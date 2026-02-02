@@ -1,5 +1,24 @@
 import { buttonTemplates, textTemplates } from "../templates/index.js";
 
+const conflictTags = [
+  "[EBE] Pedido Enviado",
+  "[EBE] Pedido Cancelado1",
+  "[EBE] Pedido Cancelado2",
+  "[EBE] Pedido Cancelado3",
+  "[EBE] Pedido Carrinho Abandonado1",
+  "[EBE] Pedido Carrinho Abandonado2",
+  "[EBE] Pedido Carrinho Abandonado3"
+];
+
+const receivedTags = [
+  "[EBE] Pedido Recebido",
+  "[EBE] Pedido Recebido1",
+  "[EBE] Pedido Recebido2",
+  "[EBE] Pedido Recebido3"
+];
+
+const createRemoveSteps = (tags) => tags.map(tag => ({ type: "removeTag", label: `Limpar ${tag}`, tag }));
+
 export const pedidoRecebidoUseCases = [
   {
     id: "pedidoRecebido",
@@ -8,24 +27,23 @@ export const pedidoRecebidoUseCases = [
     description: "Fluxo principal após pedido recebido.",
     steps: [
       { type: "addTag", label: "Marcar etapa recebido 1", tag: "[EBE] Pedido Recebido1" },
-      { type: "removeTag", label: "Limpar Enviado", tag: "[EBE] Pedido Enviado" },
-      { type: "removeTag", label: "Limpar Cancelado1", tag: "[EBE] Pedido Cancelado1" },
-      { type: "removeTag", label: "Limpar Cancelado2", tag: "[EBE] Pedido Cancelado2" },
-      { type: "removeTag", label: "Limpar Cancelado3", tag: "[EBE] Pedido Cancelado3" },
-      { type: "removeTag", label: "Limpar Carrinho1", tag: "[EBE] Pedido Carrinho Abandonado1" },
-      { type: "removeTag", label: "Limpar Carrinho2", tag: "[EBE] Pedido Carrinho Abandonado2" },
-      { type: "removeTag", label: "Limpar Carrinho3", tag: "[EBE] Pedido Carrinho Abandonado3" },
+      ...createRemoveSteps(conflictTags),
       { type: "wait", label: "Aguardar 120s", seconds: 120 },
       { type: "stopIfHasAnyTag", label: "Encerrar se pagou", tags: ["[EBE] Pedido Pago"] },
-      { type: "removeTag", label: "Limpar Recebido", tag: "[EBE] Pedido Recebido" },
-      { type: "removeTag", label: "Limpar Recebido1", tag: "[EBE] Pedido Recebido1" },
-      { type: "removeTag", label: "Limpar Recebido2", tag: "[EBE] Pedido Recebido2" },
-      { type: "removeTag", label: "Limpar Recebido3", tag: "[EBE] Pedido Recebido3" },
+      ...createRemoveSteps(receivedTags),
       { type: "sendText", label: "Mensagem teste", text: textTemplates.pedidoRecebidoTeste },
       { type: "sendButtons", label: "Enviar botão rastreio", template: buttonTemplates.pedidoRecebido },
       { type: "sendButtons", label: "Enviar quick replies", template: buttonTemplates.pedidoRecebidoQuickReply },
       { type: "wait", label: "Aguardar 2s", seconds: 2 },
-      { type: "conditionalChoice", label: "Tratar escolha do cliente" }
+      { 
+        type: "conditionalChoice", 
+        label: "Tratar escolha do cliente",
+        conditions: [
+          { match: "descadastre", responseTemplate: textTemplates.pedidoRecebidoDescadastre },
+          { match: "rastrear", responseTemplate: textTemplates.pedidoRecebidoRastrear }
+        ],
+        defaultTemplate: textTemplates.pedidoRecebidoSelecione
+      }
     ]
   },
   {
@@ -35,13 +53,7 @@ export const pedidoRecebidoUseCases = [
     description: "Primeira cobrança de pagamento.",
     steps: [
       { type: "addTag", label: "Marcar etapa recebido 2", tag: "[EBE] Pedido Recebido2" },
-      { type: "removeTag", label: "Limpar Enviado", tag: "[EBE] Pedido Enviado" },
-      { type: "removeTag", label: "Limpar Cancelado1", tag: "[EBE] Pedido Cancelado1" },
-      { type: "removeTag", label: "Limpar Cancelado2", tag: "[EBE] Pedido Cancelado2" },
-      { type: "removeTag", label: "Limpar Cancelado3", tag: "[EBE] Pedido Cancelado3" },
-      { type: "removeTag", label: "Limpar Carrinho 1 (nome antigo)", tag: "[EBE] Carrinho Abandonado 1" },
-      { type: "removeTag", label: "Limpar Carrinho2", tag: "[EBE] Pedido Carrinho Abandonado2" },
-      { type: "removeTag", label: "Limpar Carrinho3", tag: "[EBE] Pedido Carrinho Abandonado3" },
+      ...createRemoveSteps(conflictTags),
       { type: "removeTag", label: "Limpar Recebido", tag: "[EBE] Pedido Recebido" },
       { type: "stopIfHasAnyTag", label: "Encerrar se pagou", tags: ["[EBE] Pedido Pago"] },
       { type: "sendText", label: "Cobrança 1", text: textTemplates.pedidoRecebido1 }
@@ -54,13 +66,7 @@ export const pedidoRecebidoUseCases = [
     description: "Segunda cobrança de pagamento.",
     steps: [
       { type: "addTag", label: "Marcar etapa recebido 3", tag: "[EBE] Pedido Recebido3" },
-      { type: "removeTag", label: "Limpar Enviado", tag: "[EBE] Pedido Enviado" },
-      { type: "removeTag", label: "Limpar Cancelado1", tag: "[EBE] Pedido Cancelado1" },
-      { type: "removeTag", label: "Limpar Cancelado2", tag: "[EBE] Pedido Cancelado2" },
-      { type: "removeTag", label: "Limpar Cancelado3", tag: "[EBE] Pedido Cancelado3" },
-      { type: "removeTag", label: "Limpar Carrinho1", tag: "[EBE] Pedido Carrinho Abandonado1" },
-      { type: "removeTag", label: "Limpar Carrinho2", tag: "[EBE] Pedido Carrinho Abandonado2" },
-      { type: "removeTag", label: "Limpar Carrinho3", tag: "[EBE] Pedido Carrinho Abandonado3" },
+      ...createRemoveSteps(conflictTags),
       { type: "removeTag", label: "Limpar Recebido2", tag: "[EBE] Pedido Recebido2" },
       { type: "stopIfHasAnyTag", label: "Encerrar se pagou", tags: ["[EBE] Pedido Pago"] },
       { type: "sendText", label: "Cobrança 2", text: textTemplates.pedidoRecebido2 }
@@ -73,13 +79,7 @@ export const pedidoRecebidoUseCases = [
     description: "Terceira cobrança de pagamento.",
     steps: [
       { type: "addTag", label: "Manter recebido 3", tag: "[EBE] Pedido Recebido3" },
-      { type: "removeTag", label: "Limpar Enviado", tag: "[EBE] Pedido Enviado" },
-      { type: "removeTag", label: "Limpar Cancelado1", tag: "[EBE] Pedido Cancelado1" },
-      { type: "removeTag", label: "Limpar Cancelado2", tag: "[EBE] Pedido Cancelado2" },
-      { type: "removeTag", label: "Limpar Cancelado3", tag: "[EBE] Pedido Cancelado3" },
-      { type: "removeTag", label: "Limpar Carrinho1", tag: "[EBE] Pedido Carrinho Abandonado1" },
-      { type: "removeTag", label: "Limpar Carrinho2", tag: "[EBE] Pedido Carrinho Abandonado2" },
-      { type: "removeTag", label: "Limpar Carrinho3", tag: "[EBE] Pedido Carrinho Abandonado3" },
+      ...createRemoveSteps(conflictTags),
       { type: "removeTag", label: "Limpar Recebido2", tag: "[EBE] Pedido Recebido2" },
       { type: "stopIfHasAnyTag", label: "Encerrar se pagou", tags: ["[EBE] Pedido Pago"] },
       { type: "sendText", label: "Cobrança 3", text: textTemplates.pedidoRecebido3 }

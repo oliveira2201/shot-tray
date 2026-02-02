@@ -5,7 +5,7 @@ export const buttonTemplates = {
       {
         phone: "{{number}}",
         title: "👋Graça e Paz {{name}}! 🙏",
-        body: "Vi que você deixou umas bênçãos te esperando no carrinho da nossa loja! 📖✨\nMas corre, viu?\n\n*%extra3%* têm estoque limitado e pode acabar rapidinho! 🏃‍♀️💨\n\nAcesse agora mesmo seu carrinho e garanta sua bênção",
+        body: "Vi que você deixou umas bênçãos te esperando no carrinho da nossa loja! 📖✨\nMas corre, viu?\n\n*{{extra3}}* têm estoque limitado e pode acabar rapidinho! 🏃‍♀️💨\n\nAcesse agora mesmo seu carrinho e garanta sua bênção",
         footer: "Clique para acessar seu carrinho",
         buttons: [
           {
@@ -28,7 +28,7 @@ export const buttonTemplates = {
           {
             type: "url",
             text: "Rastrear Pedido",
-            url: "%extra1%"
+            url: "{{extra1}}"
           }
         ]
       }
@@ -46,7 +46,7 @@ export const buttonTemplates = {
           {
             type: "url",
             text: "Rastrear Pedido",
-            url: "%extra1%"
+            url: "{{extra1}}"
           }
         ]
       }
@@ -57,7 +57,7 @@ export const buttonTemplates = {
     body: [
       {
         phone: "{{number}}",
-        title: "👋 A Paz %name%",
+        title: "👋 A Paz {{name}}",
         body: "Obrigado por comprar na *Ebenézer*, Deus te abençoe 😊\nRecebemos seu pedido e assim que o pagamento for confirmado, ele segue para separação e envio, vou continuar te avisando por aqui.\nEnquanto isso, aproveite e salve meu contato para garantir que vai receber minhas mensagens.\nSe precisar você também pode verificar o status do seu pedido ou até mesmo gerar o boleto caso não tenha gerado ainda no link abaixo 👇",
         footer: "Selecione uma opção",
         buttons: [
@@ -72,14 +72,14 @@ export const buttonTemplates = {
     body: [
       {
         phone: "{{number}}",
-        title: "🚚 *Seu pedido já está pronto {nome}* 🚚",
+        title: "🚚 *Seu pedido já está pronto {{name}}* 🚚",
         body: "Se você optou por retirar aqui em nossa loja, *aguarde por favor o contato do SAC,* e se você optou pela entrega via transportadora ou correios, agora é só acompanhar a entrega, *se certifique que vai ter alguém no endereço para poder receber seu pedido.*\n\nPara rastrear a entrega acesse sua conta no nosso site pelo link\n😉 Te mandei também por e-mail os dados para vc poder rastrear a entrega.\nQualquer dúvida é só me chamar ok?\nAté mais.",
         footer: "",
         buttons: [
           {
             type: "url",
             text: "Rastrear Pedido",
-            url: "%extra1%"
+            url: "{{extra1}}"
           }
         ]
       }

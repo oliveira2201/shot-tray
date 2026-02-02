@@ -24,32 +24,21 @@ const buildTextPayload = (text, context) => ({
   ]
 });
 
-const handleChoice = async (context, templates) => {
+const handleChoice = async (context, step) => {
   const choice = (context.choice || "").toString().toLowerCase();
 
-  if (choice.includes("descadastre")) {
+  const condition = step.conditions?.find(c => choice.includes(c.match));
+  const template = condition ? condition.responseTemplate : step.defaultTemplate;
+
+  if (template) {
     const payload = buildTextPayload(
-      renderTemplate(templates.pedidoRecebidoDescadastre, context),
+      renderTemplate(template, context),
       context
     );
     await sendTextMessage(payload);
-    return;
+  } else {
+    logger.warn({ choice }, "Nenhuma ação definida para a escolha");
   }
-
-  if (choice.includes("rastrear")) {
-    const payload = buildTextPayload(
-      renderTemplate(templates.pedidoRecebidoRastrear, context),
-      context
-    );
-    await sendTextMessage(payload);
-    return;
-  }
-
-  const payload = buildTextPayload(
-    renderTemplate(templates.pedidoRecebidoSelecione, context),
-    context
-  );
-  await sendTextMessage(payload);
 };
 
 export const runUseCase = async (useCase, context, templates) => {
@@ -92,7 +81,7 @@ export const runUseCase = async (useCase, context, templates) => {
       }
       case "conditionalChoice": {
         logger.info({ label: step.label }, "Tratando escolha do cliente");
-        await handleChoice(context, templates);
+        await handleChoice(context, step);
         break;
       }
       default:
