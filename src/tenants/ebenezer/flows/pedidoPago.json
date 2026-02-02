@@ -1,0 +1,28 @@
+{
+  "id": "pedidoPago",
+  "title": "Pedido Pago",
+  "aliases": ["[EBE] Pedido Pago"],
+  "description": "Limpa tags anteriores e envia confirmação de pagamento.",
+  "steps": [
+    { "type": "addTag", "label": "Marcar pago", "tag": "[EBE] Pedido Pago" },
+    { 
+      "type": "removeTags", 
+      "label": "Limpar todas as tags anteriores", 
+      "tags": [
+        "[EBE] Pedido Recebido",
+        "[EBE] Pedido Recebido1",
+        "[EBE] Pedido Recebido2",
+        "[EBE] Pedido Recebido3",
+        "[EBE] Pedido Enviado",
+        "[EBE] Pedido Cancelado1",
+        "[EBE] Pedido Cancelado2",
+        "[EBE] Pedido Cancelado3",
+        "[EBE] Pedido Carrinho Abandonado1",
+        "[EBE] Pedido Carrinho Abandonado2",
+        "[EBE] Pedido Carrinho Abandonado3"
+      ]
+    },
+    { "type": "sendButtons", "label": "Enviar confirmação", "templateKey": "pedidoPago" },
+    { "type": "wait", "label": "Aguardar 2s", "seconds": 2 }
+  ]
+}

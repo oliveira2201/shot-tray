@@ -1,0 +1,11 @@
+{
+  "id": "carrinhoAbandonado3",
+  "title": "Carrinho Abandonado 3",
+  "aliases": ["[EBE] Carrinho Abandonado3"],
+  "description": "Última tentativa de carrinho abandonado.",
+  "steps": [
+    { "type": "stopIfHasAnyTag", "label": "Encerrar se já pagou/recebeu", "tags": ["[EBE] Pedido Pago", "[EBE] Pedido Recebido", "[EBE] Pedido Recebido1", "[EBE] Pedido Recebido2", "[EBE] Pedido Recebido3"] },
+    { "type": "sendText", "label": "Enviar último aviso", "textKey": "carrinhoAbandonado3" },
+    { "type": "sendText", "label": "Mensagem extra", "textKey": "carrinhoAbandonado3Extra" }
+  ]
+}

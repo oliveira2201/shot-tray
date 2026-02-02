@@ -1,0 +1,18 @@
+[
+  {
+    "id": "ebenezer",
+    "name": "Livraria Ebenezer",
+    "inputAdapter": "default",
+    "outputProvider": "shotzap",
+    "config": {
+      "baseUrl": "https://api.shotzap.com.br",
+      "token": "seu_token_aqui_uuid",
+      "paths": {
+        "sendButtons": "/api/messages/whatsmeow/sendButtonsPRO",
+        "sendText": "/api/messages/whatsmeow/sendText",
+        "addTag": "/api/tags/add",
+        "removeTag": "/api/tags/remove"
+      }
+    }
+  }
+]

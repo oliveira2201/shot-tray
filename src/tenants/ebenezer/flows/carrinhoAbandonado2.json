@@ -1,0 +1,12 @@
+{
+  "id": "carrinhoAbandonado2",
+  "title": "Carrinho Abandonado 2",
+  "aliases": ["[EBE] Carrinho Abandonado2"],
+  "description": "Remove tag anterior e envia lembrete de carrinho.",
+  "steps": [
+    { "type": "removeTag", "label": "Remover tag carrinho 2", "tag": "[EBE] Pedido Carrinho Abandonado2" },
+    { "type": "stopIfHasAnyTag", "label": "Encerrar se já pagou/recebeu", "tags": ["[EBE] Pedido Pago", "[EBE] Pedido Recebido", "[EBE] Pedido Recebido1", "[EBE] Pedido Recebido2", "[EBE] Pedido Recebido3"] },
+    { "type": "addTag", "label": "Marcar etapa carrinho 3", "tag": "[EBE] Pedido Carrinho Abandonado3" },
+    { "type": "sendText", "label": "Enviar lembrete carrinho", "textKey": "carrinhoAbandonado2" }
+  ]
+}

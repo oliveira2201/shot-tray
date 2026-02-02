@@ -1,19 +1,20 @@
-import { renderTemplate } from "../flow-engine/templateRenderer.js";
-import { delay } from "../utils/delay.js";
-import { logger } from "../utils/logger.js";
+import { renderTemplate } from "../../../flow-engine/templateRenderer.js";
+import { delay } from "../../../utils/delay.js";
+import { logger } from "../../../utils/logger.js";
+import { UseCase, AutomationContext, IChannelProvider, Step } from "../../../types/automation.js";
 
-const hasAnyTag = (contextTags, tags) => {
+const hasAnyTag = (contextTags: string[] | undefined, tags: string[]) => {
   if (!Array.isArray(contextTags)) return false;
   const normalized = contextTags.map((tag) => tag.toLowerCase());
   return tags.some((tag) => normalized.includes(tag.toLowerCase()));
 };
 
-const buildTagPayload = (tag, context) => ({
+const buildTagPayload = (tag: string, context: AutomationContext) => ({
   phone: context.number,
   tag
 });
 
-const buildTextPayload = (text, context) => ({
+const buildTextPayload = (text: string, context: AutomationContext) => ({
   openTicket: 0,
   body: [
     {
@@ -23,17 +24,17 @@ const buildTextPayload = (text, context) => ({
   ]
 });
 
-const resolveTemplate = (keyOrObject, templates) => {
+const resolveTemplate = (keyOrObject: any, templates: Record<string, any>) => {
   if (typeof keyOrObject === "string" && templates[keyOrObject]) {
     return templates[keyOrObject];
   }
   return keyOrObject;
 };
 
-const handleChoice = async (context, step, provider, templates) => {
+const handleChoice = async (context: AutomationContext, step: Step, provider: IChannelProvider, templates: Record<string, any>) => {
   const choice = (context.choice || "").toString().toLowerCase();
 
-  const condition = step.conditions?.find(c => choice.includes(c.match));
+  const condition = step.conditions?.find((c: any) => choice.includes(c.match));
   // Condition response could be a key or object
   const rawTemplate = condition ? condition.responseTemplate : step.defaultTemplate;
   const template = resolveTemplate(rawTemplate, templates);
@@ -49,7 +50,14 @@ const handleChoice = async (context, step, provider, templates) => {
   }
 };
 
-export const runUseCase = async ({ useCase, context, provider, templates }) => {
+interface RunUseCaseParams {
+  useCase: UseCase;
+  context: AutomationContext;
+  provider: IChannelProvider;
+  templates: Record<string, any>;
+}
+
+export const runUseCase = async ({ useCase, context, provider, templates }: RunUseCaseParams) => {
   for (const step of useCase.steps) {
     switch (step.type) {
       case "stopIfHasAnyTag": {
@@ -67,6 +75,15 @@ export const runUseCase = async ({ useCase, context, provider, templates }) => {
       case "removeTag": {
         logger.info({ tag: step.tag, label: step.label }, "Removendo tag");
         await provider.removeTag(buildTagPayload(step.tag, context));
+        break;
+      }
+      case "removeTags": {
+        logger.info({ tags: step.tags, label: step.label }, "Removendo múltiplas tags");
+        if (Array.isArray(step.tags)) {
+          for (const tag of step.tags) {
+            await provider.removeTag(buildTagPayload(tag, context));
+          }
+        }
         break;
       }
       case "sendButtons": {

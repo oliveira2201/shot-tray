@@ -1,0 +1,47 @@
+{
+  "id": "pedidoRecebido",
+  "title": "Pedido Recebido",
+  "aliases": ["[EBE] Pedido Recebido"],
+  "description": "Fluxo principal após pedido recebido.",
+  "steps": [
+    { "type": "addTag", "label": "Marcar etapa recebido 1", "tag": "[EBE] Pedido Recebido1" },
+    { 
+      "type": "removeTags", 
+      "label": "Limpar tags iniciais", 
+      "tags": [
+        "[EBE] Pedido Enviado",
+        "[EBE] Pedido Cancelado1",
+        "[EBE] Pedido Cancelado2",
+        "[EBE] Pedido Cancelado3",
+        "[EBE] Pedido Carrinho Abandonado1",
+        "[EBE] Pedido Carrinho Abandonado2",
+        "[EBE] Pedido Carrinho Abandonado3"
+      ] 
+    },
+    { "type": "wait", "label": "Aguardar 120s", "seconds": 120 },
+    { "type": "stopIfHasAnyTag", "label": "Encerrar se pagou", "tags": ["[EBE] Pedido Pago"] },
+    { 
+      "type": "removeTags", 
+      "label": "Limpar tags de recebimento", 
+      "tags": [
+        "[EBE] Pedido Recebido",
+        "[EBE] Pedido Recebido1",
+        "[EBE] Pedido Recebido2",
+        "[EBE] Pedido Recebido3"
+      ]
+    },
+    { "type": "sendText", "label": "Mensagem teste", "textKey": "pedidoRecebidoTeste" },
+    { "type": "sendButtons", "label": "Enviar botão rastreio", "templateKey": "pedidoRecebido" },
+    { "type": "sendButtons", "label": "Enviar quick replies", "templateKey": "pedidoRecebidoQuickReply" },
+    { "type": "wait", "label": "Aguardar 2s", "seconds": 2 },
+    { 
+      "type": "conditionalChoice", 
+      "label": "Tratar escolha do cliente",
+      "conditions": [
+        { "match": "descadastre", "responseTemplate": "pedidoRecebidoDescadastre" },
+        { "match": "rastrear", "responseTemplate": "pedidoRecebidoRastrear" }
+      ],
+      "defaultTemplate": "pedidoRecebidoSelecione"
+    }
+  ]
+}

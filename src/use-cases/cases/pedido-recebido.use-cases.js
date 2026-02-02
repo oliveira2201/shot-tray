@@ -1,5 +1,3 @@
-import { buttonTemplates, textTemplates } from "../templates/index.js";
-
 const conflictTags = [
   "[EBE] Pedido Enviado",
   "[EBE] Pedido Cancelado1",
@@ -31,18 +29,18 @@ export const pedidoRecebidoUseCases = [
       { type: "wait", label: "Aguardar 120s", seconds: 120 },
       { type: "stopIfHasAnyTag", label: "Encerrar se pagou", tags: ["[EBE] Pedido Pago"] },
       ...createRemoveSteps(receivedTags),
-      { type: "sendText", label: "Mensagem teste", text: textTemplates.pedidoRecebidoTeste },
-      { type: "sendButtons", label: "Enviar botão rastreio", template: buttonTemplates.pedidoRecebido },
-      { type: "sendButtons", label: "Enviar quick replies", template: buttonTemplates.pedidoRecebidoQuickReply },
+      { type: "sendText", label: "Mensagem teste", textKey: "pedidoRecebidoTeste" },
+      { type: "sendButtons", label: "Enviar botão rastreio", templateKey: "pedidoRecebido" },
+      { type: "sendButtons", label: "Enviar quick replies", templateKey: "pedidoRecebidoQuickReply" },
       { type: "wait", label: "Aguardar 2s", seconds: 2 },
       { 
         type: "conditionalChoice", 
         label: "Tratar escolha do cliente",
         conditions: [
-          { match: "descadastre", responseTemplate: textTemplates.pedidoRecebidoDescadastre },
-          { match: "rastrear", responseTemplate: textTemplates.pedidoRecebidoRastrear }
+          { match: "descadastre", responseTemplate: "pedidoRecebidoDescadastre" },
+          { match: "rastrear", responseTemplate: "pedidoRecebidoRastrear" }
         ],
-        defaultTemplate: textTemplates.pedidoRecebidoSelecione
+        defaultTemplate: "pedidoRecebidoSelecione"
       }
     ]
   },
@@ -56,7 +54,7 @@ export const pedidoRecebidoUseCases = [
       ...createRemoveSteps(conflictTags),
       { type: "removeTag", label: "Limpar Recebido", tag: "[EBE] Pedido Recebido" },
       { type: "stopIfHasAnyTag", label: "Encerrar se pagou", tags: ["[EBE] Pedido Pago"] },
-      { type: "sendText", label: "Cobrança 1", text: textTemplates.pedidoRecebido1 }
+      { type: "sendText", label: "Cobrança 1", textKey: "pedidoRecebido1" }
     ]
   },
   {
@@ -69,7 +67,7 @@ export const pedidoRecebidoUseCases = [
       ...createRemoveSteps(conflictTags),
       { type: "removeTag", label: "Limpar Recebido2", tag: "[EBE] Pedido Recebido2" },
       { type: "stopIfHasAnyTag", label: "Encerrar se pagou", tags: ["[EBE] Pedido Pago"] },
-      { type: "sendText", label: "Cobrança 2", text: textTemplates.pedidoRecebido2 }
+      { type: "sendText", label: "Cobrança 2", textKey: "pedidoRecebido2" }
     ]
   },
   {
@@ -82,7 +80,7 @@ export const pedidoRecebidoUseCases = [
       ...createRemoveSteps(conflictTags),
       { type: "removeTag", label: "Limpar Recebido2", tag: "[EBE] Pedido Recebido2" },
       { type: "stopIfHasAnyTag", label: "Encerrar se pagou", tags: ["[EBE] Pedido Pago"] },
-      { type: "sendText", label: "Cobrança 3", text: textTemplates.pedidoRecebido3 }
+      { type: "sendText", label: "Cobrança 3", textKey: "pedidoRecebido3" }
     ]
   }
 ];

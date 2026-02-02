@@ -1,10 +1,10 @@
 import path from "path";
 import { env } from "../config/env.js";
-import { extractTemplatesFromDir } from "./extractTemplates.js";
+import { extractTemplatesFromDir, ExtractedTemplate } from "./extractTemplates.js";
 
-let cachedTemplates = null;
+let cachedTemplates: ExtractedTemplate[] | null = null;
 
-export const loadFlowTemplates = async () => {
+export const loadFlowTemplates = async (): Promise<ExtractedTemplate[]> => {
   if (cachedTemplates) return cachedTemplates;
 
   const flowsDir = path.isAbsolute(env.FLOWS_DIR)

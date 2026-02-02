@@ -1,0 +1,12 @@
+{
+  "id": "carrinhoAbandonado1",
+  "title": "Carrinho Abandonado 1",
+  "aliases": ["_[EBE] Carrinho Abandonado1"],
+  "description": "Início de carrinho abandonado: marca tag e envia botão de carrinho.",
+  "steps": [
+    { "type": "stopIfHasAnyTag", "label": "Encerrar se já pagou/recebeu", "tags": ["[EBE] Pedido Pago", "[EBE] Pedido Recebido", "[EBE] Pedido Recebido1", "[EBE] Pedido Recebido2", "[EBE] Pedido Recebido3"] },
+    { "type": "addTag", "label": "Marcar etapa carrinho 2", "tag": "[EBE] Pedido Carrinho Abandonado2" },
+    { "type": "sendButtons", "label": "Enviar botão carrinho", "templateKey": "carrinhoAbandonado1" },
+    { "type": "wait", "label": "Aguardar 2s", "seconds": 2 }
+  ]
+}

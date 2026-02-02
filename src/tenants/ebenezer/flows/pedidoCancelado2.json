@@ -1,0 +1,12 @@
+{
+  "id": "pedidoCancelado2",
+  "title": "Pedido Cancelado 2",
+  "aliases": ["[EBE] Pedido Cancelado2"],
+  "description": "Segundo contato após cancelamento.",
+  "steps": [
+    { "type": "removeTag", "label": "Remover tag cancelado 2", "tag": "[EBE] Pedido Cancelado2" },
+    { "type": "stopIfHasAnyTag", "label": "Encerrar se já pagou/recebeu", "tags": ["[EBE] Pedido Pago", "[EBE] Pedido Recebido", "[EBE] Pedido Recebido1", "[EBE] Pedido Recebido2", "[EBE] Pedido Recebido3"] },
+    { "type": "addTag", "label": "Marcar etapa cancelado 3", "tag": "[EBE] Pedido Cancelado3" },
+    { "type": "sendText", "label": "Enviar segunda tentativa", "textKey": "pedidoCancelado2" }
+  ]
+}
