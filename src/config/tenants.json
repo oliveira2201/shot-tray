@@ -6,7 +6,7 @@
     "outputProvider": "shotzap",
     "config": {
       "baseUrl": "https://api.shotzap.com.br",
-      "token": "seu_token_aqui_uuid",
+      "token": "8FDQaIe82xmGwB3tuAIMxqp58SQydwn9nXDkrkvupLLc44rc4HDbRoDRoNfgdLtj",
       "paths": {
         "sendButtons": "/api/messages/whatsmeow/sendButtonsPRO",
         "sendText": "/api/messages/whatsmeow/sendText",
