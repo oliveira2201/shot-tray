@@ -1,7 +1,7 @@
 import { Router } from "express";
-import { generateFlowDiagram } from "../utils/visualizer.js";
 import fs from "fs/promises";
 import path from "path";
+import { generateFlowDiagram } from "../utils/visualizer.js";
 
 export const visualizerRouter = Router();
 

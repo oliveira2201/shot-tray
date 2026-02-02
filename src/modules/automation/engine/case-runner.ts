@@ -1,7 +1,7 @@
 import { renderTemplate } from "../../../flow-engine/templateRenderer.js";
+import { AutomationContext, IChannelProvider, Step, UseCase } from "../../../types/automation.js";
 import { delay } from "../../../utils/delay.js";
 import { logger } from "../../../utils/logger.js";
-import { UseCase, AutomationContext, IChannelProvider, Step } from "../../../types/automation.js";
 
 const hasAnyTag = (contextTags: string[] | undefined, tags: string[]) => {
   if (!Array.isArray(contextTags)) return false;

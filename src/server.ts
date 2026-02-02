@@ -1,8 +1,8 @@
 import express from "express";
 import { env } from "./config/env.js";
 import { healthRouter } from "./routes/health.js";
-import { webhooksRouter } from "./routes/webhooks.js";
 import { visualizerRouter } from "./routes/visualizer.js";
+import { webhooksRouter } from "./routes/webhooks.js";
 import { logger } from "./utils/logger.js";
 
 const app = express();

@@ -1,10 +1,9 @@
-import { env } from "../config/env.js";
 import { getIntegrationAdapter } from "../integrations/ecommerce/index.js";
 import { ShotzapProvider } from "../modules/automation/channels/shotzap/provider.js";
 import * as ebenezerTemplates from "../tenants/ebenezer/templates/index.js";
 // @ts-ignore
 import tenantsData from "../config/tenants.json" assert { type: "json" };
-import { TenantConfig, IChannelProvider } from "../types/automation.js";
+import { IChannelProvider, TenantConfig } from "../types/automation.js";
 
 const templateMap: Record<string, any> = {
   ebenezer: ebenezerTemplates

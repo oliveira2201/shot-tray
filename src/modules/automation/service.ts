@@ -1,8 +1,8 @@
-import { logger } from "../../utils/logger.js";
-import { findFlowByAlias } from "./engine/flow-registry.js";
-import { runUseCase } from "./engine/case-runner.js";
-import { NormalizedEvent } from "../../types/integration.js";
 import { TenantConfig } from "../../types/automation.js";
+import { NormalizedEvent } from "../../types/integration.js";
+import { logger } from "../../utils/logger.js";
+import { runUseCase } from "./engine/case-runner.js";
+import { findFlowByAlias } from "./engine/flow-registry.js";
 
 interface ProcessEventParams {
   flowAlias: string;
