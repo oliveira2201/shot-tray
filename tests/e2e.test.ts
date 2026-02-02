@@ -1,5 +1,5 @@
-import { describe, it, expect, vi, beforeEach } from "vitest";
 import request from "supertest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { app } from "../src/app.js";
 
 // Mock Delay to make tests instant
