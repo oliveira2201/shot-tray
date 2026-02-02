@@ -1,0 +1,3018 @@
+{
+  "name": "[MD+SZ] Thalvion V2",
+  "nodes": [
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.shotzap.com.br/webhook/37/k0fZvIhGE8eb26PzdrMHiPd4oY978a2Gk7s7GjX2fu",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "fname",
+              "value": "={{ $item(\"0\").$node[\"Switch\"].json[\"body\"][\"FNAME\"] }}"
+            },
+            {
+              "name": "phone",
+              "value": "={{ $item(\"0\").$node[\"Remover + do telefone1\"].json[\"phone\"] }}"
+            },
+            {
+              "name": "tracknumb",
+              "value": "={{ $item(\"0\").$node[\"Switch\"].json[\"body\"][\"tracknumb\"] }}"
+            },
+            {
+              "name": "email",
+              "value": "={{ $item(\"0\").$node[\"Switch\"].json[\"body\"][\"email\"] }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "2f54c5b1-4799-405f-bc1c-628578893ad0",
+      "name": "Enviar Webhook [TG] Pedido Recebido",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1280,
+        -176
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.shotzap.com.br/webhook/37/CTzmCgbMoytjtBhYz48A6kpjvml42HMK3h1YT1b1A2",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "fname",
+              "value": "={{ $item(\"0\").$node[\"Switch\"].json[\"body\"][\"FNAME\"] }}"
+            },
+            {
+              "name": "phone",
+              "value": "={{ $item(\"0\").$node[\"Remover + do telefone\"].json[\"phone\"] }}"
+            },
+            {
+              "name": "tracknumb",
+              "value": "={{ $item(\"0\").$node[\"Switch\"].json[\"body\"][\"tracknumb\"] }}"
+            },
+            {
+              "name": "email",
+              "value": "={{ $item(\"0\").$node[\"Switch\"].json[\"body\"][\"email\"] }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "fname",
+              "value": "={{ $item(\"0\").$node[\"Switch\"].json[\"body\"][\"FNAME\"] }}"
+            },
+            {
+              "name": "phone",
+              "value": "={{ $item(\"0\").$node[\"Remover + do telefone\"].json[\"phone\"] }}"
+            },
+            {
+              "name": "tracknumb",
+              "value": "={{ $item(\"0\").$node[\"Switch\"].json[\"body\"][\"tracknumb\"] }}"
+            },
+            {
+              "name": "email",
+              "value": "={{ $item(\"0\").$node[\"Switch\"].json[\"body\"][\"email\"] }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "bc43c371-80dd-4382-be08-5484f1412f4b",
+      "name": "Enviar Webhook [TG] Pagamento Pendente",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1312,
+        112
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.shotzap.com.br/api/messages/send",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Authorization",
+              "value": "Bearer 9Uw.6>L@n3'6"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "number",
+              "value": "={{ $item(\"0\").$node[\"Webhook\"].json[\"body\"][\"PHONE\"] }}"
+            },
+            {
+              "name": "openTicket",
+              "value": "0"
+            },
+            {
+              "name": "body",
+              "value": "=👋 A Paz {{ $item(\"0\").$node[\"Switch\"].json[\"body\"][\"FNAME\"] }}, tudo bem? \n\nPassei aqui só para te avisar que ainda *não recebi a confirmação* do seu pagamento.\n\nQualquer dúvida é só me chamar ok? 😊\n\n🏃 Assim o pagamento for confirmado, seu pedido será separado e para envio.\nAté mais.\n\nSe você já pagou, é só aguardar 😉"
+            },
+            {
+              "name": "=queueId",
+              "value": "0"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "64893d50-3742-4fba-8cd6-34a8dc9df906",
+      "name": "Enviar Mensagem Pagamento Pendente1",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        624,
+        48
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.shotzap.com.br/webhook/37/ydWRnkUh51R08qZAgBgYjCwDNJYfQzxw3oKURihmzB",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "fname",
+              "value": "={{ $item(\"0\").$node[\"Switch\"].json[\"body\"][\"FNAME\"] }}"
+            },
+            {
+              "name": "phone",
+              "value": "={{ $item(\"0\").$node[\"Remover + do telefone3\"].json[\"phone\"] }}"
+            },
+            {
+              "name": "tracknumb",
+              "value": "={{ $item(\"0\").$node[\"Switch\"].json[\"body\"][\"tracknumb\"] }}"
+            },
+            {
+              "name": "email",
+              "value": "={{ $item(\"0\").$node[\"Switch\"].json[\"body\"][\"email\"] }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "fname",
+              "value": "={{ $item(\"0\").$node[\"Switch\"].json[\"body\"][\"FNAME\"] }}"
+            },
+            {
+              "name": "phone",
+              "value": "={{ $item(\"0\").$node[\"Remover + do telefone3\"].json[\"phone\"] }}"
+            },
+            {
+              "name": "tracknumb",
+              "value": "={{ $item(\"0\").$node[\"Switch\"].json[\"body\"][\"tracknumb\"] }}"
+            },
+            {
+              "name": "email",
+              "value": "={{ $item(\"0\").$node[\"Switch\"].json[\"body\"][\"email\"] }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "574a6b2c-afb2-4e79-a07f-951d73bb3c6c",
+      "name": "Enviar Webhook [TG] Pedido Recebido2",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1312,
+        288
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.shotzap.com.br/webhook/37/HtzJHjeOKZ4gKkR81TQ5km3e86n8dwd6ATlNfqBUfj",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "fname",
+              "value": "={{ $item(\"0\").$node[\"Switch\"].json[\"body\"][\"FNAME\"] }}"
+            },
+            {
+              "name": "phone",
+              "value": "={{ $item(\"0\").$node[\"Remover + do telefone4\"].json[\"phone\"] }}"
+            },
+            {
+              "name": "tracknumb",
+              "value": "={{ $item(\"0\").$node[\"Switch\"].json[\"body\"][\"tracknumb\"] }}"
+            },
+            {
+              "name": "email",
+              "value": "={{ $item(\"0\").$node[\"Switch\"].json[\"body\"][\"email\"] }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "fname",
+              "value": "={{ $item(\"0\").$node[\"Switch\"].json[\"body\"][\"FNAME\"] }}"
+            },
+            {
+              "name": "phone",
+              "value": "={{ $item(\"0\").$node[\"Remover + do telefone4\"].json[\"phone\"] }}"
+            },
+            {
+              "name": "tracknumb",
+              "value": "={{ $item(\"0\").$node[\"Switch\"].json[\"body\"][\"tracknumb\"] }}"
+            },
+            {
+              "name": "email",
+              "value": "={{ $item(\"0\").$node[\"Switch\"].json[\"body\"][\"email\"] }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "d1037e2b-212a-4467-8d39-0b06d882c9c0",
+      "name": "Enviar Webhook [TG] Pedido Recebido3",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1280,
+        512
+      ]
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "",
+                    "rightValue": "",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "738af44e-3163-4590-80a0-8d8bf392e52c",
+      "name": "Switch1",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        336,
+        672
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.shotzap.com.br/webhook/37/vbSbKcv60E8MeiMAL05bffykQ5HpFfrS67uOPX78qZ",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "fname",
+              "value": "={{ $item(\"0\").$node[\"Switch\"].json[\"body\"][\"FNAME\"] }}"
+            },
+            {
+              "name": "phone",
+              "value": "={{ $item(\"0\").$node[\"Remover + do telefone5\"].json[\"phone\"] }}"
+            },
+            {
+              "name": "tracknumb",
+              "value": "={{ $item(\"0\").$node[\"Switch\"].json[\"body\"][\"tracknumb\"] }}"
+            },
+            {
+              "name": "email",
+              "value": "={{ $item(\"0\").$node[\"Switch\"].json[\"body\"][\"email\"] }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "fname",
+              "value": "={{ $item(\"0\").$node[\"Switch\"].json[\"body\"][\"FNAME\"] }}"
+            },
+            {
+              "name": "phone",
+              "value": "={{ $item(\"0\").$node[\"Remover + do telefone5\"].json[\"phone\"] }}"
+            },
+            {
+              "name": "tracknumb",
+              "value": "={{ $item(\"0\").$node[\"Switch\"].json[\"body\"][\"tracknumb\"] }}"
+            },
+            {
+              "name": "email",
+              "value": "={{ $item(\"0\").$node[\"Switch\"].json[\"body\"][\"email\"] }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "24b4c677-2476-4a73-bc4c-9116cd36d58c",
+      "name": "Enviar Webhook [TG] Pedido Pago",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1712,
+        688
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.shotzap.com.br/api/messages/send",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Authorization",
+              "value": "Bearer 9Uw.6>L@n3'6"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "number",
+              "value": "={{ $item(\"0\").$node[\"Webhook\"].json[\"body\"][\"PHONE\"] }}"
+            },
+            {
+              "name": "openTicket",
+              "value": "0"
+            },
+            {
+              "name": "body",
+              "value": "=🚚 *Seu pedido já está pronto {{ $item(\"0\").$node[\"Switch\"].json[\"body\"][\"FNAME\"] }}* 🚚 \n\nSe você optou por retirar aqui em nossa loja, *aguarde por favor o contato do SAC,* e se você optou pela entrega via transportadora ou correios, agora é só acompanhar a entrega, *se certifique que vai ter alguém no endereço para poder receber seu pedido.* \n\nPara rastrear a entrega acesse sua conta no nosso site pelo link {{ $item(\"0\").$node[\"Webhook\"].json[\"body\"][\"tracknumb\"] }}\n\n😉 Te mandei também por e-mail os dados para você poder rastrear a entrega. \n\nQualquer dúvida é só me chamar ok? \n\nAté mais."
+            },
+            {
+              "name": "queueId",
+              "value": "97"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "de61da1e-44b3-428d-a63f-4e1793bf4415",
+      "name": "Enviar Mensagem Pedido Enviado",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        640,
+        1136
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.shotzap.com.br/webhook/37/WGMDRcCAfgFwBY1E0c8f7g3y1EOrEy0jjWIsCMUSj1",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "fname",
+              "value": "={{ $item(\"0\").$node[\"Switch\"].json[\"body\"][\"FNAME\"] }}"
+            },
+            {
+              "name": "phone",
+              "value": "={{ $item(\"0\").$node[\"Remover + do telefone6\"].json[\"phone\"] }}"
+            },
+            {
+              "name": "tracknumb",
+              "value": "={{ $item(\"0\").$node[\"Switch\"].json[\"body\"][\"tracknumb\"] }}"
+            },
+            {
+              "name": "email",
+              "value": "={{ $item(\"0\").$node[\"Switch\"].json[\"body\"][\"email\"] }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "fname",
+              "value": "={{ $item(\"0\").$node[\"Switch\"].json[\"body\"][\"FNAME\"] }}"
+            },
+            {
+              "name": "phone",
+              "value": "={{ $item(\"0\").$node[\"Remover + do telefone6\"].json[\"phone\"] }}"
+            },
+            {
+              "name": "tracknumb",
+              "value": "={{ $item(\"0\").$node[\"Switch\"].json[\"body\"][\"tracknumb\"] }}"
+            },
+            {
+              "name": "email",
+              "value": "={{ $item(\"0\").$node[\"Switch\"].json[\"body\"][\"email\"] }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "8dd775e1-4b14-4ac9-a912-7d8b56b327d9",
+      "name": "Enviar Webhook [TG] Pedido Concluído",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2032,
+        1008
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.shotzap.com.br/api/messages/send",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Authorization",
+              "value": "Bearer 9Uw.6>L@n3'6"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "number",
+              "value": "={{ $item(\"0\").$node[\"Webhook\"].json[\"body\"][\"PHONE\"] }}"
+            },
+            {
+              "name": "openTicket",
+              "value": "0"
+            },
+            {
+              "name": "body",
+              "value": "=👋 Glória a Deus {{ $item(\"0\").$node[\"Switch\"].json[\"body\"][\"FNAME\"] }}! ✨\n\nPassando pra avisar que a sua bênção chegou! \n🙏📦 O seu pedido já foi entregue! 🙌 Que alegria! 😍\n\nAgora é só desfrutar dos seus livros, Bíblias, devocionais e tudo o mais que você escolheu pra edificar a sua fé! 📖🔥\n\nSe tiver alguma dúvida ou precisar de algo mais, pode contar com a gente! 😉\n\nQue Deus te abençoe grandemente! \n💖 E não se esqueça: leitura edifica! 😉"
+            },
+            {
+              "name": "queueId",
+              "value": "97"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "422dbbcf-c5f1-42d3-9bc4-d84ef842b024",
+      "name": "Enviar Mensagem Pedido Entregue",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        640,
+        1328
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.shotzap.com.br/api/messages/send",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Authorization",
+              "value": "Bearer 9Uw.6>L@n3'6"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "number",
+              "value": "={{ $item(\"0\").$node[\"Webhook\"].json[\"body\"][\"PHONE\"] }}"
+            },
+            {
+              "name": "openTicket",
+              "value": "0"
+            },
+            {
+              "name": "body",
+              "value": "=Graça e paz {{ $item(\"0\").$node[\"Switch\"].json[\"body\"][\"FNAME\"] }}! 🙏 \nVi que você deixou umas bênçãos te esperando no carrinho! 📖✨ \nMas corre, viu? \n*{{ $item(\"0\").$node[\"Webhook\"].json[\"body\"][\"NAME\"] }}* têm estoque limitado e pode acabar rapidinho! 🏃‍♀️💨\nAcesse agora mesmo seu carrinho e garanta sua bênção.\n\nhttps://4soci.al/carrinho_comcristo"
+            },
+            {
+              "name": "queueId",
+              "value": "97"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "66063237-c7d3-400d-82eb-1be9bdf4c526",
+      "name": "Enviar Mensagem Carrinho Abandonado1",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        640,
+        1536
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.shotzap.com.br/api/messages/send",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Authorization",
+              "value": "Bearer 9Uw.6>L@n3'6"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "number",
+              "value": "={{ $item(\"0\").$node[\"Webhook\"].json[\"body\"][\"PHONE\"] }}"
+            },
+            {
+              "name": "openTicket",
+              "value": "0"
+            },
+            {
+              "name": "body",
+              "value": "=A Paz do Senhor {{ $item(\"0\").$node[\"Webhook\"].json[\"body\"][\"fname\"] }}! 😊 \nPassando para lembrar que os produtos que você escolheu na nossa loja continuam disponíveis, mas a procura está grande! 😲 \nNão perca a oportunidade de adquirir aquele livro/Bíblia que vai edificar a sua vida! ⏳ \nClique aqui e finalize sua compra antes que acabe 👇\n\nhttps://4soci.al/meucarrinho-comcristo"
+            },
+            {
+              "name": "queueId",
+              "value": "0"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "df60716b-a72a-4a4e-b3cc-3bbb0ffad492",
+      "name": "Enviar Mensagem Carrinho Abandonado2",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        640,
+        1712
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.shotzap.com.br/api/messages/send",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Authorization",
+              "value": "Bearer 9Uw.6>L@n3'6"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "number",
+              "value": "={{ $item(\"0\").$node[\"Webhook\"].json[\"body\"][\"PHONE\"] }}"
+            },
+            {
+              "name": "openTicket",
+              "value": "0"
+            },
+            {
+              "name": "body",
+              "value": "=Graça e Paz {{ $item(\"0\").$node[\"Webhook\"].json[\"body\"][\"fname\"] }}? 😉 \nEstamos quase sem estoque de alguns itens que você adicionou ao carrinho na nossa loja! 🚨 \nEssa é a sua última chance de garantir esses produtos incríveis para sua jornada de fé! \nNão deixe essa bênção escapar! 🙏 \nClique aqui e aproveite https://4soci.al/vercarrinho-comcristo"
+            },
+            {
+              "name": "openTicket",
+              "value": "97"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "a5c24c9c-b9e2-4628-bae7-c0dd79c7bb3c",
+      "name": "Enviar Mensagem Carrinho Abandonado3",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        640,
+        1952
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.shotzap.com.br/api/messages/send",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Authorization",
+              "value": "Bearer 9Uw.6>L@n3'6"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "number",
+              "value": "={{ $item(\"0\").$node[\"Webhook\"].json[\"body\"][\"PHONE\"] }}"
+            },
+            {
+              "name": "openticket",
+              "value": "0"
+            },
+            {
+              "name": "body",
+              "value": "=Olá! 😊 Que a paz do Senhor esteja contigo {{ $item(\"0\").$node[\"Switch\"].json[\"body\"][\"FNAME\"] }}! 🙏 \nO produto que você escolheu está quase esgotando! ⚠️ \nNão perca tempo e garanta já o seu para edificar sua vida espiritual. 😉 \nhttps://4soci.al/meupedido-comcristo"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "03b90cdc-45ab-4d95-8cf8-8cc191a789d4",
+      "name": "Enviar Mensagem Pedido Cancelado2",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        640,
+        2368
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.shotzap.com.br/api/messages/send",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Authorization",
+              "value": "Bearer 9Uw.6>L@n3'6"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "number",
+              "value": "={{ $item(\"0\").$node[\"Webhook\"].json[\"body\"][\"PHONE\"] }}"
+            },
+            {
+              "name": "openTicket",
+              "value": "0"
+            },
+            {
+              "name": "body",
+              "value": "=Graça e Paz {{ $item(\"0\").$node[\"Webhook\"].json[\"body\"][\"fname\"] }} 😔 \nSeu pedido na Com Cristo foi cancelado, mas a Palavra de Deus continua te chamando! ✨ \nRefaça seu pedido e continue sua jornada de fé! \nhttps://4soci.al/verpedido-comcristo"
+            },
+            {
+              "name": "queueId",
+              "value": "97"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "ccab6968-0fdd-4fa0-bff4-33eee464eb01",
+      "name": "Enviar Mensagem Pedido Cancelado1",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        640,
+        2176
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.shotzap.com.br/api/messages/send",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Authorization",
+              "value": "Bearer 9Uw.6>L@n3'6"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "number",
+              "value": "={{ $item(\"0\").$node[\"Webhook\"].json[\"body\"][\"PHONE\"] }}"
+            },
+            {
+              "name": "openTicket",
+              "value": "0"
+            },
+            {
+              "name": "body",
+              "value": "=A Paz do Senhor {{ $item(\"0\").$node[\"Webhook\"].json[\"body\"][\"fname\"] }}! 👋 \nSei que imprevistos acontecem, mas não deixe sua busca pela Palavra de Deus ser interrompida! \nPara te ajudar, reservamos seus itens por tempo limitado! ⏳ \nRefaça seu pedido agora e não perca essa oportunidade \nhttps://4soci.al/pedido-comcristo"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "3ae6ed49-f7ab-4fc6-a449-de9e1cba99c5",
+      "name": "Enviar Mensagem Pedido Cancelado3",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        640,
+        2592
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.shotzap.com.br/api/messages/send",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Authorization",
+              "value": "Bearer 9Uw.6>L@n3'6"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "number",
+              "value": "{{ $item(\"0\").$node[\"Webhook\"].json[\"body\"][\"PHONE\"] }}"
+            },
+            {
+              "name": "openTicket",
+              "value": "0"
+            },
+            {
+              "name": "body",
+              "value": "=🤔 Aconteceu alguma coisa {{ $item(\"0\").$node[\"Switch\"].json[\"body\"][\"FNAME\"] }}?\n\nAinda não recebi a confirmação de pagamento do seu pedido, *ele continua reservado e te esperando*, mas não por muito tempo, nosso estoque é limitado e *outros clientes já estão de olho.*\n \nFaça o pagamento e garanta a próxima leitura que vai te *aproximar de Deus* 📖\n\n*Vou segurar para você até hoje combinado?*\n\nQualquer dúvida é só me chamar ok? 😊\n"
+            },
+            {
+              "name": "queueId",
+              "value": "97"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "332fb61e-dec8-4f1c-b1b1-07e19deee96a",
+      "name": "Enviar Mensagem Pagamento Pendente2",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        624,
+        256
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.shotzap.com.br/api/messages/send",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Authorization",
+              "value": "Bearer 9Uw.6>L@n3'6"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "number",
+              "value": "={{ $item(\"0\").$node[\"Webhook\"].json[\"body\"][\"PHONE\"] }}"
+            },
+            {
+              "name": "openTicket",
+              "value": "0"
+            },
+            {
+              "name": "body",
+              "value": "=*😬 Estou preocupado com você {{ $item(\"0\").$node[\"Switch\"].json[\"body\"][\"FNAME\"] }}*\n\n*Não recebi* ainda a confirmação do seu pagamento e estão me cobrando aqui para liberar o produto que eu *reservei para você.*\n\n*Vou segurar o seu carrinho até hoje tá,* não consigo reservar por mais tempo.\n\nSe você quiser trocar a forma de pagamento me avisa, você pode pagar no cartão de crédito á vista ou parcelado, Boleto á vista e até parcelar no Pix é possível.\n\nMe manda mensagem se precisar uma ajuda.\n\nAté +"
+            },
+            {
+              "name": "queueId",
+              "value": "97"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "a3ec36a4-8577-4300-95a8-ab39b64f6658",
+      "name": "Enviar Mensagem Pagamento Pendente3",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        624,
+        448
+      ]
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "6a9716af-66af-45eb-ae84-dfbbfaef3041",
+                    "leftValue": "={{ $item(\"0\").$node[\"Webhook\"].json[\"body\"][\"taginternals\"] }}",
+                    "rightValue": "open",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "open"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "c0384ee3-5522-4a9a-8d1c-917b3c5ea235",
+                    "leftValue": "={{ $item(\"0\").$node[\"Webhook\"].json[\"body\"][\"taginternals\"] ",
+                    "rightValue": "open1",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "open1"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "7164a415-3e07-4f73-94ac-bc1075fd5dd1",
+                    "leftValue": "={{ $item(\"0\").$node[\"Webhook\"].json[\"body\"][\"taginternals\"] ",
+                    "rightValue": "open2",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "open2"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "88560c58-86d8-462d-aee6-904b4a93a93e",
+                    "leftValue": "={{ $item(\"0\").$node[\"Webhook\"].json[\"body\"][\"taginternals\"] ",
+                    "rightValue": "open3",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "open3"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "5a0671c7-eeb5-431b-84ec-235914995375",
+                    "leftValue": "={{ $item(\"0\").$node[\"Webhook\"].json[\"body\"][\"taginternals\"] }}",
+                    "rightValue": "pending",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "pending"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $item(\"0\").$node[\"Webhook\"].json[\"body\"][\"taginternals\"] }}",
+                    "rightValue": "paid",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "paid"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "a3f2d517-545d-4a4d-8af1-2a8064d7a119",
+                    "leftValue": "={{ $item(\"0\").$node[\"Webhook\"].json[\"body\"][\"taginternals\"] }}",
+                    "rightValue": "shipped",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "shipped"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "96bae482-142b-4bb0-80ab-6dcf1dbf7541",
+                    "leftValue": "={{ $item(\"0\").$node[\"Webhook\"].json[\"body\"][\"taginternals\"] ",
+                    "rightValue": "refunded",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "refunded"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "aa85291a-f866-43b7-b629-f5c97df8bb3d",
+                    "leftValue": "={{ $item(\"0\").$node[\"Webhook\"].json[\"body\"][\"taginternals\"] ",
+                    "rightValue": "delivered",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "delivered"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "3a765708-a8e8-4125-9b17-cb31230a1698",
+                    "leftValue": "={{ $item(\"0\").$node[\"Webhook\"].json[\"body\"][\"taginternals\"] }}",
+                    "rightValue": "abandonou.carrinho",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "1abandonou.carrinho"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "418c9b03-de13-4940-849b-3f17be0137e7",
+                    "leftValue": "={{ $item(\"0\").$node[\"Webhook\"].json[\"body\"][\"taginternals\"] }}",
+                    "rightValue": "cartaband2",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "2abandonou.carrinho"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "902352b1-2091-40d8-809e-4b67824a48f7",
+                    "leftValue": "={{ $item(\"0\").$node[\"Webhook\"].json[\"body\"][\"taginternals\"] }}",
+                    "rightValue": "cartaband3",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "3abandonou.carrinho"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "3b4f7df3-d367-452a-837b-ae03d160ebb7",
+                    "leftValue": "={{ $item(\"0\").$node[\"Webhook\"].json[\"body\"][\"taginternals\"] }}",
+                    "rightValue": "cancelled",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "cancelled"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "714e36ac-af2d-45ad-bf78-69e97eead666",
+                    "leftValue": "={{ $item(\"0\").$node[\"Webhook\"].json[\"body\"][\"taginternals\"] ",
+                    "rightValue": "cancelled2",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "2canceled"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "59c2474f-98da-46e7-84c7-81817dba5148",
+                    "leftValue": "={{ $item(\"0\").$node[\"Webhook\"].json[\"body\"][\"taginternals\"] ",
+                    "rightValue": "cancelled3",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "3cancelld"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "13148488-8d74-4408-a818-484e386ad98b",
+      "name": "Switch",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        -384,
+        880
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.shotzap.com.br/api/messages/send",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Authorization",
+              "value": "Bearer 9Uw.6>L@n3'6"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "number",
+              "value": "={{ $item(\"0\").$node[\"Webhook\"].json[\"body\"][\"PHONE\"] }}"
+            },
+            {
+              "name": "openTicket",
+              "value": "1"
+            },
+            {
+              "name": "body",
+              "value": "=👋 A Paz {{ $item(\"0\").$node[\"Switch\"].json[\"body\"][\"FNAME\"] }},\nObrigado por comprar na *Livraria Com Cristo,* Deus te abençoe 😊\n\nRecebemos seu pedido e assim que o pagamento for confirmado, ele segue para separação e envio.\nContinuo te avisando por aqui e por e-mail.\nSe precisar você também pode verificar o status do seu pedido ou até mesmo gerar o boleto caso não tenha gerado ainda no link abaixo 👇\n{{ $item(\"0\").$node[\"Switch\"].json[\"body\"][\"TRACKNUMB\"] }}\n\nEnquanto isso, aproveite e salve meu contato para garantir que vai receber minhas mensagens.  \n\nQualquer dúvida é só me chamar, até mais. 🕊️"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "a20bb93c-320b-4828-a956-704c6c430da7",
+      "name": "Enviar Mensagem Pedido Recebido1",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        624,
+        -176
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Itera sobre os itens recebidos\nfor (const item of items) {\n  // Acessa o campo PHONE da saída do nó Switch\n  const phone = item.json.body ? item.json.body.PHONE : null;\n\n  // Verifica se o telefone existe e se começa com '+'\n  if (phone && phone.startsWith(\"+\")) {\n    // Remove o sinal de \"+\" e armazena o resultado de volta no campo\n    item.json.phone = phone.replace(\"+\", \"\");\n  }\n}\n\n// Retorna os itens modificados\nreturn items;"
+      },
+      "id": "d4d7b0bb-1727-43d2-8116-3af7e104c3fc",
+      "name": "Remover + do telefone",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        336,
+        48
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Itera sobre os itens recebidos\nfor (const item of items) {\n  // Acessa o campo PHONE da saída do nó Switch\n  const phone = item.json.body ? item.json.body.PHONE : null;\n\n  // Verifica se o telefone existe e se começa com '+'\n  if (phone && phone.startsWith(\"+\")) {\n    // Remove o sinal de \"+\" e armazena o resultado de volta no campo\n    item.json.phone = phone.replace(\"+\", \"\");\n  }\n}\n\n// Retorna os itens modificados\nreturn items;"
+      },
+      "id": "92865f17-d582-49de-ae9d-57944a587751",
+      "name": "Remover + do telefone1",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        352,
+        -176
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Itera sobre os itens recebidos\nfor (const item of items) {\n  // Acessa o campo PHONE da saída do nó Switch\n  const phone = item.json.body ? item.json.body.PHONE : null;\n\n  // Verifica se o telefone existe e se começa com '+'\n  if (phone && phone.startsWith(\"+\")) {\n    // Remove o sinal de \"+\" e armazena o resultado de volta no campo\n    item.json.phone = phone.replace(\"+\", \"\");\n  }\n}\n\n// Retorna os itens modificados\nreturn items;"
+      },
+      "id": "779b4fcd-935c-4aa6-be14-8c1454f6a253",
+      "name": "Remover + do telefone4",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        336,
+        448
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Itera sobre os itens recebidos\nfor (const item of items) {\n  // Acessa o campo PHONE da saída do nó Switch\n  const phone = item.json.body ? item.json.body.PHONE : null;\n\n  // Verifica se o telefone existe e se começa com '+'\n  if (phone && phone.startsWith(\"+\")) {\n    // Remove o sinal de \"+\" e armazena o resultado de volta no campo\n    item.json.phone = phone.replace(\"+\", \"\");\n  }\n}\n\n// Retorna os itens modificados\nreturn items;"
+      },
+      "id": "bd6e366f-538f-40dc-b6b1-7c082d80ecaa",
+      "name": "Remover + do telefone3",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        336,
+        256
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Itera sobre os itens recebidos\nfor (const item of items) {\n  // Acessa o campo PHONE da saída do nó Switch\n  const phone = item.json.body ? item.json.body.PHONE : null;\n\n  // Verifica se o telefone existe e se começa com '+'\n  if (phone && phone.startsWith(\"+\")) {\n    // Remove o sinal de \"+\" e armazena o resultado de volta no campo\n    item.json.phone = phone.replace(\"+\", \"\");\n  }\n}\n\n// Retorna os itens modificados\nreturn items;"
+      },
+      "id": "46f526f4-9ea5-4cb3-8cf7-fa94d9f497fb",
+      "name": "Remover + do telefone5",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        336,
+        912
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Itera sobre os itens recebidos\nfor (const item of items) {\n  // Acessa o campo PHONE da saída do nó Switch\n  const phone = item.json.body ? item.json.body.PHONE : null;\n\n  // Verifica se o telefone existe e se começa com '+'\n  if (phone && phone.startsWith(\"+\")) {\n    // Remove o sinal de \"+\" e armazena o resultado de volta no campo\n    item.json.phone = phone.replace(\"+\", \"\");\n  }\n}\n\n// Retorna os itens modificados\nreturn items;"
+      },
+      "id": "28b8f52a-fe24-490b-94f4-13ba865d307b",
+      "name": "Remover + do telefone6",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        336,
+        1104
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Itera sobre os itens recebidos\nfor (const item of items) {\n  // Acessa o campo PHONE da saída do nó Switch\n  const phone = item.json.body ? item.json.body.PHONE : null;\n\n  // Verifica se o telefone existe e se começa com '+'\n  if (phone && phone.startsWith(\"+\")) {\n    // Remove o sinal de \"+\" e armazena o resultado de volta no campo\n    item.json.phone = phone.replace(\"+\", \"\");\n  }\n}\n\n// Retorna os itens modificados\nreturn items;"
+      },
+      "id": "4816bbbe-d4ed-4cc7-ac8f-d3371653c442",
+      "name": "Remover + do telefone7",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        336,
+        1312
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Itera sobre os itens recebidos\nfor (const item of items) {\n  // Acessa o campo PHONE da saída do nó Switch\n  const phone = item.json.body ? item.json.body.PHONE : null;\n\n  // Verifica se o telefone existe e se começa com '+'\n  if (phone && phone.startsWith(\"+\")) {\n    // Remove o sinal de \"+\" e armazena o resultado de volta no campo\n    item.json.phone = phone.replace(\"+\", \"\");\n  }\n}\n\n// Retorna os itens modificados\nreturn items;"
+      },
+      "id": "2a0838c7-6d9b-4310-9dc1-daf4fcb91b04",
+      "name": "Remover + do telefone8",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        336,
+        1504
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Itera sobre os itens recebidos\nfor (const item of items) {\n  // Acessa o campo PHONE da saída do nó Switch\n  const phone = item.json.body ? item.json.body.PHONE : null;\n\n  // Verifica se o telefone existe e se começa com '+'\n  if (phone && phone.startsWith(\"+\")) {\n    // Remove o sinal de \"+\" e armazena o resultado de volta no campo\n    item.json.phone = phone.replace(\"+\", \"\");\n  }\n}\n\n// Retorna os itens modificados\nreturn items;"
+      },
+      "id": "2ea87eda-8ec5-404f-ba2d-23fcef76a323",
+      "name": "Remover + do telefone9",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        336,
+        1712
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Itera sobre os itens recebidos\nfor (const item of items) {\n  // Acessa o campo PHONE da saída do nó Switch\n  const phone = item.json.body ? item.json.body.PHONE : null;\n\n  // Verifica se o telefone existe e se começa com '+'\n  if (phone && phone.startsWith(\"+\")) {\n    // Remove o sinal de \"+\" e armazena o resultado de volta no campo\n    item.json.phone = phone.replace(\"+\", \"\");\n  }\n}\n\n// Retorna os itens modificados\nreturn items;"
+      },
+      "id": "698700fa-3bdd-406f-a444-a2335478b645",
+      "name": "Remover + do telefone10",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        336,
+        1952
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Itera sobre os itens recebidos\nfor (const item of items) {\n  // Acessa o campo PHONE da saída do nó Switch\n  const phone = item.json.body ? item.json.body.PHONE : null;\n\n  // Verifica se o telefone existe e se começa com '+'\n  if (phone && phone.startsWith(\"+\")) {\n    // Remove o sinal de \"+\" e armazena o resultado de volta no campo\n    item.json.phone = phone.replace(\"+\", \"\");\n  }\n}\n\n// Retorna os itens modificados\nreturn items;"
+      },
+      "id": "1de3d8af-c7b1-4bfe-bf40-98698305ca9e",
+      "name": "Remover + do telefone11",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        336,
+        2176
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Itera sobre os itens recebidos\nfor (const item of items) {\n  // Acessa o campo PHONE da saída do nó Switch\n  const phone = item.json.body ? item.json.body.PHONE : null;\n\n  // Verifica se o telefone existe e se começa com '+'\n  if (phone && phone.startsWith(\"+\")) {\n    // Remove o sinal de \"+\" e armazena o resultado de volta no campo\n    item.json.phone = phone.replace(\"+\", \"\");\n  }\n}\n\n// Retorna os itens modificados\nreturn items;"
+      },
+      "id": "e33d77a4-869c-45a6-bbbd-f18442dd3004",
+      "name": "Remover + do telefone12",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        336,
+        2368
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Itera sobre os itens recebidos\nfor (const item of items) {\n  // Acessa o campo PHONE da saída do nó Switch\n  const phone = item.json.body ? item.json.body.PHONE : null;\n\n  // Verifica se o telefone existe e se começa com '+'\n  if (phone && phone.startsWith(\"+\")) {\n    // Remove o sinal de \"+\" e armazena o resultado de volta no campo\n    item.json.phone = phone.replace(\"+\", \"\");\n  }\n}\n\n// Retorna os itens modificados\nreturn items;"
+      },
+      "id": "c79e0560-ab2f-4567-b83f-0f3c6ecfb123",
+      "name": "Remover + do telefone13",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        336,
+        2592
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.shotzap.com.br/webhook/37/KyFC8nwJorQp5MBsHaHw6D8wIA9MhAvLmfYpd6Ps9t",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "fname",
+              "value": "={{ $item(\"0\").$node[\"Switch\"].json[\"body\"][\"FNAME\"] }}"
+            },
+            {
+              "name": "phone",
+              "value": "={{ $item(\"0\").$node[\"Remover + do telefone7\"].json[\"phone\"] }}"
+            },
+            {
+              "name": "tracknumb",
+              "value": "={{ $item(\"0\").$node[\"Switch\"].json[\"body\"][\"tracknumb\"] }}"
+            },
+            {
+              "name": "email",
+              "value": "{{ $item(\"0\").$node[\"Switch\"].json[\"body\"][\"email\"] }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "fname",
+              "value": "={{ $item(\"0\").$node[\"Switch\"].json[\"body\"][\"FNAME\"] }}"
+            },
+            {
+              "name": "phone",
+              "value": "={{ $item(\"0\").$node[\"Remover + do telefone7\"].json[\"phone\"] }}"
+            },
+            {
+              "name": "tracknumb",
+              "value": "={{ $item(\"0\").$node[\"Switch\"].json[\"body\"][\"tracknumb\"] }}"
+            },
+            {
+              "name": "email",
+              "value": "={{ $item(\"0\").$node[\"Switch\"].json[\"body\"][\"email\"] }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "73fbaf0e-7ae9-4cf5-9b17-b53f274bb88e",
+      "name": "Enviar Webhook [TG] Pedido Entregue",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1856,
+        1344
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.shotzap.com.br/webhook/37/kkHitpeSAIhcy0FddTitxM9S7yFvsEc14R7rX5mp7s",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "fname",
+              "value": "={{ $item(\"0\").$node[\"Switch\"].json[\"body\"][\"FNAME\"] }}"
+            },
+            {
+              "name": "phone",
+              "value": "={{ $item(\"0\").$node[\"Remover + do telefone8\"].json[\"phone\"] }}"
+            },
+            {
+              "name": "tracknumb",
+              "value": "={{ $item(\"0\").$node[\"Switch\"].json[\"body\"][\"tracknumb\"] }}"
+            },
+            {
+              "name": "email",
+              "value": "={{ $item(\"0\").$node[\"Switch\"].json[\"body\"][\"email\"] }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "fname",
+              "value": "={{ $item(\"0\").$node[\"Switch\"].json[\"body\"][\"FNAME\"] }}"
+            },
+            {
+              "name": "phone",
+              "value": "={{ $item(\"0\").$node[\"Remover + do telefone8\"].json[\"phone\"] }}"
+            },
+            {
+              "name": "tracknumb",
+              "value": "={{ $item(\"0\").$node[\"Switch\"].json[\"body\"][\"tracknumb\"] }}"
+            },
+            {
+              "name": "email",
+              "value": "={{ $item(\"0\").$node[\"Switch\"].json[\"body\"][\"email\"] }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "746e5b5f-dc21-46e8-a10f-8c0342b64e47",
+      "name": "Enviar Webhook [TG]  Abandonou Carrinho1",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1696,
+        1648
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.shotzap.com.br/webhook/37/uHka06Nq1fcukyUe69aanfFyaaeBdptH3x11HMK7Kh",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "fname",
+              "value": "={{ $item(\"0\").$node[\"Switch\"].json[\"body\"][\"FNAME\"] }}"
+            },
+            {
+              "name": "phone",
+              "value": "={{ $item(\"0\").$node[\"Remover + do telefone9\"].json[\"phone\"] }}"
+            },
+            {
+              "name": "tracknumb",
+              "value": "={{ $item(\"0\").$node[\"Switch\"].json[\"body\"][\"tracknumb\"] }}"
+            },
+            {
+              "name": "email",
+              "value": "={{ $item(\"0\").$node[\"Switch\"].json[\"body\"][\"email\"] }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "fname",
+              "value": "={{ $item(\"0\").$node[\"Switch\"].json[\"body\"][\"FNAME\"] }}"
+            },
+            {
+              "name": "phone",
+              "value": "={{ $item(\"0\").$node[\"Remover + do telefone9\"].json[\"phone\"] }}"
+            },
+            {
+              "name": "tracknumb",
+              "value": "={{ $item(\"0\").$node[\"Switch\"].json[\"body\"][\"tracknumb\"] }}"
+            },
+            {
+              "name": "email",
+              "value": "={{ $item(\"0\").$node[\"Switch\"].json[\"body\"][\"email\"] }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "b8f8ab70-f345-4fb3-8ba5-af3870183198",
+      "name": "Enviar Webhook [TG]  Abandonou Carrinho2",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1856,
+        1888
+      ]
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "",
+                    "rightValue": "",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "3bbe5eac-5ca0-4ecb-9ac1-942fc791920b",
+      "name": "Switch2",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        2192,
+        672
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.shotzap.com.br/api/messages/send",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Authorization",
+              "value": "Bearer 9Uw.6>L@n3'6"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "number",
+              "value": "={{ $item(\"0\").$node[\"Webhook\"].json[\"body\"][\"PHONE\"] }}"
+            },
+            {
+              "name": "openTicket",
+              "value": "0"
+            },
+            {
+              "name": "body",
+              "value": "=🕊️🎉 *Trago boas novas {{ $item(\"0\").$node[\"Switch\"].json[\"body\"][\"FNAME\"] }}* 🕊️🎉\nQue benção! Acabei de receber a confirmação do seu pagamento ✅ \nJá estou enviando ele para separação e envio, assim que ele for despachado te aviso. \nQualquer dúvida é só me chamar ok? 😊  \nFique Com Deus!"
+            },
+            {
+              "name": "queueId",
+              "value": "97"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "675958bc-68a5-40d6-99da-e4ab4e537e64",
+      "name": "Enviar Mensagem Pedido Pago",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        640,
+        928
+      ]
+    },
+    {
+      "parameters": {
+        "amount": 20
+      },
+      "id": "f6057b3a-3484-4b96-9ff1-8fce427f1632",
+      "name": "Wait",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        880,
+        1136
+      ],
+      "webhookId": "bea7ae53-76e6-48f8-85f9-cfe1e1a2e362"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.shotzap.com.br/api/messages/send",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Authorization",
+              "value": "Bearer 9Uw.6>L@n3'6"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "number",
+              "value": "={{ $item(\"0\").$node[\"Webhook\"].json[\"body\"][\"PHONE\"] }}"
+            },
+            {
+              "name": "openTicket",
+              "value": "0"
+            },
+            {
+              "name": "body",
+              "value": "=😳 Já ia me esquecendo {{ $item(\"0\").$node[\"Webhook\"].json[\"body\"][\"fname\"] }}...\n\nVocê conhece nosso grupo VIP de promoções?👑\n\nÉ um grupo de WhatsApp onde eu envio as melhores promoções para clientes VIP como você.\n\nE não se preocupe que é um grupo silenciado que só eu envio mensagens lá.\n\n👇 Vamos manter contato, clique no link e faça parte do grupo VIP 👇\n\nhttps://4soci.al/grupovip-comcristo\n\nTe vejo por lá\n\nAté mais"
+            },
+            {
+              "name": "queueId",
+              "value": "97"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "2371205e-bd96-4377-b9ec-9e86d5a22d4a",
+      "name": "Enviar Convite Grupo VIP",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1072,
+        1136
+      ]
+    },
+    {
+      "parameters": {
+        "amount": 20
+      },
+      "id": "8860aa9d-7386-47e4-b097-cf4916b38916",
+      "name": "Wait1",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        880,
+        1328
+      ],
+      "webhookId": "3d5bd654-7c06-40ce-8555-e48a9a1b4f47"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.shotzap.com.br/api/messages/send",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Authorization",
+              "value": "Bearer 9Uw.6>L@n3'6"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "number",
+              "value": "={{ $item(\"0\").$node[\"Webhook\"].json[\"body\"][\"PHONE\"] }}"
+            },
+            {
+              "name": "openTicket",
+              "value": "0"
+            },
+            {
+              "name": "body",
+              "value": "=E se você ainda não entrou no nosso Grupo VIP {{ $item(\"0\").$node[\"Switch\"].json[\"body\"][\"FNAME\"] }} entre agora mesmo. ✨\n\nÉ um grupo de ofertas para clientes VIP como você, fique por dentro de nossas promoções exclusivas, eventos, lançamentos e muito mais.\n\nhttps://4soci.al/grupovip-comcristo"
+            },
+            {
+              "name": "queueId",
+              "value": "97"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "32785330-a077-4e95-9b35-b6f451fc5b60",
+      "name": "Enviar Mensagem Pedido Entregue1",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1104,
+        1328
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.shotzap.com.br/api/messages/send",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Authorization",
+              "value": "Bearer 9Uw.6>L@n3'6"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "number",
+              "value": "5511959171072"
+            },
+            {
+              "name": "openTicket",
+              "value": "1"
+            },
+            {
+              "name": "body",
+              "value": "=Pedido Recebido\n👋 A Paz {{ $item(\"0\").$node[\"Switch\"].json[\"body\"][\"FNAME\"] }},\nObrigado por comprar na *Livraria Com Cristo,* Deus te abençoe 😊\n\nRecebemos seu pedido e assim que o pagamento for confirmado, ele segue para separação e envio.\nContinuo te avisando por aqui e por e-mail.\nSe precisar você também pode verificar o status do seu pedido ou até mesmo gerar o boleto caso não tenha gerado ainda no link abaixo 👇\n{{ $item(\"0\").$node[\"Switch\"].json[\"body\"][\"TRACKNUMB\"] }}\n\nEnquanto isso, aproveite e salve meu contato para garantir que vai receber minhas mensagens.  \n\nQualquer dúvida é só me chamar, até mais. 🕊️\n"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "f3a87ccb-2734-44ec-bf63-c9b823b18717",
+      "name": "Enviar Mensagem Pedido Recebido",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        864,
+        -176
+      ]
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "md-sz-thalvion",
+        "options": {}
+      },
+      "id": "5a90e8c6-2e5f-4470-ab9d-20afc45d6d75",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -2048,
+        -112
+      ],
+      "webhookId": "4df0064e-299b-4b2e-bc69-53c6589e3c3b"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api2.shotzap.com.br/webhook/2/TS8JdFATPlxJ9UhqINARulvrPXmlZezaJq2UCuXIB4",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Authorization",
+              "value": "Bearer 58q8Z2Au9zog"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "NAME",
+              "value": "={{ $json.body.fname }}"
+            },
+            {
+              "name": "TAG",
+              "value": "={{ $json.body.taginternals }}"
+            },
+            {
+              "name": "Cel Teste",
+              "value": "5511997873915"
+            },
+            {
+              "name": "EMAIL",
+              "value": "={{ $json.body.email }}"
+            },
+            {
+              "name": "TrackNumb",
+              "value": "={{ $json.body.tracknumb }}"
+            },
+            {
+              "name": "Phone",
+              "value": "={{ $json.body.phone }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "880c26ab-ec22-4512-9e8c-b3d8a237fc0f",
+      "name": "Enviar Triger Pedido Enviado",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -400,
+        -256
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api2.shotzap.com.br/webhook/2/6VheiY3tX8eZgFrBXCtma22APKnW60PoCN3i4Bu657",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Authorization",
+              "value": "Bearer 58q8Z2Au9zog"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "FNAME",
+              "value": "={{ $json.body.fname }}"
+            },
+            {
+              "name": "TAG",
+              "value": "={{ $json.body.taginternals }}"
+            },
+            {
+              "name": "Cel Teste",
+              "value": "5511997873915"
+            },
+            {
+              "name": "URL Carrinho",
+              "value": "={{ $json.body.abandoned_checkout_url }}"
+            },
+            {
+              "name": "Produto Abandonado",
+              "value": "={{ $json.body.NAME }}"
+            },
+            {
+              "name": "Phone",
+              "value": "={{ $json.body.phone }}"
+            },
+            {
+              "name": "E-Mail",
+              "value": "={{ $json.body.email }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "ec4fbc38-26c6-4d0f-98b9-d415bab5255d",
+      "name": "Enviar Triger Carrinho Abandonado",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -400,
+        96
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api2.shotzap.com.br/webhook/2/QH9yhWwqirL9tPDVzz3v56MJSm5n2iHh4f2j3WGtmX",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Authorization",
+              "value": "Bearer 58q8Z2Au9zog"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "NAME",
+              "value": "={{ $json.body.fname }}"
+            },
+            {
+              "name": "TAG",
+              "value": "={{ $json.body.taginternals }}"
+            },
+            {
+              "name": "Cel Teste",
+              "value": "5511997873915"
+            },
+            {
+              "name": "TRACKNUMB",
+              "value": "={{ $json.body.tracknumb }}"
+            },
+            {
+              "name": "Phone",
+              "value": "={{ $json.body.phone }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "3074fdf4-93ab-46a2-ab19-4416b699f99f",
+      "name": "Enviar Triger Pedido Cancelado",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -400,
+        304
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api2.shotzap.com.br/webhook/2/iwrQ8DGHmHBWVFOJAQP81kEixHMJZWLaeQ9QuAR5H4",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Authorization",
+              "value": "Bearer 58q8Z2Au9zog"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "NAME",
+              "value": "={{ $json.body.fname }}"
+            },
+            {
+              "name": "TAG",
+              "value": "={{ $json.body.taginternals }}"
+            },
+            {
+              "name": "Cel Teste",
+              "value": "5511997873915"
+            },
+            {
+              "name": "EMAIL",
+              "value": "={{ $json.body.email }}"
+            },
+            {
+              "name": "TrackNumb",
+              "value": "={{ $json.body.tracknumb }}"
+            },
+            {
+              "name": "Phone",
+              "value": "={{ $json.body.phone }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "dc79594b-e063-40b6-b057-5d1cd2ca3229",
+      "name": "Enviar Triger Pedido Recebido",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -448,
+        -624
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.shotzap.com.br/webhook/37/KyFC8nwJorQp5MBsHaHw6D8wIA9MhAvLmfYpd6Ps9t",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Authorization",
+              "value": "Bearer 9S2MgU7KWvB0"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "NAME",
+              "value": "={{ $json.body.FNAME }}"
+            },
+            {
+              "name": "TAG",
+              "value": "={{ $json.body.taginternals }}"
+            },
+            {
+              "name": "PHONE",
+              "value": "5511997873915"
+            },
+            {
+              "name": "EMAIL",
+              "value": "={{ $json.body.EMAIL }}"
+            },
+            {
+              "name": "TrackNumb",
+              "value": "={{ $json.body.TRACKNUMB }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "59994aaf-bac0-42de-8f2e-2506d0b9bd04",
+      "name": "Pedido Entregue",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -400,
+        -64
+      ]
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "6a9716af-66af-45eb-ae84-dfbbfaef3041",
+                    "leftValue": "={{ $item(\"0\").$node[\"Webhook\"].json[\"body\"][\"taginternals\"] }}",
+                    "rightValue": "open,pending,unpacked",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "open"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "c0384ee3-5522-4a9a-8d1c-917b3c5ea235",
+                    "leftValue": "={{ $item(\"0\").$node[\"Webhook\"].json[\"body\"][\"taginternals\"] ",
+                    "rightValue": "open1",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "open1"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "7164a415-3e07-4f73-94ac-bc1075fd5dd1",
+                    "leftValue": "={{ $item(\"0\").$node[\"Webhook\"].json[\"body\"][\"taginternals\"] ",
+                    "rightValue": "open2",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "open2"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "88560c58-86d8-462d-aee6-904b4a93a93e",
+                    "leftValue": "={{ $item(\"0\").$node[\"Webhook\"].json[\"body\"][\"taginternals\"] ",
+                    "rightValue": "open3",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "open3"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "5a0671c7-eeb5-431b-84ec-235914995375",
+                    "leftValue": "={{ $item(\"0\").$node[\"Webhook\"].json[\"body\"][\"taginternals\"] }}",
+                    "rightValue": "pending",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "pending"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $item(\"0\").$node[\"Webhook\"].json[\"body\"][\"taginternals\"] }}",
+                    "rightValue": "open,paid,unpacked",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "paid"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "a3f2d517-545d-4a4d-8af1-2a8064d7a119",
+                    "leftValue": "={{ $item(\"0\").$node[\"Webhook\"].json[\"body\"][\"taginternals\"] }}",
+                    "rightValue": "open,paid,shipped",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "shipped"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "96bae482-142b-4bb0-80ab-6dcf1dbf7541",
+                    "leftValue": "={{ $item(\"0\").$node[\"Webhook\"].json[\"body\"][\"taginternals\"] ",
+                    "rightValue": "refunded",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "refunded"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "aa85291a-f866-43b7-b629-f5c97df8bb3d",
+                    "leftValue": "={{ $item(\"0\").$node[\"Webhook\"].json[\"body\"][\"taginternals\"] ",
+                    "rightValue": "delivered",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "delivered"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "3a765708-a8e8-4125-9b17-cb31230a1698",
+                    "leftValue": "={{ $item(\"0\").$node[\"Webhook\"].json[\"body\"][\"taginternals\"] }}",
+                    "rightValue": "abandonou.carrinho",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "1abandonou.carrinho"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "418c9b03-de13-4940-849b-3f17be0137e7",
+                    "leftValue": "={{ $item(\"0\").$node[\"Webhook\"].json[\"body\"][\"taginternals\"] }}",
+                    "rightValue": "cartaband2",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "2abandonou.carrinho"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "902352b1-2091-40d8-809e-4b67824a48f7",
+                    "leftValue": "={{ $item(\"0\").$node[\"Webhook\"].json[\"body\"][\"taginternals\"] }}",
+                    "rightValue": "cartaband3",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "3abandonou.carrinho"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "3b4f7df3-d367-452a-837b-ae03d160ebb7",
+                    "leftValue": "={{ $item(\"0\").$node[\"Webhook\"].json[\"body\"][\"taginternals\"] }}",
+                    "rightValue": "cancelled,pending,unpacked",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "cancelled"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "714e36ac-af2d-45ad-bf78-69e97eead666",
+                    "leftValue": "={{ $item(\"0\").$node[\"Webhook\"].json[\"body\"][\"taginternals\"] ",
+                    "rightValue": "cancelled,refunded,unpacked",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "2canceled"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "59c2474f-98da-46e7-84c7-81817dba5148",
+                    "leftValue": "={{ $item(\"0\").$node[\"Webhook\"].json[\"body\"][\"taginternals\"] ",
+                    "rightValue": "cancelled3",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "3cancelld"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "a96774f7-918f-44dc-98d7-74e3cb41751d",
+      "name": "Switch3",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        -1728,
+        -320
+      ]
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        -1136,
+        -528
+      ],
+      "id": "9f362aa0-917d-407a-984e-2dd9da3c934e",
+      "name": "No Operation, do nothing"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api2.shotzap.com.br/webhook/2/lIxIfD4iU9W5xjMl8o4hW54Oa5qO4PNJcCXHrVp4dU",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Authorization",
+              "value": "Bearer 58q8Z2Au9zog"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "NAME",
+              "value": "={{ $json.body.fname }}"
+            },
+            {
+              "name": "TAG",
+              "value": "={{ $json.body.taginternals }}"
+            },
+            {
+              "name": "Cel Teste",
+              "value": "5511997873915"
+            },
+            {
+              "name": "TRACKNUMB",
+              "value": "={{ $json.body.tracknumb }}"
+            },
+            {
+              "name": "E-Mail",
+              "value": "={{ $json.body.email }}"
+            },
+            {
+              "name": "Phone",
+              "value": "={{ $json.body.phone }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "df493935-a6cb-4e11-af27-465b5db5b899",
+      "name": "Enviar Triger Pedido Pago",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -400,
+        -432
+      ]
+    },
+    {
+      "parameters": {
+        "url": "https://api.shotzap.com.br/webhook/1/uAhTnzfdprImDfbg6oIcBr8CBTE4oxEOWIqxEv95Sz",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        0,
+        -592
+      ],
+      "id": "bd608c4e-e1db-4ee3-84a6-9ed0ad93a315",
+      "name": "HTTP Request"
+    }
+  ],
+  "pinData": {
+    "Webhook": [
+      {
+        "json": {
+          "headers": {
+            "host": "automacaobksz.shotzap.com.br",
+            "user-agent": "GuzzleHttp/7",
+            "content-length": "325",
+            "content-type": "application/x-www-form-urlencoded",
+            "x-forwarded-for": "162.241.203.47",
+            "x-forwarded-host": "automacaobksz.shotzap.com.br",
+            "x-forwarded-port": "443",
+            "x-forwarded-proto": "https",
+            "x-forwarded-server": "traefik_traefik.1",
+            "x-real-ip": "162.241.203.47",
+            "accept-encoding": "gzip"
+          },
+          "params": {},
+          "query": {},
+          "body": {
+            "fname": "Yure",
+            "email": "yurenlucena@gmail.com",
+            "phoneprefix": "",
+            "phone": "5583996449049",
+            "abandoned_checkout_url": "",
+            "name": "",
+            "tracknumb": "https://thalvionsuplementos.com.br/checkout/v3/success/1884319962/ce99e42eb0406cb6119379b0201e8067d12371fb",
+            "list_uid": "NULL",
+            "status": "confirmed",
+            "taginternals": "cancelled,refunded,unpacked",
+            "rota": "pedidos"
+          },
+          "webhookUrl": "https://automacaobksz.shotzap.com.br/webhook/md-sz-thalvion",
+          "executionMode": "production"
+        }
+      }
+    ]
+  },
+  "connections": {
+    "Switch": {
+      "main": [
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        []
+      ]
+    },
+    "Enviar Webhook [TG] Pedido Pago": {
+      "main": [
+        [
+          {
+            "node": "Switch2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Enviar Mensagem Pedido Enviado": {
+      "main": [
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait": {
+      "main": [
+        [
+          {
+            "node": "Enviar Convite Grupo VIP",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Enviar Mensagem Pedido Entregue": {
+      "main": [
+        [
+          {
+            "node": "Wait1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait1": {
+      "main": [
+        [
+          {
+            "node": "Enviar Mensagem Pedido Entregue1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Remover + do telefone": {
+      "main": [
+        [
+          {
+            "node": "Enviar Mensagem Pagamento Pendente1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Remover + do telefone3": {
+      "main": [
+        [
+          {
+            "node": "Enviar Mensagem Pagamento Pendente2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Remover + do telefone4": {
+      "main": [
+        [
+          {
+            "node": "Enviar Mensagem Pagamento Pendente3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Remover + do telefone6": {
+      "main": [
+        [
+          {
+            "node": "Enviar Mensagem Pedido Enviado",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Remover + do telefone7": {
+      "main": [
+        [
+          {
+            "node": "Enviar Mensagem Pedido Entregue",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Remover + do telefone8": {
+      "main": [
+        [
+          {
+            "node": "Enviar Mensagem Carrinho Abandonado1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Remover + do telefone9": {
+      "main": [
+        [
+          {
+            "node": "Enviar Mensagem Carrinho Abandonado2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Remover + do telefone10": {
+      "main": [
+        [
+          {
+            "node": "Enviar Mensagem Carrinho Abandonado3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Remover + do telefone11": {
+      "main": [
+        [
+          {
+            "node": "Enviar Mensagem Pedido Cancelado1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Remover + do telefone12": {
+      "main": [
+        [
+          {
+            "node": "Enviar Mensagem Pedido Cancelado2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Remover + do telefone13": {
+      "main": [
+        [
+          {
+            "node": "Enviar Mensagem Pedido Cancelado3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Remover + do telefone5": {
+      "main": [
+        [
+          {
+            "node": "Enviar Mensagem Pedido Pago",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Remover + do telefone1": {
+      "main": [
+        [
+          {
+            "node": "Enviar Mensagem Pedido Recebido1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Switch3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch3": {
+      "main": [
+        [
+          {
+            "node": "Enviar Triger Pedido Recebido",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [],
+        [],
+        [],
+        [],
+        [
+          {
+            "node": "Enviar Triger Pedido Pago",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Enviar Triger Pedido Enviado",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [],
+        [],
+        [
+          {
+            "node": "Enviar Triger Carrinho Abandonado",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [],
+        [],
+        [
+          {
+            "node": "Enviar Triger Pedido Cancelado",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Enviar Triger Carrinho Abandonado",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Enviar Triger Pedido Recebido",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        []
+      ]
+    },
+    "Enviar Triger Pedido Recebido": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "921afd83-f599-4f4b-8ed9-12861b4298b6",
+  "meta": {
+    "instanceId": "c587a4266da3c002cba7246fb5a0ce41bb05c82135b89406cfb92061accaffa0"
+  },
+  "id": "huPLwLFd4Fi6SuUH",
+  "tags": []
+}

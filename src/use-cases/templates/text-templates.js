@@ -1,0 +1,16 @@
+export const textTemplates = {
+  carrinhoAbandonado2: "A Paz do Senhor {nome}! 😊 \nPassando para lembrar que os produtos que você escolheu na nossa loja continuam disponíveis, mas a procura está grande! 😲 \nNão perca a oportunidade de adquirir aquele livro/Bíblia que vai edificar a sua vida! ⏳ \nClique aqui e finalize sua compra antes que acabe 👇\nhttps://4soci.al/carrinho_ebenezer",
+  carrinhoAbandonado3: "Graça e Paz {nome} 😉 \nEstamos quase sem estoque de alguns itens que você adicionou ao carrinho da nossa loja! 🚨 \nEssa é a sua última chance de garantir esses produtos incríveis para sua jornada de fé! \nNão deixe essa bênção escapar! 🙏 \n\nClique aqui e aproveite 👇\nhttps://4soci.al/vercarrinho",
+  carrinhoAbandonado3Extra: "Abandonado3",
+  pedidoCancelado1: "Graça e Paz {nome} 😔 \nSeu pedido na nossa loja foi cancelado, mas a Palavra de Deus continua te chamando! ✨ \nRefaça seu pedido e continue sua jornada de fé! \nhttps://4soci.al/verpedidoebenezer\n",
+  pedidoCancelado2: "Olá! 😊 Que a paz do Senhor esteja contigo {nome}! 🙏 \nO produto que você escolheu está quase esgotando! ⚠️ \nNão perca tempo e garanta já o seu para edificar sua vida espiritual. 😉 \nhttps://4soci.al/verpedido_ebenezer",
+  pedidoCancelado3: "A Paz do Senhor {nome}! 👋 \nSei que imprevistos acontecem, mas não deixe sua busca pela Palavra de Deus ser interrompida! \nPara te ajudar, reservamos seus itens por tempo limitado! ⏳ \nRefaça seu pedido agora e não perca essa oportunidade \nhttps://4soci.al/meupedido_ebenezer",
+  pedidoEntregue: "👋 Glória a Deus! ✨\n\nPassando pra avisar que a sua bênção chegou! 🙏📦 O seu pedido já foi entregue! 🙌 Que alegria! 😍\n\nAgora é só desfrutar dos seus livros, Bíblias, devocionais e tudo o mais que você escolheu pra edificar a sua fé! 📖🔥\n\nSe tiver alguma dúvida ou precisar de algo mais, pode contar com a gente! 😉\n\nQue Deus te abençoe grandemente! 💖 E não se esqueça: leitura edifica! 😉",
+  pedidoRecebido1: "👋 A Paz {nome}, tudo bem? \n\nPassei aqui só para te avisar que ainda *não recebi a confirmação* do seu pagamento.\n\nQualquer dúvida é só me chamar ok? 😊\n\n🏃 Assim o pagamento for confirmado, seu pedido será separado e para envio.\nAté mais.\n\nSe você já pagou, é só aguardar 😉",
+  pedidoRecebido2: "🤔 Aconteceu alguma coisa {nome}?\n\nAinda não recebi a confirmação de pagamento do seu pedido, *ele continua reservado e te esperando*, mas não por muito tempo, nosso estoque é limitado e *outros clientes já estão de olho.*\n \nFaça o pagamento e garanta a próxima leitura que vai te *aproximar de Deus* 📖",
+  pedidoRecebido3: "*😬 Estou preocupado com você {nome}*\n\n*Não recebi* ainda a confirmação do seu pagamento e estão me cobrando aqui para liberar o produto que eu *reservei para você.*\n\n*Vou segurar o seu carrinho até hoje tá,* não consigo reservar por mais tempo.\n\nSe você quiser trocar a forma de pagamento me avisa, você pode pagar no cartão de crédito á vista ou parcelado, Boleto á vista e até parcelar no Pix é possível.\n\nMe manda mensagem se precisar uma ajuda.\n\nAté +",
+  pedidoRecebidoTeste: "teste",
+  pedidoRecebidoDescadastre: "Que Pena",
+  pedidoRecebidoRastrear: "Quero Rastrear",
+  pedidoRecebidoSelecione: "selecione a opção desejada"
+};
