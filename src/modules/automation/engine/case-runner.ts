@@ -15,13 +15,9 @@ const buildTagPayload = (tag: string, context: AutomationContext) => ({
 });
 
 const buildTextPayload = (text: string, context: AutomationContext) => ({
-  openTicket: 0,
-  body: [
-    {
-      phone: context.number,
-      message: text
-    }
-  ]
+  openTicket: "0",
+  number: context.number,
+  body: text
 });
 
 const resolveTemplate = (keyOrObject: any, templates: Record<string, any>) => {
@@ -69,19 +65,31 @@ export const runUseCase = async ({ useCase, context, provider, templates }: RunU
       }
       case "addTag": {
         logger.info({ tag: step.tag, label: step.label }, "Adicionando tag");
-        await provider.addTag(buildTagPayload(step.tag, context));
+        try {
+          await provider.addTag(buildTagPayload(step.tag, context));
+        } catch (err: any) {
+          logger.warn({ tag: step.tag, error: err.message }, "Falha ao adicionar tag (não bloqueante)");
+        }
         break;
       }
       case "removeTag": {
         logger.info({ tag: step.tag, label: step.label }, "Removendo tag");
-        await provider.removeTag(buildTagPayload(step.tag, context));
+        try {
+          await provider.removeTag(buildTagPayload(step.tag, context));
+        } catch (err: any) {
+          logger.warn({ tag: step.tag, error: err.message }, "Falha ao remover tag (não bloqueante)");
+        }
         break;
       }
       case "removeTags": {
         logger.info({ tags: step.tags, label: step.label }, "Removendo múltiplas tags");
         if (Array.isArray(step.tags)) {
           for (const tag of step.tags) {
-            await provider.removeTag(buildTagPayload(tag, context));
+            try {
+              await provider.removeTag(buildTagPayload(tag, context));
+            } catch (err: any) {
+              logger.warn({ tag, error: err.message }, "Falha ao remover tag na lista (não bloqueante)");
+            }
           }
         }
         break;

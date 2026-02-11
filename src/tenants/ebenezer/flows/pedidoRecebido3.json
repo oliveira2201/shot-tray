@@ -5,20 +5,6 @@
   "description": "Terceira cobrança de pagamento.",
   "steps": [
     { "type": "addTag", "label": "Manter recebido 3", "tag": "[EBE] Pedido Recebido3" },
-    { 
-      "type": "removeTags", 
-      "label": "Limpar tags anteriores", 
-      "tags": [
-        "[EBE] Pedido Enviado",
-        "[EBE] Pedido Cancelado1",
-        "[EBE] Pedido Cancelado2",
-        "[EBE] Pedido Cancelado3",
-        "[EBE] Pedido Carrinho Abandonado1",
-        "[EBE] Pedido Carrinho Abandonado2",
-        "[EBE] Pedido Carrinho Abandonado3",
-        "[EBE] Pedido Recebido2"
-      ] 
-    },
     { "type": "stopIfHasAnyTag", "label": "Encerrar se pagou", "tags": ["[EBE] Pedido Pago"] },
     { "type": "sendText", "label": "Cobrança 3", "textKey": "pedidoRecebido3" }
   ]

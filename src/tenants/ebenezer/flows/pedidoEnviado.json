@@ -5,24 +5,6 @@
   "description": "Confirma envio e oferece grupo VIP.",
   "steps": [
     { "type": "addTag", "label": "Marcar cliente", "tag": "[EBE] Cliente" },
-    { 
-      "type": "removeTags", 
-      "label": "Limpar tags anteriores", 
-      "tags": [
-        "[EBE] Pedido Enviado",
-        "[EBE] Pedido Cancelado1",
-        "[EBE] Pedido Cancelado2",
-        "[EBE] Pedido Cancelado3",
-        "[EBE] Pedido Carrinho Abandonado1",
-        "[EBE] Pedido Carrinho Abandonado2",
-        "[EBE] Pedido Carrinho Abandonado3",
-        "[EBE] Pedido Recebido",
-        "[EBE] Pedido Recebido1",
-        "[EBE] Pedido Recebido2",
-        "[EBE] Pedido Recebido3",
-        "[EBE] Pedido Pago"
-      ]
-    },
     { "type": "sendButtons", "label": "Enviar rastreio", "templateKey": "pedidoEnviadoTracking" },
     { "type": "wait", "label": "Aguardar 30s", "seconds": 30 },
     { "type": "sendButtons", "label": "Enviar convite VIP", "templateKey": "pedidoEnviadoVip" },

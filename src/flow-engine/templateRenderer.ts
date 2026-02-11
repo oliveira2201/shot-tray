@@ -1,7 +1,15 @@
 const normalizeKey = (key: string) => key.toLowerCase();
 
 const resolveValue = (context: Record<string, any>, rawKey: string) => {
-  const key = normalizeKey(rawKey);
+  const key = normalizeKey(rawKey).trim(); // Trim extra spaces!
+  
+  if (Object.prototype.hasOwnProperty.call(context, rawKey)) {
+    return context[rawKey];
+  }
+
+  // Debug: Se quiser ver o que está acontecendo no log, descomente:
+  // console.log(`[Resolving] Key: '${key}', ContextKeys:`, Object.keys(context));
+
   const normalizedContext = Object.keys(context).reduce((acc, current) => {
     acc[normalizeKey(current)] = context[current];
     return acc;
@@ -11,9 +19,8 @@ const resolveValue = (context: Record<string, any>, rawKey: string) => {
     return normalizedContext[key];
   }
 
-  if (key === "nome" && normalizedContext.name) {
-    return normalizedContext.name;
-  }
+  if (key === "nome" && normalizedContext.name) return normalizedContext.name;
+  if (key === "telefone" && normalizedContext.number) return normalizedContext.number;
 
   return undefined;
 };

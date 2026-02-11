@@ -25,6 +25,8 @@ export class TenantService {
     const outputProvider = new ProviderClass({
       baseUrl: tenant.config.baseUrl,
       token: tenant.config.token,
+      tagsToken: tenant.config.tagsToken,
+      tagsCachePath: tenant.config.tagsCachePath,
       paths: tenant.config.paths
     });
 

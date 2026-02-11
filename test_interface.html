@@ -1,0 +1,125 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ShotTray - Teste de Integração</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f4f9; color: #333; display: flex; justify-content: center; padding: 20px; }
+        .card { background: white; width: 100%; max-width: 600px; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        h1 { margin-top: 0; font-size: 24px; color: #4a4a4a; text-align: center; }
+        .input-group { margin-bottom: 20px; }
+        label { display: block; margin-bottom: 8px; font-weight: 600; font-size: 0.9em; color: #666; }
+        input { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; box-sizing: border-box; font-size: 16px; }
+        
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 25px; }
+        button { padding: 12px; border: none; border-radius: 6px; font-size: 14px; font-weight: 600; cursor: pointer; transition: transform 0.1s, opacity 0.2s; color: white; }
+        button:active { transform: scale(0.98); }
+        button:hover { opacity: 0.9; }
+
+        .btn-recebido { background-color: #2196F3; }
+        .btn-pago { background-color: #4CAF50; }
+        .btn-enviado { background-color: #FF9800; }
+        .btn-entregue { background-color: #009688; }
+        .btn-cancelado { background-color: #F44336; }
+        .btn-carrinho { background-color: #9C27B0; }
+        .btn-test { background-color: #607D8B; }
+
+        #console { background: #2d2d2d; color: #76ff03; padding: 15px; border-radius: 6px; font-family: 'Consolas', monospace; font-size: 12px; height: 200px; overflow-y: auto; white-space: pre-wrap; }
+        .status-ok { color: #76ff03; }
+        .status-err { color: #ff5252; }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <h1>Simulador de Eventos (E-commerce)</h1>
+    
+    <div class="input-group">
+        <label>URL do Webhook Local</label>
+        <input type="text" id="url" value="http://localhost:3005/webhooks/ebenezer">
+    </div>
+
+    <div class="input-group">
+        <div style="display: flex; gap: 10px;">
+            <div style="flex: 1;">
+                <label>Telefone (com 55 + DDD)</label>
+                <input type="text" id="phone" value="5586995336923">
+            </div>
+            <div style="flex: 1;">
+                <label>Nome do Cliente</label>
+                <input type="text" id="name" value="Cliente Teste">
+            </div>
+        </div>
+    </div>
+
+    <div class="grid">
+        <button class="btn-recebido" onclick="send('pedido_recebido')">📅 Pedido Recebido</button>
+        <button class="btn-pago" onclick="send('pedido_pago')">💰 Pedido Pago</button>
+        <button class="btn-enviado" onclick="send('pedido_enviado')">🚚 Pedido Enviado</button>
+        <button class="btn-entregue" onclick="send('pedido_entregue')">✅ Pedido Entregue</button>
+        <button class="btn-carrinho" onclick="send('carrinho_abandonado')">🛒 Carrinho Abandonado</button>
+        <button class="btn-cancelado" onclick="send('pedido_cancelado')">❌ Pedido Cancelado</button>
+    </div>
+
+    <div id="console">Pronto para testar...</div>
+</div>
+
+<script>
+    function log(text, type = 'info') {
+        const consoleEl = document.getElementById('console');
+        const line = document.createElement('div');
+        line.textContent = `> ${text}`;
+        line.className = type === 'error' ? 'status-err' : 'status-ok';
+        consoleEl.prepend(line);
+    }
+
+    async function send(eventType) {
+        const url = document.getElementById('url').value;
+        const phone = document.getElementById('phone').value;
+        const name = document.getElementById('name').value;
+
+        const payload = {
+            // Simula estrutura do E-commerce (Tray/Nuvemshop/Woocomerce -> Adapter padroniza isso)
+            status: eventType, 
+            customer: {
+                name: name,
+                phone: phone,
+                email: "teste@email.com"
+            },
+            data: {
+                extra1: "https://rastreio.com/123",
+                extra2: "https://nfe.com/123",
+                extra3: "Resumo do Pedido #12345"
+            }
+        };
+
+        log(`Enviando ${eventType}...`);
+
+        try {
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    // Se precisar de segredo: 'x-erp-signature': '...'
+                },
+                body: JSON.stringify(payload)
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                log(`Sucesso: Fluxo "${data.flow}" disparado!`);
+                console.log(data);
+            } else {
+                log(`Erro ${response.status}: ${data.error || 'Desconhecido'}`, 'error');
+            }
+        } catch (err) {
+            log(`Falha na requisição: ${err.message}. O servidor está rodando?`, 'error');
+        }
+    }
+</script>
+
+</body>
+</html>

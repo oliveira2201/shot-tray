@@ -1,3 +1,4 @@
+import cors from "cors";
 import express from "express";
 import { healthRouter } from "./routes/health.js";
 import { visualizerRouter } from "./routes/visualizer.js";
@@ -6,6 +7,7 @@ import { logger } from "./utils/logger.js";
 
 export const app = express();
 
+app.use(cors()); // Habilita chamadas de qualquer origem (arquivo local)
 app.use(express.json({ limit: "2mb" }));
 app.use(healthRouter);
 app.use(webhooksRouter);
