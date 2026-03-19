@@ -4,6 +4,7 @@ import { processEvent } from "../modules/automation/service.js";
 import { handleIncomingMessage } from "../modules/automation/engine/choice-listener.js";
 import { renderTemplate } from "../flow-engine/templateRenderer.js";
 import { logger } from "../utils/logger.js";
+import { SchedulerService } from "../modules/scheduler/service.js";
 
 export const webhooksRouter = Router();
 
@@ -51,18 +52,41 @@ webhooksRouter.post("/webhooks/:tenantId", async (req: Request, res: Response): 
       customerPhone: normalizedEvent.customer?.phone,
     }, "🔀 Evento normalizado → roteando para flow");
 
-    // 4. Responder imediatamente e processar em background
+    // 4. Registrar no Redis
+    await SchedulerService.log({
+      type: "webhook_received",
+      tenantId,
+      flowAlias: normalizedEvent.flowAlias,
+      phone: normalizedEvent.customer?.phone,
+      detail: `${normalizedEvent.customer?.name || "?"} — ${JSON.stringify(req.body).substring(0, 150)}`,
+    });
+
+    // 5. Responder imediatamente e processar em background
     res.json({ ok: true, flow: normalizedEvent.flowAlias, status: "processing" });
 
-    // 5. Executar flow em background (não bloqueia a resposta)
+    // 6. Executar flow em background
     processEvent({
       flowAlias: normalizedEvent.flowAlias,
       context: normalizedEvent,
       tenantConfig
     }).then((result) => {
       logger.info({ tenantId, flowAlias: normalizedEvent.flowAlias, result }, "✅ Flow executado");
+      SchedulerService.log({
+        type: "flow_completed",
+        tenantId,
+        flowAlias: normalizedEvent.flowAlias,
+        phone: normalizedEvent.customer?.phone,
+        detail: JSON.stringify(result),
+      });
     }).catch((err) => {
       logger.error({ tenantId, flowAlias: normalizedEvent.flowAlias, error: err.message }, "❌ Erro no flow");
+      SchedulerService.log({
+        type: "flow_error",
+        tenantId,
+        flowAlias: normalizedEvent.flowAlias,
+        phone: normalizedEvent.customer?.phone,
+        detail: err.message,
+      });
     });
 
   } catch (error: any) {

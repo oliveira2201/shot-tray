@@ -10,6 +10,7 @@ import { simulateApiRouter } from "./routes/api/simulate.js";
 import { templatesApiRouter } from "./routes/api/templates.js";
 import { overviewApiRouter } from "./routes/api/overview.js";
 import { tagsRouter } from "./routes/api/tags.js";
+import { schedulerApiRouter } from "./routes/api/scheduler.js";
 import { logger } from "./utils/logger.js";
 
 export const app = express();
@@ -24,6 +25,7 @@ app.use(simulateApiRouter);
 app.use(templatesApiRouter);
 app.use(overviewApiRouter);
 app.use(tagsRouter);
+app.use(schedulerApiRouter);
 app.use(visualizerRouter);
 
 // Servir frontend React (build estático)

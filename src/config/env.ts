@@ -6,6 +6,7 @@ dotenv.config();
 const envSchema = z.object({
   PORT: z.coerce.number().default(3005),
   FLOWS_DIR: z.string().default("flows"),
+  REDIS_URL: z.string().default("redis://localhost:6379"),
 });
 
 const parsed = envSchema.safeParse(process.env);
