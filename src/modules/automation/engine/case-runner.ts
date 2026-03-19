@@ -134,8 +134,26 @@ export const runUseCase = async ({ useCase, context, provider, templates }: RunU
         break;
       }
       case "wait": {
-        logger.info({ seconds: step.seconds, label: step.label }, "Aguardando");
-        await delay(step.seconds * 1000);
+        const waitSecs = step.seconds || 0;
+        const remainingAfterWait = steps.slice(i + 1);
+
+        if (waitSecs <= 5 || remainingAfterWait.length === 0) {
+          // Waits curtos ou sem steps restantes: inline
+          logger.info({ seconds: waitSecs, label: step.label }, "Aguardando (inline)");
+          if (waitSecs > 0) await delay(waitSecs * 1000);
+        } else {
+          // Waits longos: agenda no scheduler e retorna
+          logger.info({ seconds: waitSecs, remainingSteps: remainingAfterWait.length, label: step.label }, "Aguardando (agendado)");
+          await SchedulerService.scheduleContinuation(
+            context._tenantId || "ebenezer",
+            useCase.id,
+            waitSecs,
+            context,
+            remainingAfterWait,
+            []
+          );
+          return { skipped: false, deferred: true };
+        }
         break;
       }
       case "scheduleFlow": {

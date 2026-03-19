@@ -51,15 +51,19 @@ webhooksRouter.post("/webhooks/:tenantId", async (req: Request, res: Response): 
       customerPhone: normalizedEvent.customer?.phone,
     }, "🔀 Evento normalizado → roteando para flow");
 
-    // 4. Send to Automation Module
-    const result = await processEvent({
+    // 4. Responder imediatamente e processar em background
+    res.json({ ok: true, flow: normalizedEvent.flowAlias, status: "processing" });
+
+    // 5. Executar flow em background (não bloqueia a resposta)
+    processEvent({
       flowAlias: normalizedEvent.flowAlias,
       context: normalizedEvent,
       tenantConfig
+    }).then((result) => {
+      logger.info({ tenantId, flowAlias: normalizedEvent.flowAlias, result }, "✅ Flow executado");
+    }).catch((err) => {
+      logger.error({ tenantId, flowAlias: normalizedEvent.flowAlias, error: err.message }, "❌ Erro no flow");
     });
-
-    logger.info({ tenantId, flowAlias: normalizedEvent.flowAlias, result }, "✅ Flow executado");
-    res.json({ ok: true, flow: normalizedEvent.flowAlias, result });
 
   } catch (error: any) {
     logger.error({ error, tenantId }, "Webhook processing failed");
