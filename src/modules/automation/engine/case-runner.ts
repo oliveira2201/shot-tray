@@ -104,10 +104,21 @@ export const runUseCase = async ({ useCase, context, provider, templates }: RunU
         const template = resolveTemplate(step.templateKey || step.template, templates);
         if (!template) {
            logger.error({ key: step.templateKey }, "Template de botões não encontrado");
-           continue; 
+           continue;
         }
-        const payload = renderTemplate(template, context);
-        await provider.sendButtons(payload);
+        const rendered = renderTemplate(template, context);
+        // Wrapping no formato esperado pela API PRO: { openTicket, body: [{ phone, title, body, footer, buttons }] }
+        const buttonsPayload = {
+          openTicket: 0,
+          body: [{
+            phone: context.number,
+            title: rendered.title || "",
+            body: rendered.body || "",
+            footer: rendered.footer || "",
+            buttons: rendered.buttons || [],
+          }]
+        };
+        await provider.sendButtons(buttonsPayload);
         break;
       }
       case "sendText": {
