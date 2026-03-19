@@ -1,6 +1,4 @@
 import axios from "axios";
-import fs from "fs-extra";
-import path from "path";
 
 // Configuração manual para teste isolado
 const BASE_URL = "https://api.shotzap.com.br";
