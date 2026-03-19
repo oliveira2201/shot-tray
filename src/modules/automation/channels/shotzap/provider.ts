@@ -6,27 +6,23 @@ import { IChannelProvider } from "../../../../types/automation.js";
 interface ShotzapConfig {
   baseUrl: string;
   token: string;
-  tagsToken?: string; // Token específico para operações de tags (criação/listagem)
-  tagsCachePath?: string; // Caminho para arquivo de cache de tags
+  tagsCachePath?: string;
   timeout?: number;
   paths?: {
     sendButtons?: string;
     sendText?: string;
     addTag?: string;
-    removeTag?: string;
   };
 }
 
 export class ShotzapProvider implements IChannelProvider {
   private client: any;
   private token: string;
-  private tagsToken: string;
   private tagsCachePath?: string;
   private paths: {
     sendButtons: string;
     sendText: string;
     addTag: string;
-    removeTag: string;
   };
   private _tagsCache: Map<string, number> = new Map();
   private _tagsLoaded: boolean = false;
@@ -47,24 +43,50 @@ export class ShotzapProvider implements IChannelProvider {
       timeout: config.timeout || 20000
     });
     this.token = config.token;
-    this.tagsToken = config.tagsToken || config.token;
     this.tagsCachePath = config.tagsCachePath;
 
     this.paths = {
-      sendButtons: config.paths?.sendButtons || "/messages/send-button-list",
-      sendText: config.paths?.sendText || "/messages/send-text",
-      addTag: config.paths?.addTag || "/tags/add",
-      removeTag: config.paths?.removeTag || "/tags/remove"
+      sendButtons: config.paths?.sendButtons || "/api/messages/whatsmeow/sendButtonsPRO",
+      sendText: config.paths?.sendText || "/api/messages/send",
+      addTag: config.paths?.addTag || "/api/tags/add"
     };
     
     // Inicia carregamento das tags em background na inicialização
     this._ensureTagsLoaded().catch(e => console.error(">>> [ShotzapProvider] Falha silenciosa no pré-carregamento de tags:", e.message));
   }
 
+  // Sanitiza o número para o padrão esperado (remover nono dígito em DDDs brasileiros se houver excesso)
+  private _sanitizePhone(phone: string): string {
+    if (!phone) return phone;
+    // Remove caracteres não numéricos
+    let clean = phone.replace(/\D/g, "");
+
+    // Tratamento específico para números do Brasil (55)
+    // Padrão: 55 + DDD (2) + 9 + 8 dígitos = 13 dígitos.
+    // Muitos sistemas e a API Shotzap (para envio WhatsMeow) preferem o formato sem o 9 no início do número local se ele for 12 dígitos.
+    // Mas o usuário especificou: "podar o primeiro 9 para ficar 8" se tiver 9 digitos na frente.
+    
+    if (clean.length === 13 && clean.startsWith("55")) {
+        // Formato: 55 DDD 9 XXXX XXXX
+        // Queremos transformar em: 55 DDD XXXX XXXX (12 dígitos)
+        // Índice 01 (55) | 23 (DD) | 4 (9) | 5... (resto)
+        // Se o índice 4 for '9', removemos.
+        if (clean[4] === '9') {
+             console.log(`>>> [ShotzapProvider] Sanitizando telefone: ${clean} -> removendo 9 adicional.`);
+             const ddi_ddd = clean.substring(0, 4); // "5586"
+             const number_body = clean.substring(5); // Pula o índice 4
+             return clean = ddi_ddd + number_body;
+        }
+    }
+    
+    return clean;
+  }
+
   // Helper para métodos privados de tickets e contatos
   private async _lookupContact(phone: string): Promise<number | null> {
       try {
-          console.log(`${this.C.blue}>>> [ShotzapProvider] Buscando contato para ${phone}${this.C.reset}`);
+          const sanitizedPhone = this._sanitizePhone(phone);
+          console.log(`${this.C.blue}>>> [ShotzapProvider] Buscando contato para ${sanitizedPhone} (Original: ${phone})${this.C.reset}`);
           const token = this.token; // Legacy Token para contatos
           
           // 1. Tenta endpoint direto (single) com BODY (segundo testes da API)
@@ -74,7 +96,7 @@ export class ShotzapProvider implements IChannelProvider {
                    method: 'GET',
                    url: '/api/contacts/single',
                    headers: { Authorization: `Bearer ${token}` },
-                   data: { number: phone }
+                   data: { number: sanitizedPhone }
                });
 
                // Resposta vem como { "370484": { id: 370484, ... } }
@@ -98,12 +120,12 @@ export class ShotzapProvider implements IChannelProvider {
           // Portanto, se ambos falharem, dependemos da CRIAÇÃO, que funciona.
           try {
               const res = await this.client.get(`/api/contacts`, {
-                  params: { number: phone },
+                  params: { number: sanitizedPhone },
                   headers: { Authorization: `Bearer ${token}` }
               });
               
               const list = Array.isArray(res.data) ? res.data : (res.data?.contacts || []);
-              const found = list.find((c: any) => c.number == phone || c.phone == phone);
+              const found = list.find((c: any) => c.number == sanitizedPhone || c.phone == sanitizedPhone);
               if (found?.id) return found.id;
           } catch (e2) {
               // Ignore
@@ -117,21 +139,22 @@ export class ShotzapProvider implements IChannelProvider {
 
   private async _ensureContact(phone: string): Promise<number | null> {
       // Tenta lookup primeiro
-      const existing = await this._lookupContact(phone);
+      const sanitizedPhone = this._sanitizePhone(phone);
+      const existing = await this._lookupContact(sanitizedPhone);
       if (existing) return existing;
 
       const userId = this._getUserId() || 854; 
       const payload = {
-          name: phone,
-          number: phone, 
+          name: sanitizedPhone,
+          number: sanitizedPhone, 
           email: "",
           userId
       };
 
       try {
-          console.log(`${this.C.blue}>>> [ShotzapProvider] Criando/Garantindo contato ${phone} usando Legacy Token...${this.C.reset}`);
+          console.log(`${this.C.blue}>>> [ShotzapProvider] Criando/Garantindo contato ${sanitizedPhone} usando Legacy Token...${this.C.reset}`);
           // Usa Legacy Token (false) para criar contato
-          const res = await this._postWithAuth("/api/contacts", payload, false);
+          const res = await this._postWithAuth("/api/contacts", payload);
           
           // Sucesso direto (Created)
           if (res?.id) return res.id;
@@ -149,18 +172,19 @@ export class ShotzapProvider implements IChannelProvider {
           // Erro 400 geralmente significa que já existe.
           if (e.response?.status === 400 || e.response?.status === 409) {
              console.log(`${this.C.yellow}>>> [ShotzapProvider] Contato já existe (erro 400/409), re-tentando lookup.${this.C.reset}`);
-             return this._lookupContact(phone);
+             return this._lookupContact(sanitizedPhone);
           }
           
-          console.error(`${this.C.red}>>> [ShotzapProvider] Falha ao criar contato ${phone}:${this.C.reset}`, e.message);
+          console.error(`${this.C.red}>>> [ShotzapProvider] Falha ao criar contato ${sanitizedPhone}:${this.C.reset}`, e.message);
       }
       
       // Última tentativa de lookup
-      return this._lookupContact(phone);
+      return this._lookupContact(sanitizedPhone);
   }
 
   private async _ensureTicket(phone: string): Promise<number | null> {
-      const contactId = await this._ensureContact(phone);
+      const sanitizedPhone = this._sanitizePhone(phone);
+      const contactId = await this._ensureContact(sanitizedPhone);
       if (!contactId) {
           console.error(`${this.C.red}>>> [ShotzapProvider] Impossível criar ticket: Contato não encontrado/criado.${this.C.reset}`);
           return null;
@@ -173,7 +197,7 @@ export class ShotzapProvider implements IChannelProvider {
           // Tickets exigem Token Legacy conforme validação script test_ticket.ts
           const endpoint = "/api/tickets/createTicketAPI";
           console.log(`${this.C.blue}>>> [ShotzapProvider] Tentando criar ticket em ${endpoint} (Token Legacy)...${this.C.reset}`);
-          const res = await this._postWithAuth(endpoint, payload, false); // false = Legacy Token
+          const res = await this._postWithAuth(endpoint, payload);
           
           if (res?.id) return res.id;
           if (res?.ticket?.id) return res.ticket.id;
@@ -188,17 +212,11 @@ export class ShotzapProvider implements IChannelProvider {
       return null;
   }
 
-  // Método auxiliar para escolher o token corretoInt
-  private _getToken(isTagOperation: boolean = false): string {
-      return isTagOperation ? this.tagsToken : this.token;
-  }
-
-  private async _postWithAuth(path: string, payload: any, isTagOperation: boolean = false) {
-    const tokenToUse = this._getToken(isTagOperation);
+  private async _postWithAuth(path: string, payload: any) {
     const response = await this.client.post(path, payload, {
       headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${tokenToUse}`
+        "Content-Type": "application/json; charset=utf-8",
+        Authorization: `Bearer ${this.token}`
       },
       maxBodyLength: Infinity
     });
@@ -208,7 +226,7 @@ export class ShotzapProvider implements IChannelProvider {
   private _getUserId(): number | undefined {
     // Tenta extrair do token de tags, que provavelmente é JWT
     try {
-        const part = this.tagsToken.split('.')[1];
+        const part = this.token.split('.')[1];
         if (!part) return undefined;
         const json = Buffer.from(part, 'base64').toString();
         const data = JSON.parse(json);
@@ -249,8 +267,8 @@ export class ShotzapProvider implements IChannelProvider {
 
             console.log(">>> [ShotzapProvider] Iniciando carga de tags da API (Cache não encontrado/configurado)...");
             // Listagem de tags usa o token de tags
-            const response = await this.client.get("/tags", {
-                headers: { Authorization: `Bearer ${this.tagsToken}` }
+            const response = await this.client.get("/api/tags", {
+                headers: { Authorization: `Bearer ${this.token}` }
             });
             
             const tags = response.data?.tags || [];
@@ -302,7 +320,7 @@ export class ShotzapProvider implements IChannelProvider {
         // Criação usa token de tags
         // Nota: se _postWithAuth usa o padrão token, precisamos passar flag ou usar client direto.
         // Vou usar _postWithAuth com novo parâmetro isTagOperation
-        const response = await this._postWithAuth("/tags", payload, true);
+        const response = await this._postWithAuth("/api/tags", payload);
 
         if (response && (response.id || response.data?.id)) {
             const id = response.id || response.data?.id;
@@ -333,70 +351,66 @@ export class ShotzapProvider implements IChannelProvider {
   }
 
   async sendButtons(payload: any) {
-    console.log(">>> [ShotzapProvider] Interceptando sendButtons");
-    // console.log(">>> [ShotzapProvider] Payload recebido:", JSON.stringify(payload, null, 2));
+    console.log(">>> [ShotzapProvider] Enviando sendButtons (API PRO)");
 
-    // CONVERSÃO FORÇADA PARA TEXTO PARA GARANTIR ENTREGA
-    // A API de botões apresenta instabilidade ou falhas silenciosas.
-    // Convertemos o payload de botões em um formato textual legível.
     try {
-      if (!payload.body || !Array.isArray(payload.body) || payload.body.length === 0) {
-          // Se não for o array esperado, tenta enviar como está (fallback ruim) ou loga erro
-          console.warn(">>> [ShotzapProvider] Payload de botões inválido para conversão. Tentando envio original...");
-          return this._postWithAuth(this.paths.sendButtons, payload);
+      // Garantir campo obrigatório openTicket
+      if (payload.openTicket === undefined) payload.openTicket = 0;
+
+      // Hook: Normalizar payload para API PRO (tratar copy_code -> code)
+      // E Hook: Sanitizar telefones no payload
+      if (payload.body && Array.isArray(payload.body)) {
+          payload.body.forEach((item: any) => {
+              if (item.phone) {
+                   item.phone = this._sanitizePhone(item.phone);
+              }
+
+              if (item.buttons && Array.isArray(item.buttons)) {
+                  item.buttons.forEach((btn: any) => {
+                      // Mapeia tipos alternativos para 'copy'
+                      if (btn.type === 'cta_copy') {
+                          btn.type = 'copy';
+                      }
+                      // Mapeia 'copy_code' para 'code' (exigido pela API PRO)
+                      if (btn.type === 'copy' && btn.copy_code && !btn.code) {
+                          btn.code = btn.copy_code;
+                      }
+                  });
+              }
+          });
       }
 
-      const item = payload.body[0];
-      const targetNumber = item.phone || item.number;
-      const title = item.title || "Mensagem";
+      const response = await this._postWithAuth(this.paths.sendButtons, payload);
       
-      console.log(`>>> [ShotzapProvider] Convertendo Botão para Texto -> ${title} (${targetNumber})`);
-
-      let textBody = "";
-      if (item.title) textBody += `*${item.title}*`;
-      textBody += `\n\n${item.body || ''}`;
-      if (item.footer) textBody += `\n\n_${item.footer}_`;
-      
-      // ... Conversão de botões omitida para brevidade (mantida igual) ...
-
-
-      if (item.buttons && Array.isArray(item.buttons)) {
-         textBody += "\n\n👇 *Opções:*";
-         item.buttons.forEach((btn: any) => {
-            if (btn.type === 'url') {
-              textBody += `\n🔗 ${btn.text}: ${btn.url}`;
-            } else if (btn.type === 'quickreply') {
-               textBody += `\n👉 ${btn.text}`;
-            } else {
-               textBody += `\n🔹 ${btn.text || 'Botão'}`;
-            }
-         });
+      // Valida se a resposta indica sucesso
+      if (response && (response.retorno === true || response.id || response.messageId)) {
+           // Hook: Verificar se veio ticketId e processar tags pendentes
+           // O payload.body[0].phone geralmente existe na estrutura PRO
+           if (payload.body && payload.body[0] && payload.body[0].phone) {
+               // A sanitização já ocorreu acima, então payload.body[0].phone está limpo
+               this._checkAndFlushTags(response, payload.body[0].phone);
+           }
+           return response;
       }
 
-      const textPayload = {
-        number: targetNumber,
-        openTicket: "0",
-        body: textBody.trim()
-      };
-
-      // console.log(">>> [ShotzapProvider] Payload convertido para TEXTO:", JSON.stringify(textPayload, null, 2));
-
-      // Usa o endpoint de TEXTO que sabemos que funciona
-      const response = await this._postWithAuth(this.paths.sendText, textPayload);
-      // console.log(">>> [ShotzapProvider] Resposta da API de Texto:", JSON.stringify(response, null, 2));
-
-      // Hook: Verificar se veio ticketId e processar tags pendentes
-      this._checkAndFlushTags(response, targetNumber);
-
+      console.warn(">>> [ShotzapProvider] Resposta suspeita da API de botões:", response);
       return response;
 
-    } catch (error) {
-       console.error(">>> [ShotzapProvider] Erro na conversão de botões para texto:", error);
+    } catch (error: any) {
+       console.error(">>> [ShotzapProvider] Erro ao enviar botões:", error.message);
+       // Se quiser fallback para texto em caso de erro, descomente abaixo:
+       // return this._fallbackToText(payload);
        throw error; 
     }
   }
 
   async sendText(payload: any) {
+    if (payload.number) {
+         payload.number = this._sanitizePhone(payload.number);
+    }
+    // Garantir campos obrigatórios da API Whaticket
+    if (!payload.openTicket) payload.openTicket = "0";
+    if (!payload.queueId) payload.queueId = "0";
     const response = await this._postWithAuth(this.paths.sendText, payload);
     
     // Hook: Verificar se veio ticketId e processar tags pendentes
@@ -451,12 +465,15 @@ export class ShotzapProvider implements IChannelProvider {
     // 2. Obter Telefone
     // O payload do addTag geralmente vem do flow engine contendo o number
     // pode vir como payload.number, payload.phone, ou contact.phone
-    const phone = payload.phone || payload.number;
+    let phone = payload.phone || payload.number;
 
     if (!phone) {
         console.error(">>> [ShotzapProvider] addTag chamado sem telefone. Impossível criar ticket.");
         return null;
     }
+    
+    // Sanitizar telefone também no addTag
+    phone = this._sanitizePhone(phone);
 
     // 3. Garantir Ticket
     const ticketId = await this._ensureTicket(phone);
@@ -506,21 +523,44 @@ export class ShotzapProvider implements IChannelProvider {
       }
   }
 
-  async removeTag(payload: any) {
-    // Lógica similar para remover tag
-    if (payload.tag && typeof payload.tag === 'string') {
-        const tagId = await this._resolveTagId(payload.tag);
-        if (tagId) {
-            const newPayload = { 
-                ...payload,
-                tagId: tagId,
-                tagIds: [tagId]
-            };
-            delete newPayload.tag;
-            return this._postWithAuth(this.paths.removeTag, newPayload);
-        }
+  async getContactTags(phone: string): Promise<string[]> {
+    const sanitizedPhone = this._sanitizePhone(phone);
+    const contactId = await this._lookupContact(sanitizedPhone);
+    if (!contactId) return [];
+
+    try {
+      // Criar ticket pra pegar as tags associadas
+      const ticketId = await this._ensureTicket(sanitizedPhone);
+      if (!ticketId) return [];
+
+      // GET no ticket retorna as tags
+      const response = await this.client.get(`/api/tickets/${ticketId}`, {
+        headers: { Authorization: `Bearer ${this.token}` }
+      });
+
+      const tags = response.data?.tags || [];
+      return tags.map((t: any) => t.name || t.tag || '').filter(Boolean);
+    } catch (e: any) {
+      console.warn(`>>> [ShotzapProvider] Erro ao buscar tags do contato ${phone}:`, e.message);
+      return [];
     }
-    return this._postWithAuth(this.paths.removeTag, payload);
+  }
+
+  async removeTag(payload: any) {
+    // A API /api/tags/add sobrescreve — enviar tags:[] limpa todas do ticket
+    let phone = payload.phone || payload.number;
+    if (!phone) {
+        console.warn(">>> [ShotzapProvider] removeTag chamado sem telefone.");
+        return null;
+    }
+    phone = this._sanitizePhone(phone);
+    const ticketId = await this._ensureTicket(phone);
+    if (!ticketId) {
+        console.warn(">>> [ShotzapProvider] removeTag: não conseguiu obter ticketId");
+        return null;
+    }
+    console.log(`>>> [ShotzapProvider] Removendo tags do ticket ${ticketId}`);
+    return this._postWithAuth(this.paths.addTag, { ticketId, tags: [] });
   }
 
   /**
@@ -549,21 +589,21 @@ export class ShotzapProvider implements IChannelProvider {
       // 1. Listar todas as tags (usando fetch direto para ter os objetos completos)
       // O _ensureTagsLoaded popula apenas o cache ID/Nome. Precisamos de dados completos.
       // Reutiliza logica de auth de tags
-      if (!this.tagsToken) throw new Error("tagsToken não configurado");
+      if (!this.token) throw new Error("token não configurado");
 
       try {
           // Usa um client axios temporário
           const { default: axios } = await import('axios');
           const baseUrl = this.client.defaults.baseURL;
           
-          const response = await axios.get(`${baseUrl}/tags`, {
+          const response = await axios.get(`${baseUrl}/api/tags`, {
               headers: { 
-                  'Authorization': `Bearer ${this.tagsToken}`,
+                  'Authorization': `Bearer ${this.token}`,
                   'Content-Type': 'application/json'
               }
           });
           
-          const allTags = response.data; // Assumindo ser array direto ou .data
+          const allTags: any = response.data;
           const tagsList = Array.isArray(allTags) ? allTags : (allTags.data || []);
           
           console.log(`>>> [ShotzapProvider] ${tagsList.length} tags recuperadas.`);
@@ -585,7 +625,7 @@ export class ShotzapProvider implements IChannelProvider {
                       // Request PUT
                       await axios.put(`${baseUrl}/tags/${tag.id}`, updatePayload, {
                           headers: { 
-                              'Authorization': `Bearer ${this.tagsToken}`,
+                              'Authorization': `Bearer ${this.token}`,
                               'Content-Type': 'application/json'
                           }
                       });

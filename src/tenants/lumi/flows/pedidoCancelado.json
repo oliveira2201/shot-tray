@@ -1,0 +1,24 @@
+{
+  "id": "pedidoCancelado",
+  "title": "Pedido Cancelado",
+  "aliases": ["[EC] Pedido Cancelado1", "[EC] Pedido Cancelado2", "[EC] Pedido Cancelado3"],
+  "description": "Fluxo de recuperação após cancelamento. Cancela se o cliente fizer novo pedido ou pagar.",
+  "steps": [
+    { "type": "addTag", "label": "Marcar Cancelado", "tag": "[EC] Pedido Cancelado1" },
+    { "type": "sendText", "label": "Aviso de cancelamento", "textKey": "pedidoCancelado1" },
+    {
+      "type": "cancelableWait",
+      "label": "Aguardar antes do 2º contato",
+      "seconds": 14400,
+      "cancelIfTags": ["[EC] Pedido Pago", "[EC] Pedido Recebido"]
+    },
+    { "type": "sendText", "label": "Segunda tentativa", "textKey": "pedidoCancelado2" },
+    {
+      "type": "cancelableWait",
+      "label": "Aguardar antes do 3º contato",
+      "seconds": 21600,
+      "cancelIfTags": ["[EC] Pedido Pago", "[EC] Pedido Recebido"]
+    },
+    { "type": "sendText", "label": "Última tentativa", "textKey": "pedidoCancelado3" }
+  ]
+}

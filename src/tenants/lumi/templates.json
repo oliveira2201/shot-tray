@@ -1,0 +1,72 @@
+{
+  "text": {
+    "carrinhoAbandonado2": "A Paz do Senhor {{name}}! 😊 \nPassando para lembrar que os produtos que você escolheu na nossa loja continuam disponíveis, mas a procura está grande! 😲 \nNão perca a oportunidade de adquirir aquele livro/Bíblia que vai edificar a sua vida! ⏳ \nClique aqui e finalize sua compra antes que acabe 👇\nhttps://4soci.al/carrinho_ebenezer",
+    "carrinhoAbandonado3": "Graça e Paz {{name}} 😉 \nEstamos quase sem estoque de alguns itens que você adicionou ao carrinho da nossa loja! 🚨 \nEssa é a sua última chance de garantir esses produtos incríveis para sua jornada de fé! \nNão deixe essa bênção escapar! 🙏 \n\nClique aqui e aproveite 👇\nhttps://4soci.al/vercarrinho",
+    "carrinhoAbandonado3Extra": "Abandonado3",
+    "pedidoCancelado1": "Graça e Paz {{name}} 😔 \nSeu pedido na nossa loja foi cancelado, mas a Palavra de Deus continua te chamando! ✨ \nRefaça seu pedido e continue sua jornada de fé! \nhttps://4soci.al/verpedidoebenezer\n",
+    "pedidoCancelado2": "Olá! 😊 Que a paz do Senhor esteja contigo {{name}}! 🙏 \nO produto que você escolheu está quase esgotando! ⚠️ \nNão perca tempo e garanta já o seu para edificar sua vida espiritual. 😉 \nhttps://4soci.al/verpedido_ebenezer",
+    "pedidoCancelado3": "A Paz do Senhor {{name}}! 👋 \nSei que imprevistos acontecem, mas não deixe sua busca pela Palavra de Deus ser interrompida! \nPara te ajudar, reservamos seus itens por tempo limitado! ⏳ \nRefaça seu pedido agora e não perca essa oportunidade \nhttps://4soci.al/meupedido_ebenezer",
+    "pedidoEntregue": "👋 Glória a Deus! ✨\n\nPassando pra avisar que a sua bênção chegou! 🙏📦 O seu pedido já foi entregue! 🙌 Que alegria! 😍\n\nAgora é só desfrutar dos seus livros, Bíblias, devocionais e tudo o mais que você escolheu pra edificar a sua fé! 📖🔥\n\nSe tiver alguma dúvida ou precisar de algo mais, pode contar com a gente! 😉\n\nQue Deus te abençoe grandemente! 💖 E não se esqueça: leitura edifica! 😉",
+    "pedidoRecebido1": "👋 A Paz {{name}}, tudo bem? \n\nPassei aqui só para te avisar que ainda *não recebi a confirmação* do seu pagamento.\n\nQualquer dúvida é só me chamar ok? 😊\n\n🏃 Assim o pagamento for confirmado, seu pedido será separado e para envio.\nAté mais.\n\nSe você já pagou, é só aguardar 😉",
+    "pedidoRecebido2": "🤔 Aconteceu alguma coisa {{name}}?\n\nAinda não recebi a confirmação de pagamento do seu pedido, *ele continua reservado e te esperando*, mas não por muito tempo, nosso estoque é limitado e *outros clientes já estão de olho.*\n \nFaça o pagamento e garanta a próxima leitura que vai te *aproximar de Deus* 📖",
+    "pedidoRecebido3": "*😬 Estou preocupado com você {{name}}*\n\n*Não recebi* ainda a confirmação do seu pagamento e estão me cobrando aqui para liberar o produto que eu *reservei para você.*\n\n*Vou segurar o seu carrinho até hoje tá,* não consigo reservar por mais tempo.\n\nSe você quiser trocar a forma de pagamento me avisa, você pode pagar no cartão de crédito á vista ou parcelado, Boleto á vista e até parcelar no Pix é possível.\n\nMe manda mensagem se precisar uma ajuda.\n\nAté +",
+    "pedidoRecebidoTeste": "teste",
+    "pedidoRecebidoDescadastre": "Que Pena",
+    "pedidoRecebidoRastrear": "Quero Rastrear",
+    "pedidoRecebidoSelecione": "selecione a opção desejada"
+  },
+  "buttons": {
+    "carrinhoAbandonado1": {
+      "title": "👋Graça e Paz {{name}}! 🙏",
+      "body": "Vi que você deixou umas bênçãos te esperando no carrinho da nossa loja! 📖✨\nMas corre, viu?\n\n*{{extra3}}* têm estoque limitado e pode acabar rapidinho! 🏃‍♀️💨\n\nAcesse agora mesmo seu carrinho e garanta sua bênção",
+      "footer": "Clique para acessar seu carrinho",
+      "buttons": [
+        { "type": "url", "text": "Acessar Carrinho", "url": "https://4soci.al/carrinhoebenezer" }
+      ]
+    },
+    "pedidoPago": {
+      "title": "🕊️🎉 *Trago boas novas {{name}}* 🕊️🎉",
+      "body": "Que benção! Acabei de receber a confirmação do seu pagamento ✅\n\nJá estou enviando ele para separação e envio, assim que ele for despachado te aviso.\n\nQualquer dúvida é só me chamar ok? 😊\nFique Com Deus!",
+      "buttons": [
+        { "type": "url", "text": "Rastrear Pedido", "url": "{{extra1}}" }
+      ]
+    },
+    "pedidoRecebido": {
+      "title": "👋 A Paz {{name}}",
+      "body": "Obrigado por comprar na *Ebenézer*, Deus te abençoe 😊\nRecebemos seu pedido e assim que o pagamento for confirmado, ele segue para separação e envio, vou continuar te avisando por aqui.\n\nEnquanto isso, aproveite e salve meu contato para garantir que vai receber minhas mensagens.\n\nSe precisar você também pode verificar o status do seu pedido ou até mesmo gerar o boleto caso não tenha gerado ainda no link abaixo 👇",
+      "buttons": [
+        { "type": "url", "text": "Rastrear Pedido", "url": "{{extra1}}" }
+      ]
+    },
+    "pedidoRecebidoQuickReply": {
+      "title": "👋 A Paz {{name}}",
+      "body": "Obrigado por comprar na *Ebenézer*, Deus te abençoe 😊\nRecebemos seu pedido e assim que o pagamento for confirmado, ele segue para separação e envio, vou continuar te avisando por aqui.\nEnquanto isso, aproveite e salve meu contato para garantir que vai receber minhas mensagens.\nSe precisar você também pode verificar o status do seu pedido ou até mesmo gerar o boleto caso não tenha gerado ainda no link abaixo 👇",
+      "footer": "Selecione uma opção",
+      "buttons": [
+        { "type": "quickreply", "text": "Rastrear Pedido", "value": "Rastrear Pedido" },
+        { "type": "quickreply", "text": "Me Descadastre", "value": "Me Descadastre" }
+      ]
+    },
+    "pedidoEnviadoTracking": {
+      "title": "🚚 *Seu pedido já está pronto {{name}}* 🚚",
+      "body": "Se você optou por retirar aqui em nossa loja, *aguarde por favor o contato do SAC,* e se você optou pela entrega via transportadora ou correios, agora é só acompanhar a entrega, *se certifique que vai ter alguém no endereço para poder receber seu pedido.*\n\nPara rastrear a entrega acesse sua conta no nosso site pelo link\n😉 Te mandei também por e-mail os dados para vc poder rastrear a entrega.\nQualquer dúvida é só me chamar ok?\nAté mais.",
+      "buttons": [
+        { "type": "url", "text": "Rastrear Pedido", "url": "{{extra1}}" }
+      ]
+    },
+    "pedidoEnviadoVip": {
+      "title": "😳 Já ia me esquecendo {{name}}",
+      "body": "Você conhece nosso grupo VIP de promoções?👑\n\nÉ um grupo de WhatsApp onde eu envio as melhores promoções para clientes VIP como você.\nE não se preocupe que é um grupo silenciado que só eu envio mensagens lá.\n\nQualquer dúvida é só me chamar.\n\nAté mais.\n\nVamos manter contato, clique no link e faça parte do grupo VIP 👇",
+      "buttons": [
+        { "type": "url", "text": "Grupo VIP Ebenezer", "url": "https://4soci.al/grupovip-ebenezer" }
+      ]
+    },
+    "pedidoEntregueVip": {
+      "title": "Você já entrou no nosso Grupo VIP {{name}}?",
+      "body": "Não sei se você sabe, temos um grupo  VIP de promoções.\n\nÉ um grupo de WhatsApp onde eu envio as melhores promoções para clientes VIP como você.\nE não se preocupe que é um grupo silenciado que só eu envio mensagens lá.\n\nQualquer dúvida é só me chamar.\n\nAté mais.\n\nClique no link e faça parte do grupo VIP 👇",
+      "buttons": [
+        { "type": "url", "text": "Grupo VIP Ebenezer", "url": "https://4soci.al/grupovip-ebenezer" }
+      ]
+    }
+  }
+}

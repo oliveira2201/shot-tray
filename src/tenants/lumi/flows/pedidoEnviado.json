@@ -1,7 +1,7 @@
 {
   "id": "pedidoEnviado",
   "title": "Pedido Enviado",
-  "aliases": ["_[EC] Pedido Enviado", "_[EC] Pedido Enviado - copy"],
+  "aliases": ["[EC] Pedido Enviado"],
   "description": "Confirma envio e oferece grupo VIP.",
   "steps": [
     { "type": "addTag", "label": "Marcar cliente", "tag": "[EC] Cliente" },

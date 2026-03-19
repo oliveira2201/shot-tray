@@ -24,11 +24,13 @@ export interface IChannelProvider {
   sendButtons(payload: any): Promise<any>;
   addTag(payload: any): Promise<any>;
   removeTag(payload: any): Promise<any>;
+  getContactTags?(phone: string): Promise<string[]>;
 }
 
 export interface TenantConfig {
   id: string;
   name: string;
+  adapterName?: string;
   inputAdapter: import("./integration.js").IIntegrationAdapter;
   provider: IChannelProvider;
   templates: Record<string, any>;

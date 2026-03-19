@@ -1,23 +1,37 @@
 [
   {
+    "id": "lumi",
+    "name": "Lumi",
+    "inputAdapter": "nuvemshop",
+    "outputProvider": "shotzap",
+    "config": {
+      "baseUrl": "https://api.shotzap.com.br",
+      "token": "felipe01",
+      "tagsCachePath": "src/tenants/lumi/tags_cache.json",
+      "paths": {
+        "sendText": "/api/messages/send",
+        "addTag": "/api/tags/add",
+        "getTickets": "/api/contacts/alltickets"
+      }
+    }
+  },
+  {
     "id": "ebenezer",
     "name": "Livraria Ebenezer",
     "inputAdapter": "default",
     "outputProvider": "shotzap",
     "config": {
       "baseUrl": "https://api.shotzap.com.br",
-      "token": "8FDQaIe82xmGwB3tuAIMxqp58SQydwn9nXDkrkvupLLc44rc4HDbRoDRoNfgdLty5",
-      "tagsToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2FybmFtZSI6IkZlbGlwZSBBcmHDumpvIGRlIEFsY8OibnRhcmEgT2xpdmVpcmEiLCJwcm9maWxlIjoiYWRtaW4iLCJpZCI6ODU0LCJjb21wYW55SWQiOjIyMywiaWF0IjoxNzcwODMyNTE4LCJleHAiOjE3NzM0MjQ1MTh9.1FmHc6lq87NUao9QnUaPcIdXuOIhOUK0gIeS8_tF2_w",
+      "token": "felipe01",
       "tagsCachePath": "src/tenants/ebenezer/tags_cache.json",
       "paths": {
         "sendText": "/api/messages/send",
         "addTag": "/api/tags/add",
-        "removeTag": "/api/tags/remove",
         "getTickets": "/api/contacts/alltickets"
       },
       "tagMap": {
-          "[EBE] Pedido Carrinho Abandonado2": 0,
-          "Example Tag": 123
+        "[EBE] Pedido Carrinho Abandonado2": 0,
+        "Example Tag": 123
       }
     }
   }

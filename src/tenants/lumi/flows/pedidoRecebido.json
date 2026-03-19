@@ -1,0 +1,86 @@
+{
+  "id": "pedidoRecebido",
+  "title": "Pedido Recebido",
+  "aliases": ["[EC] Pedido Recebido"],
+  "description": "Fluxo completo de cobrança após pedido recebido. Cancela automaticamente se o pedido for pago.",
+  "steps": [
+    {
+      "type": "addTag",
+      "label": "Marcar Pedido Recebido",
+      "tag": "[EC] Pedido Recebido"
+    },
+    {
+      "type": "wait",
+      "label": "Aguardar 120s",
+      "seconds": 120
+    },
+    {
+      "type": "sendButtons",
+      "label": "Enviar botão rastreio",
+      "templateKey": "pedidoRecebido"
+    },
+    {
+      "type": "sendButtons",
+      "label": "Enviar opções",
+      "templateKey": "pedidoRecebidoQuickReply"
+    },
+    {
+      "type": "wait",
+      "label": "Aguardar 2s",
+      "seconds": 2
+    },
+    {
+      "type": "conditionalChoice",
+      "label": "Tratar escolha do cliente",
+      "timeoutSeconds": 120,
+      "conditions": [
+        {
+          "match": "rastrear",
+          "responseTemplate": "pedidoRecebidoRastrear"
+        },
+        {
+          "match": "descadastre",
+          "responseTemplate": "pedidoRecebidoDescadastre",
+          "actions": [
+            { "type": "addTag", "tag": "[EC] Descadastrado" },
+            { "type": "stopFlow" }
+          ]
+        }
+      ],
+      "defaultTemplate": "pedidoRecebidoSelecione"
+    },
+    {
+      "type": "cancelableWait",
+      "label": "Aguardar antes da 1ª cobrança",
+      "seconds": 7200,
+      "cancelIfTags": ["[EC] Pedido Pago", "[EC] Descadastrado"]
+    },
+    {
+      "type": "sendText",
+      "label": "Cobrança 1",
+      "textKey": "pedidoRecebido1"
+    },
+    {
+      "type": "cancelableWait",
+      "label": "Aguardar antes da 2ª cobrança",
+      "seconds": 14400,
+      "cancelIfTags": ["[EC] Pedido Pago", "[EC] Descadastrado"]
+    },
+    {
+      "type": "sendText",
+      "label": "Cobrança 2",
+      "textKey": "pedidoRecebido2"
+    },
+    {
+      "type": "cancelableWait",
+      "label": "Aguardar antes da 3ª cobrança",
+      "seconds": 21600,
+      "cancelIfTags": ["[EC] Pedido Pago", "[EC] Descadastrado"]
+    },
+    {
+      "type": "sendText",
+      "label": "Cobrança 3 (última)",
+      "textKey": "pedidoRecebido3"
+    }
+  ]
+}

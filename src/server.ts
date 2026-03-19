@@ -1,7 +1,15 @@
 import { app } from "./app.js";
 import { env } from "./config/env.js";
+import { SchedulerService } from "./modules/scheduler/service.js";
 import { logger } from "./utils/logger.js";
 
-app.listen(env.PORT, () => {
-  logger.info(`Servidor escutando na porta ${env.PORT}`);
-});
+const start = async () => {
+    // Inicializar Agendador
+    await SchedulerService.init();
+
+    app.listen(env.PORT, () => {
+        logger.info(`Servidor escutando na porta ${env.PORT}`);
+    });
+};
+
+start();

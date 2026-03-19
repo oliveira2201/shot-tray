@@ -1,28 +1,44 @@
 {
   "id": "pedidoRecebido",
   "title": "Pedido Recebido",
-  "aliases": ["[EBE] Pedido Recebido"],
-  "description": "Fluxo principal após pedido recebido.",
+  "aliases": ["[EC] Pedido Recebido", "[EC] Pedido Recebido1", "[EC] Pedido Recebido2", "[EC] Pedido Recebido3"],
+  "description": "Fluxo completo de cobrança após pedido recebido. Cancela automaticamente se o pedido for pago.",
   "steps": [
-    { 
-      "type": "addTag", 
-      "label": "Definir fase Recebido", 
-      "tag": "[EBE] Pedido Recebido1"
-    },
+    { "type": "addTag", "label": "Marcar Pedido Recebido", "tag": "[EC] Pedido Recebido" },
     { "type": "wait", "label": "Aguardar 120s", "seconds": 120 },
-    { "type": "stopIfHasAnyTag", "label": "Encerrar se pagou", "tags": ["[EBE] Pedido Pago"] },
     { "type": "sendText", "label": "Mensagem teste", "textKey": "pedidoRecebidoTeste" },
     { "type": "sendButtons", "label": "Enviar botão rastreio", "templateKey": "pedidoRecebido" },
     { "type": "sendButtons", "label": "Enviar quick replies", "templateKey": "pedidoRecebidoQuickReply" },
     { "type": "wait", "label": "Aguardar 2s", "seconds": 2 },
-    { 
-      "type": "conditionalChoice", 
+    {
+      "type": "conditionalChoice",
       "label": "Tratar escolha do cliente",
       "conditions": [
         { "match": "descadastre", "responseTemplate": "pedidoRecebidoDescadastre" },
         { "match": "rastrear", "responseTemplate": "pedidoRecebidoRastrear" }
       ],
       "defaultTemplate": "pedidoRecebidoSelecione"
-    }
+    },
+    {
+      "type": "cancelableWait",
+      "label": "Aguardar antes da 1ª cobrança",
+      "seconds": 7200,
+      "cancelIfTags": ["[EC] Pedido Pago"]
+    },
+    { "type": "sendText", "label": "Cobrança 1", "textKey": "pedidoRecebido1" },
+    {
+      "type": "cancelableWait",
+      "label": "Aguardar antes da 2ª cobrança",
+      "seconds": 14400,
+      "cancelIfTags": ["[EC] Pedido Pago"]
+    },
+    { "type": "sendText", "label": "Cobrança 2", "textKey": "pedidoRecebido2" },
+    {
+      "type": "cancelableWait",
+      "label": "Aguardar antes da 3ª cobrança",
+      "seconds": 21600,
+      "cancelIfTags": ["[EC] Pedido Pago"]
+    },
+    { "type": "sendText", "label": "Cobrança 3 (última)", "textKey": "pedidoRecebido3" }
   ]
 }

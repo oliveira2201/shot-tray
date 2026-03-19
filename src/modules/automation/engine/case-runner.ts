@@ -2,8 +2,11 @@ import { renderTemplate } from "../../../flow-engine/templateRenderer.js";
 import { AutomationContext, IChannelProvider, Step, UseCase } from "../../../types/automation.js";
 import { delay } from "../../../utils/delay.js";
 import { logger } from "../../../utils/logger.js";
+import { SchedulerService } from "../../scheduler/service.js";
+import { registerChoice } from "./choice-listener.js";
 
 const hasAnyTag = (contextTags: string[] | undefined, tags: string[]) => {
+
   if (!Array.isArray(contextTags)) return false;
   const normalized = contextTags.map((tag) => tag.toLowerCase());
   return tags.some((tag) => normalized.includes(tag.toLowerCase()));
@@ -54,7 +57,9 @@ interface RunUseCaseParams {
 }
 
 export const runUseCase = async ({ useCase, context, provider, templates }: RunUseCaseParams) => {
-  for (const step of useCase.steps) {
+  const steps = useCase.steps;
+  for (let i = 0; i < steps.length; i++) {
+    const step = steps[i];
     switch (step.type) {
       case "stopIfHasAnyTag": {
         if (hasAnyTag(context.tags, step.tags)) {
@@ -122,10 +127,104 @@ export const runUseCase = async ({ useCase, context, provider, templates }: RunU
         await delay(step.seconds * 1000);
         break;
       }
-      case "conditionalChoice": {
-        logger.info({ label: step.label }, "Tratando escolha do cliente");
-        await handleChoice(context, step, provider, templates);
+      case "scheduleFlow": {
+        const iteration = (context._iteration || 0) + 1;
+        const maxIterations = step.maxIterations || 999;
+        if (iteration > maxIterations) {
+          logger.info({ iteration, max: maxIterations, label: step.label }, "Limite de iterações atingido, não agendando");
+          break;
+        }
+        logger.info({ flow: step.targetFlow, delay: step.delaySeconds, iteration, label: step.label }, "Agendando próximo fluxo");
+        await SchedulerService.scheduleFlow(
+            "ebenezer",
+            step.targetFlow,
+            step.delaySeconds || 60,
+            { ...context, _iteration: iteration }
+        );
         break;
+      }
+      case "cancelableWait": {
+        // Agenda os steps restantes no scheduler com verificação de tags
+        const remainingSteps = steps.slice(i + 1);
+        const cancelIfTags = step.cancelIfTags || [];
+        const delaySecs = step.seconds || 60;
+
+        if (remainingSteps.length === 0) {
+          logger.info({ label: step.label }, "cancelableWait sem steps restantes — ignorando");
+          break;
+        }
+
+        // Antes de agendar, verifica se já deveria cancelar (evita agendar job inútil)
+        if (cancelIfTags.length > 0 && context.number && provider.getContactTags) {
+          const currentTags = await provider.getContactTags(context.number);
+          if (hasAnyTag(currentTags, cancelIfTags)) {
+            logger.info({ cancelIfTags, label: step.label }, "cancelableWait — já tem tag de cancelamento, encerrando flow");
+            return { skipped: true };
+          }
+        }
+
+        logger.info(
+          { seconds: delaySecs, cancelIfTags, remainingSteps: remainingSteps.length, label: step.label },
+          "cancelableWait — agendando continuação"
+        );
+
+        await SchedulerService.scheduleContinuation(
+          context._tenantId || "ebenezer",
+          useCase.id,
+          delaySecs,
+          context,
+          remainingSteps,
+          cancelIfTags
+        );
+
+        // Para a execução aqui — o scheduler retoma depois
+        return { skipped: false, deferred: true };
+      }
+      case "conditionalChoice": {
+        const remainingSteps = steps.slice(i + 1);
+        const conditions = step.conditions || [];
+        const defaultTemplate = step.defaultTemplate || "";
+        const timeoutMs = (step.timeoutSeconds || 120) * 1000;
+
+        logger.info(
+          { label: step.label, conditions: conditions.map((c: any) => c.match), timeout: `${timeoutMs / 1000}s` },
+          "Registrando listener de escolha do cliente"
+        );
+
+        registerChoice({
+          tenantId: context._tenantId || "ebenezer",
+          phone: context.number || "",
+          flowId: useCase.id,
+          conditions,
+          defaultTemplate,
+          remainingSteps,
+          context,
+          timeoutMs,
+          onResolve: async (_choice: string | null, templateKey: string) => {
+            // Enviar template de resposta
+            const template = resolveTemplate(templateKey, templates);
+            if (template) {
+              const text = renderTemplate(template, context);
+              const payload = buildTextPayload(text, context);
+              await provider.sendText(payload);
+            }
+
+            // Continuar flow com os steps restantes
+            if (remainingSteps.length > 0) {
+              const continuationUseCase: UseCase = {
+                id: useCase.id + "_choice_cont",
+                title: useCase.title,
+                aliases: [],
+                description: "Continuação após conditionalChoice",
+                steps: remainingSteps
+              };
+              await runUseCase({ useCase: continuationUseCase, context, provider, templates });
+            }
+          },
+        });
+
+        // Pausa o flow aqui — o listener retoma quando cliente responder ou timeout
+        return { skipped: false, deferred: true };
       }
       default:
         logger.warn({ step }, "Tipo de passo não reconhecido");
