@@ -3,10 +3,11 @@ import { FlowEditor } from './components/FlowEditor'
 import { FlowSimulator } from './components/FlowSimulator'
 import { SettingsPanel } from './components/SettingsPanel'
 import { Dashboard } from './components/Dashboard'
+import { Monitor } from './components/Monitor'
 import { fetchTenants, fetchFlows, fetchFlow } from './lib/api'
 import type { FlowDefinition } from './lib/types'
 
-type Tab = 'editor' | 'simulate' | 'settings'
+type Tab = 'editor' | 'simulate' | 'settings' | 'monitor'
 
 export default function App() {
   const [tenants, setTenants] = useState<string[]>([])
@@ -92,8 +93,16 @@ export default function App() {
           </div>
         </div>
 
-        {/* Settings */}
-        <div className="border-t border-gray-200 p-2">
+        {/* Bottom links */}
+        <div className="border-t border-gray-200 p-2 space-y-0.5">
+          <button
+            onClick={() => { setSelectedFlow(null); setActiveFlowId(''); setTab('monitor') }}
+            className={`w-full text-left px-2.5 py-2 rounded text-sm flex items-center gap-2 transition-colors ${
+              tab === 'monitor' ? 'bg-green-100 text-green-700 font-medium' : 'text-gray-500 hover:bg-gray-100'
+            }`}
+          >
+            <span>&#9889;</span> Monitor
+          </button>
           <button
             onClick={() => setTab('settings')}
             className={`w-full text-left px-2.5 py-2 rounded text-sm flex items-center gap-2 transition-colors ${
@@ -117,6 +126,8 @@ export default function App() {
 
         {/* Content */}
         <div className="flex-1 overflow-hidden">
+          {tab === 'monitor' && <Monitor />}
+
           {tab === 'settings' && selectedTenant && (
             <div className="h-full overflow-y-auto">
               <SettingsPanel tenantId={selectedTenant} />

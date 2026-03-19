@@ -94,3 +94,24 @@ export async function fetchTagsStatus(tenantId: string) {
   const res = await fetch(`${BASE}/tags/${tenantId}/status`)
   return res.json()
 }
+
+// Scheduler / Monitor
+export async function fetchSchedulerJobs() {
+  const res = await fetch(`${BASE}/scheduler/jobs`)
+  return res.json()
+}
+
+export async function fetchSchedulerLogs(limit = 100) {
+  const res = await fetch(`${BASE}/scheduler/logs?limit=${limit}`)
+  return res.json()
+}
+
+export async function fetchSchedulerStats() {
+  const res = await fetch(`${BASE}/scheduler/stats`)
+  return res.json()
+}
+
+export async function cancelSchedulerJob(jobId: string) {
+  const res = await fetch(`${BASE}/scheduler/jobs/${jobId}`, { method: 'DELETE' })
+  return res.json()
+}
