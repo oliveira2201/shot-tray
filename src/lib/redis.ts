@@ -23,8 +23,12 @@ export function getRedis(): any {
 
 export async function connectRedis() {
   const r = getRedis();
-  await r.connect();
-  logger.info({ url: env.REDIS_URL.replace(/\/\/.*@/, "//***@") }, "Redis pronto");
+  try {
+    await r.connect();
+    logger.info({ url: env.REDIS_URL.replace(/\/\/.*@/, "//***@") }, "Redis pronto");
+  } catch (err: any) {
+    logger.warn({ err: err.message }, "Redis indisponível na inicialização — reconecta automaticamente");
+  }
 }
 
 export async function isRedisReady(): Promise<boolean> {
