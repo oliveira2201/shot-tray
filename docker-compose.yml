@@ -2,13 +2,11 @@ services:
   app:
     build: .
     restart: unless-stopped
-    ports:
-      - "${APP_PORT:-3100}:3100"
     environment:
       PORT: 3100
       NODE_ENV: production
-      REDIS_URL: redis://infra-redis:6379
-      DATABASE_URL: ${DATABASE_URL}
+      REDIS_URL: redis://:sz_redis_2026@redis:6379
+      DATABASE_URL: postgresql://postgres:sz_pg_2026_secure@postgres:5432/shot_tray_db?schema=public
       SHOTZAP_TOKEN_LUMI: ${SHOTZAP_TOKEN_LUMI}
       SHOTZAP_TOKEN_EBENEZER: ${SHOTZAP_TOKEN_EBENEZER}
       ERP_WEBHOOK_SECRET: ${ERP_WEBHOOK_SECRET:-}
@@ -20,7 +18,10 @@ services:
       start_period: 30s
     networks:
       - cortex-shared-net
+      - shotzap-net
 
 networks:
   cortex-shared-net:
+    external: true
+  shotzap-net:
     external: true
