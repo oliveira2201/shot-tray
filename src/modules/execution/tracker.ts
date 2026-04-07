@@ -1,5 +1,5 @@
 import { v4 as uuidv4 } from "uuid";
-import { prisma } from "../../lib/prisma.js";
+import { getPrisma } from "../../lib/prisma.js";
 import { logger } from "../../utils/logger.js";
 
 export type StepStatus = "ok" | "error" | "skipped" | "deferred";
@@ -124,7 +124,7 @@ export class ExecutionTracker {
 
   private async _createInitial() {
     try {
-      await prisma.execution.create({
+      await (await getPrisma()).execution.create({
         data: {
           id: this.id,
           tenantId: this.tenantId,
@@ -148,7 +148,7 @@ export class ExecutionTracker {
   private async _update(status: ExecutionStatus, error?: string) {
     const now = Date.now();
     try {
-      await prisma.execution.update({
+      await (await getPrisma()).execution.update({
         where: { id: this.id },
         data: {
           status,
@@ -168,7 +168,7 @@ export class ExecutionTracker {
   /** Busca uma execução por ID */
   static async getById(executionId: string): Promise<ExecutionData | null> {
     try {
-      const row = await prisma.execution.findUnique({
+      const row = await (await getPrisma()).execution.findUnique({
         where: { id: executionId },
       });
       if (!row) return null;
@@ -200,18 +200,19 @@ export class ExecutionTracker {
         if (dateTo) where.startedAt.lte = new Date(dateTo + "T23:59:59.999Z");
       }
 
+      const db = await getPrisma();
       const [executions, total] = await Promise.all([
-        prisma.execution.findMany({
+        db.execution.findMany({
           where,
           orderBy: { startedAt: "desc" },
           skip: offset,
           take: limit,
         }),
-        prisma.execution.count({ where }),
+        db.execution.count({ where }),
       ]);
 
       return {
-        executions: executions.map(e => ({ ...e, steps: e.steps as unknown as StepLog[] })) as ExecutionData[],
+        executions: executions.map((e: any) => ({ ...e, steps: e.steps as unknown as StepLog[] })) as ExecutionData[],
         total,
       };
     } catch (err: any) {
