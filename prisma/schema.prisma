@@ -1,0 +1,34 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Execution {
+  id           String   @id @default(uuid())
+  tenantId     String   @map("tenant_id")
+  flowId       String   @map("flow_id")
+  flowAlias    String   @map("flow_alias")
+  phone        String?
+  customerName String?  @map("customer_name")
+  status       String   @default("running") // running, completed, failed, deferred, cancelled
+  trigger      String   @default("webhook")
+  steps        Json     @default("[]")
+  error        String?
+  startedAt    DateTime @default(now()) @map("started_at")
+  completedAt  DateTime? @map("completed_at")
+  durationMs   Int?     @map("duration_ms")
+
+  // Dados brutos do webhook que originou a execução
+  webhookPayload Json?  @map("webhook_payload")
+  webhookReceivedAt DateTime? @map("webhook_received_at")
+
+  @@index([tenantId, startedAt(sort: Desc)])
+  @@index([tenantId, status])
+  @@index([tenantId, flowId])
+  @@index([phone])
+  @@map("executions")
+}

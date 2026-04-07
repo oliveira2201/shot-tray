@@ -1,4 +1,5 @@
 import { logger } from "../../../utils/logger.js";
+import { getRedis, isRedisReady } from "../../../lib/redis.js";
 
 export interface ConditionAction {
   type: "addTag" | "removeTag" | "stopFlow";
@@ -11,27 +12,114 @@ export interface ChoiceCondition {
   actions?: ConditionAction[];
 }
 
-interface PendingChoice {
+interface PendingChoiceData {
   tenantId: string;
   phone: string;
   conditions: ChoiceCondition[];
   defaultTemplate: string;
-  /** Steps restantes do flow após o conditionalChoice */
   remainingSteps: any[];
-  /** Contexto da automação (number, name, etc) */
   context: any;
-  /** Flow ID de origem */
   flowId: string;
-  /** Timeout handle */
-  timer: NodeJS.Timeout;
-  /** Timestamp de criação */
   createdAt: number;
+  expiresAt: number;
 }
 
-// Map de phone → PendingChoice
+interface PendingChoice extends PendingChoiceData {
+  timer: NodeJS.Timeout;
+}
+
+const REDIS_PREFIX = "shot:choice:";
+const DEFAULT_TIMEOUT_MS = 120_000; // 2 minutos
+
+// Map em memória para timers (timers não podem ir pro Redis)
 const pendingChoices = new Map<string, PendingChoice>();
 
-const DEFAULT_TIMEOUT_MS = 120_000; // 2 minutos
+// Callbacks registrados por phone (necessário para onResolve)
+const resolveCallbacks = new Map<string, (choice: string | null, templateKey: string, actions?: ConditionAction[]) => Promise<void>>();
+
+/** Salva estado no Redis para sobreviver a restarts */
+async function persistToRedis(phone: string, data: PendingChoiceData) {
+  try {
+    const ready = await isRedisReady();
+    if (!ready) return;
+    const redis = getRedis();
+    const ttl = Math.ceil((data.expiresAt - Date.now()) / 1000);
+    if (ttl <= 0) return;
+    await redis.set(`${REDIS_PREFIX}${phone}`, JSON.stringify(data), "EX", ttl);
+  } catch (err: any) {
+    logger.warn({ phone, err: err.message }, "Falha ao persistir choice no Redis");
+  }
+}
+
+/** Remove do Redis */
+async function removeFromRedis(phone: string) {
+  try {
+    const ready = await isRedisReady();
+    if (!ready) return;
+    const redis = getRedis();
+    await redis.del(`${REDIS_PREFIX}${phone}`);
+  } catch {}
+}
+
+/** Busca do Redis (usado no handleIncomingMessage como fallback) */
+async function getFromRedis(phone: string): Promise<PendingChoiceData | null> {
+  try {
+    const ready = await isRedisReady();
+    if (!ready) return null;
+    const redis = getRedis();
+    const raw = await redis.get(`${REDIS_PREFIX}${phone}`);
+    if (!raw) return null;
+    return JSON.parse(raw);
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Restaura listeners do Redis após restart do server.
+ * Chamado uma vez na inicialização.
+ */
+export async function restoreChoicesFromRedis() {
+  try {
+    const ready = await isRedisReady();
+    if (!ready) return;
+    const redis = getRedis();
+    const keys = await redis.keys(`${REDIS_PREFIX}*`);
+    if (keys.length === 0) return;
+
+    let restored = 0;
+    for (const key of keys) {
+      const raw = await redis.get(key);
+      if (!raw) continue;
+      const data: PendingChoiceData = JSON.parse(raw);
+      const now = Date.now();
+
+      if (data.expiresAt <= now) {
+        // Expirado — limpar
+        await redis.del(key);
+        continue;
+      }
+
+      // Recriar timer com tempo restante
+      const remainingMs = data.expiresAt - now;
+      const timer = setTimeout(async () => {
+        pendingChoices.delete(data.phone);
+        await removeFromRedis(data.phone);
+        logger.info({ phone: data.phone, flowId: data.flowId }, "conditionalChoice timeout (restaurado do Redis)");
+        // Sem callback — o onResolve de timeout será tratado pelo scheduler/flow engine
+      }, remainingMs);
+
+      pendingChoices.set(data.phone, { ...data, timer });
+      restored++;
+    }
+
+    if (restored > 0) {
+      logger.info({ restored }, "Choice listeners restaurados do Redis");
+    }
+  } catch (err: any) {
+    logger.warn({ err: err.message }, "Falha ao restaurar choices do Redis");
+  }
+}
 
 /**
  * Registra que um contato está esperando uma resposta (conditionalChoice).
@@ -58,12 +146,15 @@ export function registerChoice(opts: {
   }
 
   const timeout = timeoutMs || DEFAULT_TIMEOUT_MS;
+  const now = Date.now();
+  const expiresAt = now + timeout;
 
   const timer = setTimeout(async () => {
-    // Timeout — ninguém respondeu, enviar defaultTemplate
     const pending = pendingChoices.get(phone);
     if (!pending) return;
     pendingChoices.delete(phone);
+    resolveCallbacks.delete(phone);
+    await removeFromRedis(phone);
 
     logger.info({ phone, defaultTemplate, flowId }, "conditionalChoice timeout — enviando default");
     try {
@@ -73,17 +164,16 @@ export function registerChoice(opts: {
     }
   }, timeout);
 
-  pendingChoices.set(phone, {
-    tenantId,
-    phone,
-    flowId,
-    conditions,
-    defaultTemplate,
-    remainingSteps,
-    context,
-    timer,
-    createdAt: Date.now(),
-  });
+  const choiceData: PendingChoiceData = {
+    tenantId, phone, flowId, conditions, defaultTemplate, remainingSteps, context,
+    createdAt: now, expiresAt,
+  };
+
+  pendingChoices.set(phone, { ...choiceData, timer });
+  resolveCallbacks.set(phone, opts.onResolve);
+
+  // Persistir no Redis (async, não bloqueia)
+  persistToRedis(phone, choiceData).catch(() => {});
 
   logger.info(
     { phone, flowId, conditions: conditions.map(c => c.match), timeout: `${timeout / 1000}s` },
@@ -108,31 +198,43 @@ export async function handleIncomingMessage(opts: {
 }): Promise<boolean> {
   const { phone, message } = opts;
 
-  const pending = pendingChoices.get(phone);
-  if (!pending) return false;
+  // Tentar memória primeiro, fallback pro Redis
+  let pendingData: PendingChoiceData | null = null;
+  const inMemory = pendingChoices.get(phone);
 
-  // Limpar o timer e remover do map
-  clearTimeout(pending.timer);
-  pendingChoices.delete(phone);
+  if (inMemory) {
+    clearTimeout(inMemory.timer);
+    pendingChoices.delete(phone);
+    resolveCallbacks.delete(phone);
+    pendingData = inMemory;
+  } else {
+    // Fallback: buscar no Redis (ex: após restart)
+    pendingData = await getFromRedis(phone);
+  }
+
+  if (!pendingData) return false;
+
+  // Limpar do Redis
+  await removeFromRedis(phone);
 
   const msgLower = message.toLowerCase();
-  const matched = pending.conditions.find(c => msgLower.includes(c.match.toLowerCase()));
+  const matched = pendingData.conditions.find(c => msgLower.includes(c.match.toLowerCase()));
 
-  const templateKey = matched ? matched.responseTemplate : pending.defaultTemplate;
+  const templateKey = matched ? matched.responseTemplate : pendingData.defaultTemplate;
   const choice = matched ? matched.match : null;
   const actions = matched?.actions;
 
   logger.info(
-    { phone, message: msgLower, matched: choice, templateKey, actions, flowId: pending.flowId },
+    { phone, message: msgLower, matched: choice, templateKey, actions, flowId: pendingData.flowId },
     "conditionalChoice — resposta recebida"
   );
 
   try {
     await opts.onResolve(choice || "default", templateKey, {
-      remainingSteps: pending.remainingSteps,
-      context: pending.context,
-      tenantId: pending.tenantId,
-      flowId: pending.flowId,
+      remainingSteps: pendingData.remainingSteps,
+      context: pendingData.context,
+      tenantId: pendingData.tenantId,
+      flowId: pendingData.flowId,
       actions,
     });
   } catch (err: any) {

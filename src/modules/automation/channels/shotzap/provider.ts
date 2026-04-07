@@ -547,20 +547,47 @@ export class ShotzapProvider implements IChannelProvider {
   }
 
   async removeTag(payload: any) {
-    // A API /api/tags/add sobrescreve — enviar tags:[] limpa todas do ticket
     let phone = payload.phone || payload.number;
+    const tagToRemove = payload.tag;
+
     if (!phone) {
         console.warn(">>> [ShotzapProvider] removeTag chamado sem telefone.");
         return null;
     }
     phone = this._sanitizePhone(phone);
+
     const ticketId = await this._ensureTicket(phone);
     if (!ticketId) {
         console.warn(">>> [ShotzapProvider] removeTag: não conseguiu obter ticketId");
         return null;
     }
-    console.log(`>>> [ShotzapProvider] Removendo tags do ticket ${ticketId}`);
-    return this._postWithAuth(this.paths.addTag, { ticketId, tags: [] });
+
+    // Buscar tags atuais do ticket
+    try {
+      const response = await this.client.get(`/api/tickets/${ticketId}`, {
+        headers: { Authorization: `Bearer ${this.token}` }
+      });
+      const currentTags: any[] = response.data?.tags || [];
+
+      // Filtrar a tag que queremos remover
+      let remaining: { id: number }[];
+      if (tagToRemove) {
+        const tagId = await this._resolveTagId(tagToRemove);
+        remaining = currentTags
+          .filter((t: any) => t.id !== tagId && t.name?.toLowerCase() !== tagToRemove.toLowerCase())
+          .map((t: any) => ({ id: t.id }));
+        console.log(`>>> [ShotzapProvider] Removendo tag "${tagToRemove}" do ticket ${ticketId}. Tags restantes: ${remaining.length}`);
+      } else {
+        // Sem tag específica → remove todas
+        remaining = [];
+        console.log(`>>> [ShotzapProvider] Removendo TODAS as tags do ticket ${ticketId}`);
+      }
+
+      return this._postWithAuth(this.paths.addTag, { ticketId, tags: remaining });
+    } catch (e: any) {
+      console.error(`>>> [ShotzapProvider] Erro ao remover tag do ticket ${ticketId}:`, e.message);
+      return null;
+    }
   }
 
   /**

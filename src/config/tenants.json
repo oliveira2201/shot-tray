@@ -6,7 +6,7 @@
     "outputProvider": "shotzap",
     "config": {
       "baseUrl": "https://api.shotzap.com.br",
-      "token": "felipe01",
+      "tokenEnv": "SHOTZAP_TOKEN_LUMI",
       "tagsCachePath": "src/tenants/lumi/tags_cache.json",
       "paths": {
         "sendText": "/api/messages/send",
@@ -22,7 +22,7 @@
     "outputProvider": "shotzap",
     "config": {
       "baseUrl": "https://api.shotzap.com.br",
-      "token": "felipe01",
+      "tokenEnv": "SHOTZAP_TOKEN_EBENEZER",
       "tagsCachePath": "src/tenants/ebenezer/tags_cache.json",
       "paths": {
         "sendText": "/api/messages/send",

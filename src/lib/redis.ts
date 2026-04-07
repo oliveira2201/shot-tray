@@ -23,12 +23,8 @@ export function getRedis(): any {
 
 export async function connectRedis() {
   const r = getRedis();
-  try {
-    await r.connect();
-    logger.info({ url: env.REDIS_URL.replace(/\/\/.*@/, "//***@") }, "Redis pronto");
-  } catch (err: any) {
-    logger.warn({ err: err.message }, "Redis indisponível — fallback para modo sem Redis");
-  }
+  await r.connect();
+  logger.info({ url: env.REDIS_URL.replace(/\/\/.*@/, "//***@") }, "Redis pronto");
 }
 
 export async function isRedisReady(): Promise<boolean> {

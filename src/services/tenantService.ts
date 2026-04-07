@@ -24,9 +24,18 @@ export class TenantService {
     const ProviderClass = providersMap[tenant.outputProvider];
     if (!ProviderClass) throw new Error(`Provider ${tenant.outputProvider} not found`);
 
+    // Resolver token: env var (tokenEnv) > fallback hardcoded (token)
+    const token = (tenant.config.tokenEnv && process.env[tenant.config.tokenEnv])
+      ? process.env[tenant.config.tokenEnv]
+      : tenant.config.token;
+
+    if (!token) {
+      throw new Error(`Token não configurado para tenant ${tenantId}. Defina a env var ${tenant.config.tokenEnv}`);
+    }
+
     const outputProvider = new ProviderClass({
       baseUrl: tenant.config.baseUrl,
-      token: tenant.config.token,
+      token,
       tagsToken: tenant.config.tagsToken,
       tagsCachePath: tenant.config.tagsCachePath,
       paths: tenant.config.paths

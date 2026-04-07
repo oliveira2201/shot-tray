@@ -8,12 +8,16 @@ services:
       PORT: 3100
       NODE_ENV: production
       REDIS_URL: redis://infra-redis:6379
+      DATABASE_URL: ${DATABASE_URL}
+      SHOTZAP_TOKEN_LUMI: ${SHOTZAP_TOKEN_LUMI}
+      SHOTZAP_TOKEN_EBENEZER: ${SHOTZAP_TOKEN_EBENEZER}
+      ERP_WEBHOOK_SECRET: ${ERP_WEBHOOK_SECRET:-}
     healthcheck:
       test: ["CMD-SHELL", "curl -f http://localhost:3100/health || exit 1"]
       interval: 10s
       timeout: 5s
       retries: 5
-      start_period: 15s
+      start_period: 30s
     networks:
       - cortex-shared-net
 

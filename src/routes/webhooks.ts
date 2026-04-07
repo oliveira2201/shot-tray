@@ -12,6 +12,7 @@ export const webhooksRouter = Router();
 // Ex: /webhooks/ebenezer
 webhooksRouter.post("/webhooks/:tenantId", async (req: Request, res: Response): Promise<any> => {
   const { tenantId } = req.params as { tenantId: string };
+  const webhookReceivedAt = Date.now();
 
   try {
     // 1. Load Tenant Configuration
@@ -34,7 +35,8 @@ webhooksRouter.post("/webhooks/:tenantId", async (req: Request, res: Response): 
 
     // 2. Validate Signature
     if (process.env.ERP_WEBHOOK_SECRET && !inputAdapter.isSignatureValid(req, process.env.ERP_WEBHOOK_SECRET)) {
-       logger.warn({ tenantId }, "⚠️ Assinatura inválida (ignorado por enquanto)");
+       logger.warn({ tenantId }, "⚠️ Assinatura HMAC inválida — rejeitando webhook");
+       return res.status(401).json({ error: "Invalid signature" });
     }
 
     // 3. Normalize Event
@@ -68,7 +70,9 @@ webhooksRouter.post("/webhooks/:tenantId", async (req: Request, res: Response): 
     processEvent({
       flowAlias: normalizedEvent.flowAlias,
       context: normalizedEvent,
-      tenantConfig
+      tenantConfig,
+      webhookReceivedAt,
+      webhookPayload: req.body,
     }).then((result) => {
       logger.info({ tenantId, flowAlias: normalizedEvent.flowAlias, result }, "✅ Flow executado");
       SchedulerService.log({
