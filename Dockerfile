@@ -17,7 +17,7 @@ COPY public/ ./public/
 RUN npx prisma generate && npm run build
 
 # Build frontend
-RUN cd web && npm ci && npx vite build
+RUN cd web && npm ci --include=dev && npx vite build
 
 # Stage 2: Runner
 FROM node:20-slim AS runner
