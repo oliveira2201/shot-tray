@@ -5,7 +5,7 @@
     "inputAdapter": "nuvemshop",
     "outputProvider": "shotzap",
     "config": {
-      "baseUrl": "https://api.shotzap.com.br",
+      "baseUrl": "https://api2.shotzap.com.br",
       "tagsCachePath": "src/tenants/lumi/tags_cache.json",
       "paths": {
         "sendText": "/api/messages/send",
