@@ -6,6 +6,7 @@
     "outputProvider": "shotzap",
     "config": {
       "baseUrl": "https://api2.shotzap.com.br",
+      "token": "4b6VH31S9cb'",
       "tagsCachePath": "src/tenants/lumi/tags_cache.json",
       "paths": {
         "sendText": "/api/messages/send",
