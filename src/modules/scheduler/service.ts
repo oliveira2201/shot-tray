@@ -25,7 +25,7 @@ interface ScheduledJob {
 export interface EventLog {
   id: string;
   timestamp: number;
-  type: "webhook_received" | "flow_started" | "flow_completed" | "flow_error" | "job_scheduled" | "job_executed" | "job_cancelled" | "job_error";
+  type: "webhook_received" | "webhook_duplicate" | "flow_started" | "flow_completed" | "flow_error" | "job_scheduled" | "job_executed" | "job_cancelled" | "job_error";
   tenantId: string;
   flowAlias?: string;
   phone?: string;

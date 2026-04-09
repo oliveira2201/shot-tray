@@ -1,4 +1,5 @@
 import { Router, Request, Response } from "express";
+import crypto from "crypto";
 import fs from "fs-extra";
 import path from "path";
 import { TenantService } from "../services/tenantService.js";
@@ -7,6 +8,48 @@ import { handleIncomingMessage } from "../modules/automation/engine/choice-liste
 import { renderTemplate } from "../flow-engine/templateRenderer.js";
 import { logger } from "../utils/logger.js";
 import { SchedulerService } from "../modules/scheduler/service.js";
+import { getRedis } from "../lib/redis.js";
+
+/**
+ * Dedupe de webhooks idênticos dentro de uma janela curta.
+ * O MauticDB/Nuvemshop às vezes re-envia o mesmo evento em ~500ms
+ * (retry após timeout ou trigger duplo). Sem isso o cliente recebe
+ * a mesma mensagem 2x.
+ *
+ * Estratégia: SHA1 dos campos que definem unicidade do evento.
+ * Se o hash estiver no Redis dentro do TTL → é duplicata, ignora.
+ *
+ * TTL curto (60s) pra não bloquear eventos legítimos do mesmo tipo
+ * que cheguem depois (ex: cliente faz 2º pedido no mesmo dia).
+ */
+const WEBHOOK_DEDUPE_TTL = 60;
+
+async function isDuplicateWebhook(tenantId: string, body: any): Promise<string | null> {
+  try {
+    // Campos que identificam o evento. Usa o tracknumb (URL única do pedido)
+    // quando disponível pra não confundir pedidos diferentes do mesmo cliente.
+    const fingerprint = [
+      tenantId,
+      (body.taginternals || "").toString(),
+      (body.phone || body.PHONE || "").toString(),
+      (body.tracknumb || body.TRACKNUMB || body.abandoned_checkout_url || "").toString(),
+      (body.subscriber_uid || "").toString(),
+    ].join("|");
+
+    const hash = crypto.createHash("sha1").update(fingerprint).digest("hex").slice(0, 16);
+    const key = `webhook:dedupe:${tenantId}:${hash}`;
+
+    const redis = getRedis();
+    // SET NX + EX: atômico. Se a chave já existe, não seta e retorna null.
+    const result = await redis.set(key, Date.now().toString(), "EX", WEBHOOK_DEDUPE_TTL, "NX");
+
+    // Se result for null → chave já existia → duplicata
+    return result === null ? hash : null;
+  } catch (err: any) {
+    logger.warn({ err: err.message }, "Dedupe falhou — deixando passar");
+    return null;
+  }
+}
 
 export const webhooksRouter = Router();
 
@@ -74,6 +117,26 @@ webhooksRouter.post(["/webhooks/:tenantId", "/webhook/:tenantId"], async (req: R
     if (!normalizedEvent) {
       logger.info({ tenantId, body: JSON.stringify(req.body).substring(0, 200) }, "⏭️ Evento não mapeado, ignorado");
       return res.status(200).json({ ignored: true, reason: "Event not mapped or relevant" });
+    }
+
+    // 3.1 Dedupe — se o mesmo webhook chegou recentemente, ignora.
+    // MauticDB/Nuvemshop às vezes faz retry em ~500ms.
+    const dupeHash = await isDuplicateWebhook(tenantId, req.body);
+    if (dupeHash) {
+      logger.warn({
+        tenantId,
+        hash: dupeHash,
+        taginternals: req.body.taginternals,
+        phone: normalizedEvent.customer?.phone,
+      }, "🔁 Webhook duplicado ignorado (dedupe)");
+      await SchedulerService.log({
+        type: "webhook_duplicate",
+        tenantId,
+        flowAlias: normalizedEvent.flowAlias,
+        phone: normalizedEvent.customer?.phone,
+        detail: `Duplicata ignorada (hash ${dupeHash}, TTL ${WEBHOOK_DEDUPE_TTL}s)`,
+      });
+      return res.status(200).json({ deduped: true, hash: dupeHash });
     }
 
     logger.info({
