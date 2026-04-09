@@ -8,9 +8,9 @@ const envSchema = z.object({
   FLOWS_DIR: z.string().default("flows"),
   REDIS_URL: z.string().default("redis://localhost:6379"),
   DATABASE_URL: z.string(),
-  SHOTZAP_TOKEN_LUMI: z.string().optional(),
-  SHOTZAP_TOKEN_EBENEZER: z.string().optional(),
   ERP_WEBHOOK_SECRET: z.string().optional(),
+  /** Dev: limita qualquer cancelableWait a N segundos (pra testar cadeias rápido) */
+  FLOW_WAIT_TURBO: z.coerce.number().optional(),
 });
 
 const parsed = envSchema.safeParse(process.env);

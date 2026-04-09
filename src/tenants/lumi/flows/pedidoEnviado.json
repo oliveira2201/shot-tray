@@ -2,12 +2,39 @@
   "id": "pedidoEnviado",
   "title": "Pedido Enviado",
   "aliases": ["[EC] Pedido Enviado"],
-  "description": "Confirma envio e oferece grupo VIP.",
+  "description": "Webhook Pedido Enviado. Marca como Cliente, limpa outras tags e envia botão de rastreio.",
   "steps": [
-    { "type": "addTag", "label": "Marcar cliente", "tag": "[EC] Cliente" },
-    { "type": "sendButtons", "label": "Enviar rastreio", "templateKey": "pedidoEnviadoTracking" },
-    { "type": "wait", "label": "Aguardar 30s", "seconds": 30 },
-    { "type": "sendButtons", "label": "Enviar convite VIP", "templateKey": "pedidoEnviadoVip" },
-    { "type": "wait", "label": "Aguardar 2s", "seconds": 2 }
+    {
+      "type": "addTag",
+      "label": "Marcar Cliente",
+      "tag": "[EC] Cliente"
+    },
+    {
+      "type": "removeTags",
+      "label": "Limpar tags de outros estados",
+      "tags": [
+        "[EC] Pedido Recebido",
+        "[EC] Pedido Recebido1",
+        "[EC] Pedido Recebido2",
+        "[EC] Pedido Recebido3",
+        "[EC] Pedido Pago",
+        "[EC] Pedido Cancelado1",
+        "[EC] Pedido Cancelado2",
+        "[EC] Pedido Cancelado3",
+        "[EC] Pedido Carrinho Abandonado1",
+        "[EC] Pedido Carrinho Abandonado2",
+        "[EC] Pedido Carrinho Abandonado3"
+      ]
+    },
+    {
+      "type": "addTag",
+      "label": "Marcar Pedido Enviado",
+      "tag": "[EC] Pedido Enviado"
+    },
+    {
+      "type": "sendButtons",
+      "label": "Enviar botão de rastreio",
+      "templateKey": "pedidoEnviadoTracking"
+    }
   ]
 }

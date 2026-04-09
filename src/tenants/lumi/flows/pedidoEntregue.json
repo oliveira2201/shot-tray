@@ -2,11 +2,17 @@
   "id": "pedidoEntregue",
   "title": "Pedido Entregue",
   "aliases": ["[EC] Pedido Entregue"],
-  "description": "Confirma entrega e oferece grupo VIP.",
+  "description": "Webhook Pedido Entregue. Marca entrega e envia confirmação.",
   "steps": [
-    { "type": "sendText", "label": "Confirmar entrega", "textKey": "pedidoEntregue" },
-    { "type": "wait", "label": "Aguardar 10s", "seconds": 10 },
-    { "type": "sendButtons", "label": "Convite VIP", "templateKey": "pedidoEntregueVip" },
-    { "type": "wait", "label": "Aguardar 3s", "seconds": 3 }
+    {
+      "type": "addTag",
+      "label": "Marcar Pedido Entregue",
+      "tag": "[EC] Pedido Entregue"
+    },
+    {
+      "type": "sendText",
+      "label": "Confirmar entrega",
+      "textKey": "pedidoEntregue"
+    }
   ]
 }

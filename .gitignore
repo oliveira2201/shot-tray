@@ -13,6 +13,9 @@ dist/
 .DS_Store
 .env
 .npmrc
+src/config/tenants.secrets.json
+backups/
+/[MD+SZ]*.json
 *.log
 npm-debug.log*
 yarn-debug.log*

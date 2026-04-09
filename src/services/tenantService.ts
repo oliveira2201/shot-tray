@@ -7,6 +7,21 @@ import * as ebenezerTemplates from "../tenants/ebenezer/templates/index.js";
 import tenantsData from "../config/tenants.json" assert { type: "json" };
 import { IChannelProvider, TenantConfig } from "../types/automation.js";
 
+// Lazy-load do arquivo de secrets (gitignored).
+// Cada tenant tem seu próprio token ShotZap. O arquivo não vai pro git.
+let _secretsCache: Record<string, { token?: string }> | null = null;
+async function loadSecrets(): Promise<Record<string, { token?: string }>> {
+  if (_secretsCache) return _secretsCache;
+  try {
+    const secretsPath = path.join(process.cwd(), "src", "config", "tenants.secrets.json");
+    const content = await fs.readFile(secretsPath, "utf-8");
+    _secretsCache = JSON.parse(content);
+  } catch {
+    _secretsCache = {};
+  }
+  return _secretsCache!;
+}
+
 const templateMap: Record<string, any> = {
   ebenezer: ebenezerTemplates
 };
@@ -19,18 +34,29 @@ export class TenantService {
   static async getTenantConfig(tenantId: string): Promise<TenantConfig | null> {
     const tenant = (tenantsData as any[]).find(t => t.id === tenantId);
     if (!tenant) return null;
+    if (tenant.disabled) return null;
 
     // 1. Resolve Output Provider (Shotzap)
     const ProviderClass = providersMap[tenant.outputProvider];
     if (!ProviderClass) throw new Error(`Provider ${tenant.outputProvider} not found`);
 
-    // Resolver token: env var (tokenEnv) > fallback hardcoded (token)
-    const token = (tenant.config.tokenEnv && process.env[tenant.config.tokenEnv])
-      ? process.env[tenant.config.tokenEnv]
-      : tenant.config.token;
+    // Resolver token ShotZap por tenant.
+    // Prioridade:
+    //   1. tenants.secrets.json (dev local, gitignored)
+    //   2. tenant.config.token (inline no tenants.json — não recomendado se repo for público)
+    //   3. env var TENANT_<ID>_TOKEN (padrão automático, ideal pra Coolify/prod)
+    const secrets = await loadSecrets();
+    const envKey = `TENANT_${tenantId.toUpperCase()}_TOKEN`;
+    const token =
+      secrets[tenantId]?.token ||
+      tenant.config.token ||
+      process.env[envKey];
 
     if (!token) {
-      throw new Error(`Token não configurado para tenant ${tenantId}. Defina a env var ${tenant.config.tokenEnv}`);
+      throw new Error(
+        `Token não configurado para tenant "${tenantId}". ` +
+        `Adicione em src/config/tenants.secrets.json (dev) ou defina ${envKey} no ambiente (prod).`
+      );
     }
 
     const outputProvider = new ProviderClass({
@@ -66,7 +92,8 @@ export class TenantService {
       adapterName: tenant.inputAdapter,
       inputAdapter,
       provider: outputProvider as IChannelProvider,
-      templates
+      templates,
+      vars: tenant.config.vars || {}
     };
   }
 }

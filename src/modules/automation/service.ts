@@ -27,6 +27,18 @@ export const processEvent = async ({ flowAlias, context, tenantConfig, webhookRe
 
   logger.info({ flow: useCase.id, title: useCase.title }, "Iniciando automação");
 
+  // Buscar tags atuais do contato no ShotZap pra o stopIfHasAnyTag funcionar
+  // logo no início do flow (sem wait). Fallback: lista vazia se a API falhar.
+  let currentTags: string[] = context.customer.tags || [];
+  if (context.customer.phone && provider.getContactTags) {
+    try {
+      const fetched = await provider.getContactTags(context.customer.phone);
+      if (Array.isArray(fetched)) currentTags = fetched;
+    } catch (err: any) {
+      logger.warn({ error: err.message }, "Falha ao buscar tags do contato — usando vazio");
+    }
+  }
+
   // Criar tracker desde o webhook
   const tracker = new ExecutionTracker({
     tenantId: tenantConfig.id,
@@ -42,9 +54,12 @@ export const processEvent = async ({ flowAlias, context, tenantConfig, webhookRe
   return runUseCase({
     useCase,
     context: {
+        // Vars globais do tenant (ex: link_loja) — prioridade mais baixa,
+        // pra não sobrescrever name/number/extras do evento.
+        ...(tenantConfig.vars || {}),
         number: context.customer.phone,
         name: context.customer.name,
-        tags: context.customer.tags,
+        tags: currentTags,
         _tenantId: tenantConfig.id,
         ...context.data
     },

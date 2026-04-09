@@ -46,7 +46,15 @@ export const renderTemplate = (value: any, context: Record<string, any>): any =>
 
   let rendered = value;
 
+  // {{var}} — dupla chave (estilo Mustache)
   rendered = rendered.replace(/\{\{\s*([^}]+?)\s*\}\}/g, (match, key) => {
+    const resolved = resolveValue(context, key);
+    return resolved !== undefined ? String(resolved) : match;
+  });
+
+  // {var} — chave simples (estilo doc Lumi). Só resolve se a chave for um identificador
+  // limpo (letras/dígitos/underscore) pra não quebrar blocos de código/JSON literal.
+  rendered = rendered.replace(/\{\s*([a-zA-Z_][a-zA-Z0-9_]*)\s*\}/g, (match, key) => {
     const resolved = resolveValue(context, key);
     return resolved !== undefined ? String(resolved) : match;
   });

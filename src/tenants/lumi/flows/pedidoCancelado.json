@@ -1,24 +1,59 @@
 {
   "id": "pedidoCancelado",
   "title": "Pedido Cancelado",
-  "aliases": ["[EC] Pedido Cancelado1", "[EC] Pedido Cancelado2", "[EC] Pedido Cancelado3"],
-  "description": "Fluxo de recuperação após cancelamento. Cancela se o cliente fizer novo pedido ou pagar.",
+  "aliases": ["[EC] Pedido Cancelado1"],
+  "description": "Webhook Pedido Cancelado. Envia msg inicial e dois follow-ups (7d + 1d) cancelando se pagar/receber novo pedido.",
   "steps": [
-    { "type": "addTag", "label": "Marcar Cancelado", "tag": "[EC] Pedido Cancelado1" },
-    { "type": "sendText", "label": "Aviso de cancelamento", "textKey": "pedidoCancelado1" },
+    {
+      "type": "addTag",
+      "label": "Marcar Cancelado2",
+      "tag": "[EC] Pedido Cancelado2"
+    },
+    {
+      "type": "sendButtons",
+      "label": "Aviso de cancelamento",
+      "templateKey": "pedidoCancelado1"
+    },
     {
       "type": "cancelableWait",
-      "label": "Aguardar antes do 2º contato",
-      "seconds": 14400,
-      "cancelIfTags": ["[EC] Pedido Pago", "[EC] Pedido Recebido"]
+      "label": "Aguardar 7 dias antes do 2º contato",
+      "seconds": 604800,
+      "cancelIfTags": [
+        "[EC] Pedido Recebido",
+        "[EC] Pedido Recebido1",
+        "[EC] Pedido Recebido2",
+        "[EC] Pedido Recebido3",
+        "[EC] Pedido Pago",
+        "[EC] Pedido Enviado"
+      ]
     },
-    { "type": "sendText", "label": "Segunda tentativa", "textKey": "pedidoCancelado2" },
+    {
+      "type": "addTag",
+      "label": "Marcar Cancelado3",
+      "tag": "[EC] Pedido Cancelado3"
+    },
+    {
+      "type": "sendButtons",
+      "label": "Segunda tentativa",
+      "templateKey": "pedidoCancelado2"
+    },
     {
       "type": "cancelableWait",
-      "label": "Aguardar antes do 3º contato",
-      "seconds": 21600,
-      "cancelIfTags": ["[EC] Pedido Pago", "[EC] Pedido Recebido"]
+      "label": "Aguardar 1 dia antes do 3º contato",
+      "seconds": 86400,
+      "cancelIfTags": [
+        "[EC] Pedido Recebido",
+        "[EC] Pedido Recebido1",
+        "[EC] Pedido Recebido2",
+        "[EC] Pedido Recebido3",
+        "[EC] Pedido Pago",
+        "[EC] Pedido Enviado"
+      ]
     },
-    { "type": "sendText", "label": "Última tentativa", "textKey": "pedidoCancelado3" }
+    {
+      "type": "sendButtons",
+      "label": "Última tentativa",
+      "templateKey": "pedidoCancelado3"
+    }
   ]
 }

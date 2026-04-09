@@ -1,25 +1,87 @@
 {
   "id": "carrinhoAbandonado",
   "title": "Carrinho Abandonado",
-  "aliases": ["[EC] Carrinho Abandonado1", "[EC] Carrinho Abandonado2", "[EC] Carrinho Abandonado3", "[EC] Pedido Carrinho Abandonado1", "[EC] Pedido Carrinho Abandonado2", "[EC] Pedido Carrinho Abandonado3"],
-  "description": "Fluxo de recuperação de carrinho abandonado. Cancela se o cliente pagar ou fizer pedido.",
+  "aliases": ["[EC] Pedido Carrinho Abandonado1"],
+  "description": "Webhook Carrinho Abandonado. Envia msg inicial com botão e dois follow-ups (1d + 1d) cancelando se o cliente progredir no funil.",
   "steps": [
-    { "type": "addTag", "label": "Marcar Carrinho Abandonado", "tag": "[EC] Carrinho Abandonado 1" },
-    { "type": "sendButtons", "label": "Enviar botão carrinho", "templateKey": "carrinhoAbandonado1" },
+    {
+      "type": "stopIfHasAnyTag",
+      "label": "Encerrar se cliente já progrediu",
+      "tags": [
+        "[EC] Pedido Recebido",
+        "[EC] Pedido Recebido1",
+        "[EC] Pedido Recebido2",
+        "[EC] Pedido Recebido3",
+        "[EC] Pedido Pago"
+      ]
+    },
+    {
+      "type": "addTag",
+      "label": "Marcar Carrinho Abandonado1",
+      "tag": "[EC] Pedido Carrinho Abandonado1"
+    },
+    {
+      "type": "sendButtons",
+      "label": "Botão recuperar carrinho",
+      "templateKey": "carrinhoAbandonado1"
+    },
     {
       "type": "cancelableWait",
-      "label": "Aguardar antes do 2º lembrete",
-      "seconds": 14400,
-      "cancelIfTags": ["[EC] Pedido Pago", "[EC] Pedido Recebido"]
+      "label": "Aguardar 1 dia antes do 2º lembrete",
+      "seconds": 86400,
+      "cancelIfTags": [
+        "[EC] Pedido Recebido",
+        "[EC] Pedido Recebido1",
+        "[EC] Pedido Recebido2",
+        "[EC] Pedido Recebido3",
+        "[EC] Pedido Pago"
+      ]
     },
-    { "type": "sendText", "label": "Lembrete carrinho", "textKey": "carrinhoAbandonado2" },
+    {
+      "type": "removeTag",
+      "label": "Remover Carrinho Abandonado1",
+      "tag": "[EC] Pedido Carrinho Abandonado1"
+    },
+    {
+      "type": "addTag",
+      "label": "Marcar Carrinho Abandonado2",
+      "tag": "[EC] Pedido Carrinho Abandonado2"
+    },
+    {
+      "type": "sendButtons",
+      "label": "Lembrete 2",
+      "templateKey": "carrinhoAbandonado2"
+    },
     {
       "type": "cancelableWait",
-      "label": "Aguardar antes do último lembrete",
-      "seconds": 21600,
-      "cancelIfTags": ["[EC] Pedido Pago", "[EC] Pedido Recebido"]
+      "label": "Aguardar 1 dia antes do 3º lembrete",
+      "seconds": 86400,
+      "cancelIfTags": [
+        "[EC] Pedido Recebido",
+        "[EC] Pedido Recebido1",
+        "[EC] Pedido Recebido2",
+        "[EC] Pedido Recebido3",
+        "[EC] Pedido Pago",
+        "[EC] Pedido Enviado",
+        "[EC] Pedido Cancelado1",
+        "[EC] Pedido Cancelado2",
+        "[EC] Pedido Cancelado3"
+      ]
     },
-    { "type": "sendText", "label": "Último aviso", "textKey": "carrinhoAbandonado3" },
-    { "type": "sendText", "label": "Mensagem extra", "textKey": "carrinhoAbandonado3Extra" }
+    {
+      "type": "removeTag",
+      "label": "Remover Carrinho Abandonado2",
+      "tag": "[EC] Pedido Carrinho Abandonado2"
+    },
+    {
+      "type": "addTag",
+      "label": "Marcar Carrinho Abandonado3",
+      "tag": "[EC] Pedido Carrinho Abandonado3"
+    },
+    {
+      "type": "sendButtons",
+      "label": "Lembrete 3 (último)",
+      "templateKey": "carrinhoAbandonado3"
+    }
   ]
 }

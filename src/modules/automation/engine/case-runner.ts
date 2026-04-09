@@ -218,7 +218,11 @@ export const runUseCase = async ({ useCase, context, provider, templates, tracke
         case "cancelableWait": {
           const remainingSteps = steps.slice(i + 1);
           const cancelIfTags = step.cancelIfTags || [];
-          const delaySecs = step.seconds || 60;
+          // Turbo mode pra testes end-to-end: se FLOW_WAIT_TURBO estiver setado,
+          // limita o wait ao valor dele (ex: FLOW_WAIT_TURBO=3 → max 3s por espera).
+          const rawSecs = step.seconds || 60;
+          const turbo = Number(process.env.FLOW_WAIT_TURBO);
+          const delaySecs = Number.isFinite(turbo) && turbo > 0 ? Math.min(rawSecs, turbo) : rawSecs;
 
           if (remainingSteps.length === 0) {
             logger.info({ label: step.label }, "cancelableWait sem steps restantes — ignorando");

@@ -34,4 +34,6 @@ export interface TenantConfig {
   inputAdapter: import("./integration.js").IIntegrationAdapter;
   provider: IChannelProvider;
   templates: Record<string, any>;
+  /** Variáveis globais do tenant (ex: link_loja) — propagadas pro contexto do flow */
+  vars?: Record<string, string>;
 }

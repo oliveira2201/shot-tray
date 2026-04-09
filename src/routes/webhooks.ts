@@ -1,4 +1,6 @@
 import { Router, Request, Response } from "express";
+import fs from "fs-extra";
+import path from "path";
 import { TenantService } from "../services/tenantService.js";
 import { processEvent } from "../modules/automation/service.js";
 import { handleIncomingMessage } from "../modules/automation/engine/choice-listener.js";
@@ -8,11 +10,38 @@ import { SchedulerService } from "../modules/scheduler/service.js";
 
 export const webhooksRouter = Router();
 
-// Endpoint: /webhooks/:tenantId
-// Ex: /webhooks/ebenezer
-webhooksRouter.post("/webhooks/:tenantId", async (req: Request, res: Response): Promise<any> => {
+/** Dumpa payload bruto em data/webhooks/{tenant}/YYYY-MM-DD/timestamp_uuid.json */
+async function dumpWebhook(tenantId: string, req: Request, kind: string = "event") {
+  try {
+    const now = new Date();
+    const date = now.toISOString().slice(0, 10);
+    const ts = now.toISOString().replace(/[:.]/g, "-");
+    const dir = path.join(process.cwd(), "data", "webhooks", tenantId, date);
+    await fs.ensureDir(dir);
+    const file = path.join(dir, `${ts}_${kind}.json`);
+    await fs.writeJson(file, {
+      receivedAt: now.toISOString(),
+      method: req.method,
+      url: req.originalUrl,
+      ip: req.ip,
+      headers: req.headers,
+      query: req.query,
+      body: req.body,
+    }, { spaces: 2 });
+    logger.info({ file }, "💾 Webhook payload salvo em arquivo");
+  } catch (err: any) {
+    logger.warn({ err: err.message }, "Falha ao salvar payload do webhook");
+  }
+}
+
+// Endpoint: /webhooks/:tenantId  (também aceita /webhook/:tenantId — singular)
+// Ex: /webhooks/ebenezer ou /webhook/lumi
+webhooksRouter.post(["/webhooks/:tenantId", "/webhook/:tenantId"], async (req: Request, res: Response): Promise<any> => {
   const { tenantId } = req.params as { tenantId: string };
   const webhookReceivedAt = Date.now();
+
+  // Dump bruto antes de qualquer processamento
+  await dumpWebhook(tenantId, req, "event");
 
   try {
     // 1. Load Tenant Configuration
@@ -105,8 +134,11 @@ webhooksRouter.post("/webhooks/:tenantId", async (req: Request, res: Response): 
  * Formato esperado: { phone: "5586...", message: "texto da resposta" }
  * Ou formato Whaticket: { ticket: { contact: { number } }, body: "texto" }
  */
-webhooksRouter.post("/webhooks/:tenantId/reply", async (req: Request, res: Response): Promise<any> => {
+webhooksRouter.post(["/webhooks/:tenantId/reply", "/webhook/:tenantId/reply"], async (req: Request, res: Response): Promise<any> => {
   const { tenantId } = req.params as { tenantId: string };
+
+  // Dump bruto antes de qualquer processamento
+  await dumpWebhook(tenantId, req, "reply");
 
   try {
     // Extrair phone e message do payload (suporta múltiplos formatos)

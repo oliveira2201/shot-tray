@@ -270,8 +270,13 @@ export class ShotzapProvider implements IChannelProvider {
             const response = await this.client.get("/api/tags", {
                 headers: { Authorization: `Bearer ${this.token}` }
             });
-            
-            const tags = response.data?.tags || [];
+
+            // A API do ShotZap retorna array direto, mas aceitar também
+            // { data: [...] } ou { tags: [...] } pra tolerar mudanças futuras.
+            const payload = response.data;
+            const tags = Array.isArray(payload)
+              ? payload
+              : (payload?.data || payload?.tags || []);
             const cacheObj: Record<string, number> = {};
 
             tags.forEach((t: any) => {
@@ -524,22 +529,20 @@ export class ShotzapProvider implements IChannelProvider {
   }
 
   async getContactTags(phone: string): Promise<string[]> {
+    // IMPORTANTE: `GET /api/tickets/{id}` retorna 403 "Expired Session" com
+    // token legacy — não dá pra usar. Em compensação, `POST /api/tickets/createTicketAPI`
+    // já devolve o ticket completo COM as tags anexadas (quando o ticket já existe,
+    // ele retorna o existente sem criar novo). Então usamos isso pra ler tags.
     const sanitizedPhone = this._sanitizePhone(phone);
-    const contactId = await this._lookupContact(sanitizedPhone);
+    const contactId = await this._ensureContact(sanitizedPhone);
     if (!contactId) return [];
 
     try {
-      // Criar ticket pra pegar as tags associadas
-      const ticketId = await this._ensureTicket(sanitizedPhone);
-      if (!ticketId) return [];
-
-      // GET no ticket retorna as tags
-      const response = await this.client.get(`/api/tickets/${ticketId}`, {
-        headers: { Authorization: `Bearer ${this.token}` }
-      });
-
-      const tags = response.data?.tags || [];
-      return tags.map((t: any) => t.name || t.tag || '').filter(Boolean);
+      const res = await this._postWithAuth("/api/tickets/createTicketAPI", { contactId });
+      const tags = res?.tags || [];
+      return tags
+        .map((t: any) => (typeof t === "string" ? t : (t?.name || t?.tag || "")))
+        .filter(Boolean);
     } catch (e: any) {
       console.warn(`>>> [ShotzapProvider] Erro ao buscar tags do contato ${phone}:`, e.message);
       return [];
@@ -556,18 +559,22 @@ export class ShotzapProvider implements IChannelProvider {
     }
     phone = this._sanitizePhone(phone);
 
-    const ticketId = await this._ensureTicket(phone);
-    if (!ticketId) {
-        console.warn(">>> [ShotzapProvider] removeTag: não conseguiu obter ticketId");
+    // Usa createTicketAPI (aceita token legacy) pra pegar ticket+tags de uma vez.
+    // O GET /api/tickets/{id} dá 403 "Expired Session" com esse token.
+    const contactId = await this._ensureContact(phone);
+    if (!contactId) {
+        console.warn(">>> [ShotzapProvider] removeTag: contato não encontrado");
         return null;
     }
 
-    // Buscar tags atuais do ticket
     try {
-      const response = await this.client.get(`/api/tickets/${ticketId}`, {
-        headers: { Authorization: `Bearer ${this.token}` }
-      });
-      const currentTags: any[] = response.data?.tags || [];
+      const ticket = await this._postWithAuth("/api/tickets/createTicketAPI", { contactId });
+      const ticketId = ticket?.id;
+      if (!ticketId) {
+          console.warn(">>> [ShotzapProvider] removeTag: não conseguiu obter ticketId");
+          return null;
+      }
+      const currentTags: any[] = ticket?.tags || [];
 
       // Filtrar a tag que queremos remover
       let remaining: { id: number }[];
@@ -585,7 +592,7 @@ export class ShotzapProvider implements IChannelProvider {
 
       return this._postWithAuth(this.paths.addTag, { ticketId, tags: remaining });
     } catch (e: any) {
-      console.error(`>>> [ShotzapProvider] Erro ao remover tag do ticket ${ticketId}:`, e.message);
+      console.error(`>>> [ShotzapProvider] Erro ao remover tag do contato ${phone}:`, e.message);
       return null;
     }
   }

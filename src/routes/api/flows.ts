@@ -2,16 +2,19 @@ import { Router } from "express";
 import fs from "fs/promises";
 import path from "path";
 import { logger } from "../../utils/logger.js";
+// @ts-ignore
+import tenantsData from "../../config/tenants.json" assert { type: "json" };
 
 export const flowsApiRouter = Router();
 
 const tenantsDir = () => path.join(process.cwd(), "src", "tenants");
 
-// GET /api/tenants — lista tenants
+// GET /api/tenants — lista tenants ativos
 flowsApiRouter.get("/api/tenants", async (_req, res) => {
   try {
-    const entries = await fs.readdir(tenantsDir(), { withFileTypes: true });
-    const tenants = entries.filter((e) => e.isDirectory()).map((e) => e.name);
+    const tenants = (tenantsData as any[])
+      .filter((t) => !t.disabled)
+      .map((t) => t.id);
     res.json(tenants);
   } catch (err) {
     logger.error({ err }, "Erro ao listar tenants");

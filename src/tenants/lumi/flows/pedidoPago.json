@@ -2,10 +2,34 @@
   "id": "pedidoPago",
   "title": "Pedido Pago",
   "aliases": ["[EC] Pedido Pago"],
-  "description": "Limpa tags anteriores e envia confirmação de pagamento.",
+  "description": "Webhook Pedido Pago. Limpa todas as tags de estados anteriores e envia confirmação.",
   "steps": [
-    { "type": "addTag", "label": "Marcar pago", "tag": "[EC] Pedido Pago" },
-    { "type": "sendButtons", "label": "Enviar confirmação", "templateKey": "pedidoPago" },
-    { "type": "wait", "label": "Aguardar 2s", "seconds": 2 }
+    {
+      "type": "addTag",
+      "label": "Marcar Pedido Pago",
+      "tag": "[EC] Pedido Pago"
+    },
+    {
+      "type": "removeTags",
+      "label": "Limpar tags de outros estados",
+      "tags": [
+        "[EC] Pedido Recebido",
+        "[EC] Pedido Recebido1",
+        "[EC] Pedido Recebido2",
+        "[EC] Pedido Recebido3",
+        "[EC] Pedido Enviado",
+        "[EC] Pedido Cancelado1",
+        "[EC] Pedido Cancelado2",
+        "[EC] Pedido Cancelado3",
+        "[EC] Pedido Carrinho Abandonado1",
+        "[EC] Pedido Carrinho Abandonado2",
+        "[EC] Pedido Carrinho Abandonado3"
+      ]
+    },
+    {
+      "type": "sendButtons",
+      "label": "Confirmar pagamento",
+      "templateKey": "pedidoPago"
+    }
   ]
 }

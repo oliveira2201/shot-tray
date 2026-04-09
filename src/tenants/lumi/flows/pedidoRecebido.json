@@ -2,85 +2,88 @@
   "id": "pedidoRecebido",
   "title": "Pedido Recebido",
   "aliases": ["[EC] Pedido Recebido"],
-  "description": "Fluxo completo de cobrança após pedido recebido. Cancela automaticamente se o pedido for pago.",
+  "description": "Webhook Pedido Recebido. Segue cadeia de follow-ups (3h → 1d → 1d) se não for pago.",
   "steps": [
     {
       "type": "addTag",
-      "label": "Marcar Pedido Recebido",
-      "tag": "[EC] Pedido Recebido"
+      "label": "Marcar Pedido Recebido1",
+      "tag": "[EC] Pedido Recebido1"
     },
     {
-      "type": "wait",
-      "label": "Aguardar 120s",
-      "seconds": 120
+      "type": "removeTags",
+      "label": "Limpar tags de outros estados",
+      "tags": [
+        "[EC] Pedido Enviado",
+        "[EC] Pedido Cancelado1",
+        "[EC] Pedido Cancelado2",
+        "[EC] Pedido Cancelado3",
+        "[EC] Pedido Carrinho Abandonado1",
+        "[EC] Pedido Carrinho Abandonado2",
+        "[EC] Pedido Carrinho Abandonado3"
+      ]
     },
     {
-      "type": "sendButtons",
-      "label": "Enviar botão rastreio",
-      "templateKey": "pedidoRecebido"
-    },
-    {
-      "type": "sendButtons",
-      "label": "Enviar opções",
-      "templateKey": "pedidoRecebidoQuickReply"
-    },
-    {
-      "type": "wait",
-      "label": "Aguardar 2s",
-      "seconds": 2
-    },
-    {
-      "type": "conditionalChoice",
-      "label": "Tratar escolha do cliente",
-      "timeoutSeconds": 120,
-      "conditions": [
-        {
-          "match": "rastrear",
-          "responseTemplate": "pedidoRecebidoRastrear"
-        },
-        {
-          "match": "descadastre",
-          "responseTemplate": "pedidoRecebidoDescadastre",
-          "actions": [
-            { "type": "addTag", "tag": "[EC] Descadastrado" },
-            { "type": "stopFlow" }
-          ]
-        }
-      ],
-      "defaultTemplate": "pedidoRecebidoSelecione"
-    },
-    {
-      "type": "cancelableWait",
-      "label": "Aguardar antes da 1ª cobrança",
-      "seconds": 7200,
-      "cancelIfTags": ["[EC] Pedido Pago", "[EC] Descadastrado"]
+      "type": "stopIfHasAnyTag",
+      "label": "Encerrar se já pagou",
+      "tags": ["[EC] Pedido Pago"]
     },
     {
       "type": "sendText",
-      "label": "Cobrança 1",
+      "label": "Confirmar pedido recebido",
+      "textKey": "pedidoRecebido"
+    },
+    {
+      "type": "cancelableWait",
+      "label": "Aguardar 3h antes do 1º follow-up",
+      "seconds": 10800,
+      "cancelIfTags": ["[EC] Pedido Pago"]
+    },
+    {
+      "type": "removeTag",
+      "label": "Remover Recebido",
+      "tag": "[EC] Pedido Recebido"
+    },
+    {
+      "type": "addTag",
+      "label": "Marcar Recebido2",
+      "tag": "[EC] Pedido Recebido2"
+    },
+    {
+      "type": "sendText",
+      "label": "Follow-up 1",
       "textKey": "pedidoRecebido1"
     },
     {
       "type": "cancelableWait",
-      "label": "Aguardar antes da 2ª cobrança",
-      "seconds": 14400,
-      "cancelIfTags": ["[EC] Pedido Pago", "[EC] Descadastrado"]
+      "label": "Aguardar 1 dia antes do 2º follow-up",
+      "seconds": 86400,
+      "cancelIfTags": ["[EC] Pedido Pago"]
     },
     {
-      "type": "sendText",
-      "label": "Cobrança 2",
-      "textKey": "pedidoRecebido2"
+      "type": "removeTag",
+      "label": "Remover Recebido2",
+      "tag": "[EC] Pedido Recebido2"
+    },
+    {
+      "type": "addTag",
+      "label": "Marcar Recebido3",
+      "tag": "[EC] Pedido Recebido3"
+    },
+    {
+      "type": "sendButtons",
+      "label": "Follow-up 2",
+      "templateKey": "pedidoRecebido2"
     },
     {
       "type": "cancelableWait",
-      "label": "Aguardar antes da 3ª cobrança",
-      "seconds": 21600,
-      "cancelIfTags": ["[EC] Pedido Pago", "[EC] Descadastrado"]
+      "label": "Aguardar 1 dia antes do 3º follow-up",
+      "seconds": 86400,
+      "cancelIfTags": ["[EC] Pedido Pago"]
     },
     {
-      "type": "sendText",
-      "label": "Cobrança 3 (última)",
-      "textKey": "pedidoRecebido3"
+      "type": "sendButtons",
+      "label": "Follow-up 3 (último)",
+      "templateKey": "pedidoRecebido3"
     }
   ]
 }

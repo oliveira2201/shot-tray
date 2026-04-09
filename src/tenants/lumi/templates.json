@@ -1,71 +1,90 @@
 {
   "text": {
-    "carrinhoAbandonado2": "A Paz do Senhor {{name}}! 😊 \nPassando para lembrar que os produtos que você escolheu na nossa loja continuam disponíveis, mas a procura está grande! 😲 \nNão perca a oportunidade de adquirir aquele livro/Bíblia que vai edificar a sua vida! ⏳ \nClique aqui e finalize sua compra antes que acabe 👇\nhttps://4soci.al/carrinho_ebenezer",
-    "carrinhoAbandonado3": "Graça e Paz {{name}} 😉 \nEstamos quase sem estoque de alguns itens que você adicionou ao carrinho da nossa loja! 🚨 \nEssa é a sua última chance de garantir esses produtos incríveis para sua jornada de fé! \nNão deixe essa bênção escapar! 🙏 \n\nClique aqui e aproveite 👇\nhttps://4soci.al/vercarrinho",
-    "carrinhoAbandonado3Extra": "Abandonado3",
-    "pedidoCancelado1": "Graça e Paz {{name}} 😔 \nSeu pedido na nossa loja foi cancelado, mas a Palavra de Deus continua te chamando! ✨ \nRefaça seu pedido e continue sua jornada de fé! \nhttps://4soci.al/verpedidoebenezer\n",
-    "pedidoCancelado2": "Olá! 😊 Que a paz do Senhor esteja contigo {{name}}! 🙏 \nO produto que você escolheu está quase esgotando! ⚠️ \nNão perca tempo e garanta já o seu para edificar sua vida espiritual. 😉 \nhttps://4soci.al/verpedido_ebenezer",
-    "pedidoCancelado3": "A Paz do Senhor {{name}}! 👋 \nSei que imprevistos acontecem, mas não deixe sua busca pela Palavra de Deus ser interrompida! \nPara te ajudar, reservamos seus itens por tempo limitado! ⏳ \nRefaça seu pedido agora e não perca essa oportunidade \nhttps://4soci.al/meupedido_ebenezer",
-    "pedidoEntregue": "👋 Glória a Deus! ✨\n\nPassando pra avisar que a sua bênção chegou! 🙏📦 O seu pedido já foi entregue! 🙌 Que alegria! 😍\n\nAgora é só desfrutar dos seus livros, Bíblias, devocionais e tudo o mais que você escolheu pra edificar a sua fé! 📖🔥\n\nSe tiver alguma dúvida ou precisar de algo mais, pode contar com a gente! 😉\n\nQue Deus te abençoe grandemente! 💖 E não se esqueça: leitura edifica! 😉",
-    "pedidoRecebido1": "👋 A Paz {{name}}, tudo bem? \n\nPassei aqui só para te avisar que ainda *não recebi a confirmação* do seu pagamento.\n\nQualquer dúvida é só me chamar ok? 😊\n\n🏃 Assim o pagamento for confirmado, seu pedido será separado e para envio.\nAté mais.\n\nSe você já pagou, é só aguardar 😉",
-    "pedidoRecebido2": "🤔 Aconteceu alguma coisa {{name}}?\n\nAinda não recebi a confirmação de pagamento do seu pedido, *ele continua reservado e te esperando*, mas não por muito tempo, nosso estoque é limitado e *outros clientes já estão de olho.*\n \nFaça o pagamento e garanta a próxima leitura que vai te *aproximar de Deus* 📖",
-    "pedidoRecebido3": "*😬 Estou preocupado com você {{name}}*\n\n*Não recebi* ainda a confirmação do seu pagamento e estão me cobrando aqui para liberar o produto que eu *reservei para você.*\n\n*Vou segurar o seu carrinho até hoje tá,* não consigo reservar por mais tempo.\n\nSe você quiser trocar a forma de pagamento me avisa, você pode pagar no cartão de crédito á vista ou parcelado, Boleto á vista e até parcelar no Pix é possível.\n\nMe manda mensagem se precisar uma ajuda.\n\nAté +",
-    "pedidoRecebidoTeste": "teste",
-    "pedidoRecebidoDescadastre": "Que Pena",
-    "pedidoRecebidoRastrear": "Quero Rastrear",
-    "pedidoRecebidoSelecione": "selecione a opção desejada"
+    "pedidoRecebido": "Olá, {nome}! ✨ Acabei de receber seu pedido.\nEstou muito feliz por você ter escolhido a LumiVittá para o seu novo ritual diário de amor-próprio.\nAssim que seu pagamento for confirmado, te avisarei por aqui e iniciaremos o preparo com todo o cuidado que você merece. 🤍\nE aproveita salva meu contato na sua agenda para garantir que irá receber as minhas mensagens\nAté logo.",
+
+    "pedidoRecebido1": "Olá, {nome}! Tudo bem? ✨\nPassando por aqui para avisar que o seu pedido está reservado, apenas aguardando a confirmação do pagamento.\n\nSabemos que a rotina pode ser corrida, mas não queremos que você atrase o início do seu novo ritual diário de amor-próprio. Como um dos nossos valores é o cuidado humano, guardamos os seus produtos com toda a segurança.\n\nVocê teve alguma dificuldade na hora de finalizar? Se precisar que eu reenvie o link ou a chave PIX, é só me falar! 🤍",
+
+    "pedidoEntregue": "Olá, {nome}! ✨\nSeu LumiVittá acabou de chegar! 💛\nQue alegria saber que o seu novo ritual diário de amor-próprio já está aí com você.\nAgora é o momento de cuidar da sua beleza e saúde de dentro para fora, com a qualidade e o cuidado humano que você merece.\nQualquer dúvida sobre como incluir os produtos na sua rotina, estamos por aqui! 🤍"
   },
   "buttons": {
-    "carrinhoAbandonado1": {
-      "title": "👋Graça e Paz {{name}}! 🙏",
-      "body": "Vi que você deixou umas bênçãos te esperando no carrinho da nossa loja! 📖✨\nMas corre, viu?\n\n*{{extra3}}* têm estoque limitado e pode acabar rapidinho! 🏃‍♀️💨\n\nAcesse agora mesmo seu carrinho e garanta sua bênção",
-      "footer": "Clique para acessar seu carrinho",
-      "buttons": [
-        { "type": "url", "text": "Acessar Carrinho", "url": "https://4soci.al/carrinhoebenezer" }
-      ]
-    },
     "pedidoPago": {
-      "title": "🕊️🎉 *Trago boas novas {{name}}* 🕊️🎉",
-      "body": "Que benção! Acabei de receber a confirmação do seu pagamento ✅\n\nJá estou enviando ele para separação e envio, assim que ele for despachado te aviso.\n\nQualquer dúvida é só me chamar ok? 😊\nFique Com Deus!",
+      "title": "Olá, {nome}! ✨",
+      "body": "Ótimas notícias: o pagamento do seu pedido foi aprovado com sucesso!\nEstamos muito felizes em fazer parte da sua rotina. A partir de agora, falta muito pouco para você iniciar o seu ritual diário de amor-próprio e cuidar da sua beleza de dentro para fora\nNossa equipe já está preparando o seu pacote com todo o cuidado e a qualidade que você merece\nAssim que ele for enviado, te chamo aqui com o código de rastreio. 🤍\nSe não salvou meu contato na sua agenda, aproveita e salva agora para garantir que você vai receber as minhas mensagens sobre seu pedido e promoções",
+      "footer": "LumiVittá",
       "buttons": [
-        { "type": "url", "text": "Rastrear Pedido", "url": "{{extra1}}" }
+        { "type": "url", "text": "Acompanhar Pedido", "url": "{extra1}" }
       ]
     },
-    "pedidoRecebido": {
-      "title": "👋 A Paz {{name}}",
-      "body": "Obrigado por comprar na *Ebenézer*, Deus te abençoe 😊\nRecebemos seu pedido e assim que o pagamento for confirmado, ele segue para separação e envio, vou continuar te avisando por aqui.\n\nEnquanto isso, aproveite e salve meu contato para garantir que vai receber minhas mensagens.\n\nSe precisar você também pode verificar o status do seu pedido ou até mesmo gerar o boleto caso não tenha gerado ainda no link abaixo 👇",
+    "pedidoRecebido2": {
+      "title": "Olá, {nome}! 🌿",
+      "body": "Vi que o seu pedido ainda está pendente no nosso sistema.\nSabemos que você é exigente e foge de promessas milagrosas. Por isso, quero te lembrar que a LumiVittá foi desenvolvida exatamente para entregar resultados reais, com fórmulas transparentes e ingredientes premium. O seu corpo merece esse nível de excelência para fortalecer a pele de dentro para fora.\nSeu pedido ainda está garantido. Quer que eu te envie os dados de pagamento por aqui para você finalizar de forma rápida e segura? Estou à disposição! ✨",
+      "footer": "LumiVittá",
       "buttons": [
-        { "type": "url", "text": "Rastrear Pedido", "url": "{{extra1}}" }
+        { "type": "url", "text": "🚀 Finalizar Pedido", "url": "{extra1}" }
       ]
     },
-    "pedidoRecebidoQuickReply": {
-      "title": "👋 A Paz {{name}}",
-      "body": "Obrigado por comprar na *Ebenézer*, Deus te abençoe 😊\nRecebemos seu pedido e assim que o pagamento for confirmado, ele segue para separação e envio, vou continuar te avisando por aqui.\nEnquanto isso, aproveite e salve meu contato para garantir que vai receber minhas mensagens.\nSe precisar você também pode verificar o status do seu pedido ou até mesmo gerar o boleto caso não tenha gerado ainda no link abaixo 👇",
-      "footer": "Selecione uma opção",
+    "pedidoRecebido3": {
+      "title": "Olá, {nome}. 🤍",
+      "body": "Hoje é o último dia para confirmarmos o seu pedido antes que ele seja cancelado automaticamente em nosso sistema.\nComo nossos suplementos contam com ativos selecionados e prezamos pela qualidade acima de tudo, nossos estoques são bastante exclusivos. Ainda dá tempo de você priorizar o seu autocuidado e elevar a saúde e a confiança da sua pele com a gente.\nPosso te ajudar com a finalização agora mesmo? Caso precise de mais tempo, me avise para tentarmos segurar sua reserva! ⏳",
+      "footer": "LumiVittá",
       "buttons": [
-        { "type": "quickreply", "text": "Rastrear Pedido", "value": "Rastrear Pedido" },
-        { "type": "quickreply", "text": "Me Descadastre", "value": "Me Descadastre" }
+        { "type": "url", "text": "🚨 Resgatar meu Pedido Agora", "url": "{extra1}" }
+      ]
+    },
+    "carrinhoAbandonado1": {
+      "title": "Você esqueceu algo 💛",
+      "body": "Olá, {nome}! Tudo bem? ✨\nNotei que você deixou alguns itens no seu carrinho da LumiVittá. Como um dos nossos pilares é o cuidado humano, passei aqui para saber se você teve alguma dificuldade técnica ou se ficou com alguma dúvida sobre as nossas fórmulas.\nEstou aqui para te ajudar a iniciar o seu ritual diário de amor-próprio com total segurança\nPara recuperar seu carrinho clique no botão abaixo\nAté logo!",
+      "footer": "LumiVittá",
+      "buttons": [
+        { "type": "url", "text": "Recuperar Carrinho", "url": "{extra2}" }
+      ]
+    },
+    "carrinhoAbandonado2": {
+      "title": "Seu ritual ficou pela metade 💛",
+      "body": "Olá, {nome},\nVimos que você começou a escolher seu LumiVittá, mas o pedido não foi concluído.\nSe ainda estiver avaliando, ficaremos felizes em ajudar. Nossas fórmulas foram desenvolvidas para quem busca ciência, qualidade e resultados visíveis de dentro para fora.\nQuando sentir que é o momento, seu carrinho estará pronto para você finalizar. Estamos à disposição.",
+      "footer": "LumiVittá",
+      "buttons": [
+        { "type": "url", "text": "🔗 Aproveitar Oferta Dupla", "url": "{extra2}" }
+      ]
+    },
+    "carrinhoAbandonado3": {
+      "title": "Seu LumiVittá ainda está disponível 💛",
+      "body": "Olá, {nome},\nNotamos que seu pedido não foi concluído.\nSabemos que escolher um suplemento premium envolve decisão consciente — e estamos aqui caso queira esclarecer qualquer detalhe sobre a fórmula, ativos ou benefícios.\nSe desejar finalizar, seu carrinho continua disponível. Será um prazer acompanhar você nessa jornada de cuidado de dentro para fora.\nTe espero do lado de cá!",
+      "footer": "LumiVittá",
+      "buttons": [
+        { "type": "url", "text": "Recuperar Carrinho", "url": "{extra2}" }
       ]
     },
     "pedidoEnviadoTracking": {
-      "title": "🚚 *Seu pedido já está pronto {{name}}* 🚚",
-      "body": "Se você optou por retirar aqui em nossa loja, *aguarde por favor o contato do SAC,* e se você optou pela entrega via transportadora ou correios, agora é só acompanhar a entrega, *se certifique que vai ter alguém no endereço para poder receber seu pedido.*\n\nPara rastrear a entrega acesse sua conta no nosso site pelo link\n😉 Te mandei também por e-mail os dados para vc poder rastrear a entrega.\nQualquer dúvida é só me chamar ok?\nAté mais.",
+      "title": "Olá, {nome}! ✨",
+      "body": "O seu novo ritual diário de amor-próprio acaba de começar a viagem até você! O seu pedido já foi enviado.\nFalta muito pouco para você começar a cuidar da sua beleza e saúde de dentro para fora, com a qualidade e o cuidado humano que você merece.\nAcompanhe a sua entrega clicando aqui abaixo.",
+      "footer": "LumiVittá",
       "buttons": [
-        { "type": "url", "text": "Rastrear Pedido", "url": "{{extra1}}" }
+        { "type": "url", "text": "📦 Rastrear Entrega", "url": "{extra1}" }
       ]
     },
-    "pedidoEnviadoVip": {
-      "title": "😳 Já ia me esquecendo {{name}}",
-      "body": "Você conhece nosso grupo VIP de promoções?👑\n\nÉ um grupo de WhatsApp onde eu envio as melhores promoções para clientes VIP como você.\nE não se preocupe que é um grupo silenciado que só eu envio mensagens lá.\n\nQualquer dúvida é só me chamar.\n\nAté mais.\n\nVamos manter contato, clique no link e faça parte do grupo VIP 👇",
+    "pedidoCancelado1": {
+      "title": "Olá, {nome} 💛",
+      "body": "Como não identificamos a confirmação do pagamento dentro do prazo, seu pedido foi cancelado automaticamente.\nSe ainda desejar realizar sua compra, você pode refazer seu pedido pelo link abaixo.\nSerá um prazer acompanhar você no seu ritual de cuidado de dentro para fora. Se precisar de qualquer apoio, estamos à disposição.",
+      "footer": "LumiVittá",
       "buttons": [
-        { "type": "url", "text": "Grupo VIP Ebenezer", "url": "https://4soci.al/grupovip-ebenezer" }
+        { "type": "url", "text": "🔗 Refazer Pedido", "url": "{link_loja}" }
       ]
     },
-    "pedidoEntregueVip": {
-      "title": "Você já entrou no nosso Grupo VIP {{name}}?",
-      "body": "Não sei se você sabe, temos um grupo  VIP de promoções.\n\nÉ um grupo de WhatsApp onde eu envio as melhores promoções para clientes VIP como você.\nE não se preocupe que é um grupo silenciado que só eu envio mensagens lá.\n\nQualquer dúvida é só me chamar.\n\nAté mais.\n\nClique no link e faça parte do grupo VIP 👇",
+    "pedidoCancelado2": {
+      "title": "Olá, {nome} 💛",
+      "body": "Seu pedido foi cancelado devido à ausência de confirmação de pagamento dentro do prazo.\nSe ainda fizer sentido para você continuar, basta refazer sua compra pelo link abaixo.\nEstaremos aqui para acompanhar você em cada etapa do seu ritual de cuidado de dentro para fora.",
+      "footer": "LumiVittá",
       "buttons": [
-        { "type": "url", "text": "Grupo VIP Ebenezer", "url": "https://4soci.al/grupovip-ebenezer" }
+        { "type": "url", "text": "🔗 Refazer Pedido", "url": "{link_loja}" }
+      ]
+    },
+    "pedidoCancelado3": {
+      "title": "Sobre seu pedido 💛",
+      "body": "Olá, {nome},\nComo o pagamento não foi concluído, o pedido foi finalizado automaticamente em nosso sistema para mantermos a organização dos envios.\nSe ainda desejar seguir com seu LumiVittá, você pode iniciar um novo pedido pelo link abaixo.\nQuando for o momento certo para você, estaremos prontas para acompanhar seu ritual de cuidado de dentro para fora.",
+      "footer": "LumiVittá",
+      "buttons": [
+        { "type": "url", "text": "🔗 Iniciar Novo Pedido", "url": "{link_loja}" }
       ]
     }
   }

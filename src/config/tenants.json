@@ -6,23 +6,25 @@
     "outputProvider": "shotzap",
     "config": {
       "baseUrl": "https://api.shotzap.com.br",
-      "tokenEnv": "SHOTZAP_TOKEN_LUMI",
       "tagsCachePath": "src/tenants/lumi/tags_cache.json",
       "paths": {
         "sendText": "/api/messages/send",
         "addTag": "/api/tags/add",
         "getTickets": "/api/contacts/alltickets"
+      },
+      "vars": {
+        "link_loja": "https://lumivitta.com.br"
       }
     }
   },
   {
     "id": "ebenezer",
     "name": "Livraria Ebenezer",
+    "disabled": true,
     "inputAdapter": "default",
     "outputProvider": "shotzap",
     "config": {
       "baseUrl": "https://api.shotzap.com.br",
-      "tokenEnv": "SHOTZAP_TOKEN_EBENEZER",
       "tagsCachePath": "src/tenants/ebenezer/tags_cache.json",
       "paths": {
         "sendText": "/api/messages/send",
