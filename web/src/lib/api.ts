@@ -115,3 +115,24 @@ export async function cancelSchedulerJob(jobId: string) {
   const res = await fetch(`${BASE}/scheduler/jobs/${jobId}`, { method: 'DELETE' })
   return res.json()
 }
+
+// Histórico de execuções (tabela executions do Postgres)
+export async function fetchExecutions(
+  tenantId: string,
+  opts: { phone?: string; status?: string; flowId?: string; limit?: number; offset?: number } = {}
+) {
+  const params = new URLSearchParams()
+  if (opts.phone) params.set('phone', opts.phone)
+  if (opts.status) params.set('status', opts.status)
+  if (opts.flowId) params.set('flowId', opts.flowId)
+  if (opts.limit) params.set('limit', String(opts.limit))
+  if (opts.offset) params.set('offset', String(opts.offset))
+  const qs = params.toString()
+  const res = await fetch(`${BASE}/executions/${tenantId}${qs ? '?' + qs : ''}`)
+  return res.json()
+}
+
+export async function fetchExecution(tenantId: string, executionId: string) {
+  const res = await fetch(`${BASE}/executions/${tenantId}/${executionId}`)
+  return res.json()
+}

@@ -4,10 +4,11 @@ import { FlowSimulator } from './components/FlowSimulator'
 import { SettingsPanel } from './components/SettingsPanel'
 import { Dashboard } from './components/Dashboard'
 import { Monitor } from './components/Monitor'
+import { History } from './components/History'
 import { fetchTenants, fetchFlows, fetchFlow } from './lib/api'
 import type { FlowDefinition } from './lib/types'
 
-type Tab = 'editor' | 'simulate' | 'settings' | 'monitor'
+type Tab = 'editor' | 'simulate' | 'settings' | 'monitor' | 'history'
 
 export default function App() {
   const [tenants, setTenants] = useState<string[]>([])
@@ -104,6 +105,14 @@ export default function App() {
             <span>&#9889;</span> Monitor
           </button>
           <button
+            onClick={() => { setSelectedFlow(null); setActiveFlowId(''); setTab('history') }}
+            className={`w-full text-left px-2.5 py-2 rounded text-sm flex items-center gap-2 transition-colors ${
+              tab === 'history' ? 'bg-purple-100 text-purple-700 font-medium' : 'text-gray-500 hover:bg-gray-100'
+            }`}
+          >
+            <span>&#128338;</span> Histórico
+          </button>
+          <button
             onClick={() => setTab('settings')}
             className={`w-full text-left px-2.5 py-2 rounded text-sm flex items-center gap-2 transition-colors ${
               tab === 'settings' ? 'bg-gray-200 text-gray-800 font-medium' : 'text-gray-500 hover:bg-gray-100'
@@ -128,6 +137,8 @@ export default function App() {
         <div className="flex-1 overflow-hidden">
           {tab === 'monitor' && <Monitor />}
 
+          {tab === 'history' && selectedTenant && <History tenantId={selectedTenant} />}
+
           {tab === 'settings' && selectedTenant && (
             <div className="h-full overflow-y-auto">
               <SettingsPanel tenantId={selectedTenant} />
@@ -142,8 +153,8 @@ export default function App() {
             <FlowSimulator tenantId={selectedTenant} flowId={activeFlowId} />
           )}
 
-          {/* Dashboard quando nenhum flow selecionado */}
-          {!selectedFlow && tab !== 'settings' && selectedTenant && (
+          {/* Dashboard quando nenhum flow selecionado e sem outra tab ativa */}
+          {!selectedFlow && tab !== 'settings' && tab !== 'monitor' && tab !== 'history' && selectedTenant && (
             <Dashboard tenantId={selectedTenant} onOpenFlow={selectFlow} onOpenSettings={() => setTab('settings')} />
           )}
         </div>
