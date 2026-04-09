@@ -75,8 +75,6 @@ export function Monitor() {
     return true
   })
 
-  const uniquePhones = [...new Set(logs.map(l => l.phone).filter(Boolean))]
-
   return (
     <div className="h-full flex flex-col overflow-hidden">
       {/* Header */}
@@ -174,12 +172,20 @@ export function Monitor() {
                 <option key={key} value={key}>{cfg.icon} {cfg.label}</option>
               ))}
             </select>
-            <select value={phoneFilter} onChange={(e) => setPhoneFilter(e.target.value)} className="text-xs px-2 py-1 rounded border border-gray-300 bg-white">
-              <option value="">Todos os telefones</option>
-              {uniquePhones.map(p => (
-                <option key={p} value={p}>{p}</option>
-              ))}
-            </select>
+            <input
+              type="text"
+              value={phoneFilter}
+              onChange={(e) => setPhoneFilter(e.target.value.replace(/\D/g, ""))}
+              placeholder="Filtrar por telefone (ex: 5586...)"
+              className="text-xs px-2 py-1 rounded border border-gray-300 bg-white w-52 font-mono"
+            />
+            {phoneFilter && (
+              <button
+                onClick={() => setPhoneFilter("")}
+                className="text-xs text-gray-400 hover:text-gray-600"
+                title="Limpar filtro"
+              >✕</button>
+            )}
             <span className="text-[10px] text-gray-400 ml-auto">{filteredLogs.length} eventos</span>
           </div>
 

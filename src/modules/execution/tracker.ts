@@ -185,15 +185,20 @@ export class ExecutionTracker {
     offset?: number;
     status?: ExecutionStatus;
     flowId?: string;
+    phone?: string;
     dateFrom?: string;
     dateTo?: string;
   } = {}): Promise<{ executions: ExecutionData[]; total: number }> {
-    const { limit = 50, offset = 0, status, flowId, dateFrom, dateTo } = opts;
+    const { limit = 50, offset = 0, status, flowId, phone, dateFrom, dateTo } = opts;
 
     try {
       const where: any = { tenantId };
       if (status) where.status = status;
       if (flowId) where.flowId = flowId;
+      if (phone) {
+        // Match parcial pra facilitar busca (558688720061, 8688720061, etc)
+        where.phone = { contains: phone.replace(/\D/g, "") };
+      }
       if (dateFrom || dateTo) {
         where.startedAt = {};
         if (dateFrom) where.startedAt.gte = new Date(dateFrom);

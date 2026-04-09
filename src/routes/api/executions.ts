@@ -11,6 +11,7 @@ executionsApiRouter.get("/api/executions/:tenantId", async (req: Request, res: R
   const offset = req.query.offset as string | undefined;
   const status = req.query.status as string | undefined;
   const flowId = req.query.flowId as string | undefined;
+  const phone = req.query.phone as string | undefined;
   const dateFrom = req.query.dateFrom as string | undefined;
   const dateTo = req.query.dateTo as string | undefined;
 
@@ -20,6 +21,7 @@ executionsApiRouter.get("/api/executions/:tenantId", async (req: Request, res: R
       offset: offset ? Number(offset) : 0,
       status: status as ExecutionStatus | undefined,
       flowId,
+      phone,
       dateFrom,
       dateTo,
     });
