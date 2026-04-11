@@ -27,6 +27,9 @@ export class ShotzapProvider implements IChannelProvider {
   private _tagsCache: Map<string, number> = new Map();
   private _tagsLoaded: boolean = false;
   private _loadingPromise: Promise<void> | null = null;
+  // Cache phone→ticketId pra evitar criar múltiplos tickets pro mesmo contato
+  // (sendButtons cria um, addTag criava outro via createTicketAPI)
+  private _ticketCache: Map<string, number> = new Map();
   
   private C = {
     green: "\x1b[32m",
@@ -184,28 +187,24 @@ export class ShotzapProvider implements IChannelProvider {
 
   private async _ensureTicket(phone: string): Promise<number | null> {
       const sanitizedPhone = this._sanitizePhone(phone);
+
+      // 1. Checar cache (evita criar ticket duplicado quando addTag e sendButtons rodam perto)
+      const cached = this._ticketCache.get(sanitizedPhone);
+      if (cached) return cached;
+
       const contactId = await this._ensureContact(sanitizedPhone);
       if (!contactId) {
           console.error(`${this.C.red}>>> [ShotzapProvider] Impossível criar ticket: Contato não encontrado/criado.${this.C.reset}`);
           return null;
       }
 
-      console.log(`${this.C.blue}>>> [ShotzapProvider] Criando ticket para ContactID ${contactId}${this.C.reset}`);
       try {
-          const payload = { contactId };
-          
-          // Tickets exigem Token Legacy conforme validação script test_ticket.ts
-          const endpoint = "/api/tickets/createTicketAPI";
-          console.log(`${this.C.blue}>>> [ShotzapProvider] Tentando criar ticket em ${endpoint} (Token Legacy)...${this.C.reset}`);
-          const res = await this._postWithAuth(endpoint, payload);
-          
-          if (res?.id) return res.id;
-          if (res?.ticket?.id) return res.ticket.id;
-          if (res?.ticketId) return res.ticketId; 
-          
-          // Debug se falhar parsing
-          console.log(`${this.C.yellow}>>> [ShotzapProvider] Resposta sem ID explícito no _ensureTicket. Verificando estrutura...${this.C.reset}`);
-
+          const res = await this._postWithAuth("/api/tickets/createTicketAPI", { contactId });
+          const ticketId = res?.id || res?.ticket?.id || res?.ticketId;
+          if (ticketId) {
+            this._ticketCache.set(sanitizedPhone, ticketId);
+            return ticketId;
+          }
       } catch (e: any) {
            console.error(`${this.C.red}>>> [ShotzapProvider] Falha ao criar ticket:${this.C.reset}`, e.message);
       }
@@ -438,6 +437,9 @@ export class ShotzapProvider implements IChannelProvider {
         }
 
         if (ticketId) {
+            // Cachear ticketId pra reusar em addTag/removeTag/getContactTags
+            const sanitized = this._sanitizePhone(phone);
+            this._ticketCache.set(sanitized, ticketId);
             // Chama o flush de tags assincronamente (sem await para não bloquear response)
             this._flushPendingTags(phone, ticketId).catch(err => console.error(">>> [ShotzapProvider] Erro no flush de tags background:", err));
         } else {

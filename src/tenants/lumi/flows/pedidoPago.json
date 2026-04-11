@@ -2,8 +2,13 @@
   "id": "pedidoPago",
   "title": "Pedido Pago",
   "aliases": ["[EC] Pedido Pago"],
-  "description": "Webhook Pedido Pago. Limpa todas as tags de estados anteriores e envia confirmação.",
+  "description": "Webhook Pedido Pago. Envia confirmação, depois tageia e limpa estados anteriores.",
   "steps": [
+    {
+      "type": "sendButtons",
+      "label": "Confirmar pagamento",
+      "templateKey": "pedidoPago"
+    },
     {
       "type": "addTag",
       "label": "Marcar Pedido Pago",
@@ -25,11 +30,6 @@
         "[EC] Pedido Carrinho Abandonado2",
         "[EC] Pedido Carrinho Abandonado3"
       ]
-    },
-    {
-      "type": "sendButtons",
-      "label": "Confirmar pagamento",
-      "templateKey": "pedidoPago"
     }
   ]
 }

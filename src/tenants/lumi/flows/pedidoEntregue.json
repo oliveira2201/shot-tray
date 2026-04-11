@@ -2,17 +2,17 @@
   "id": "pedidoEntregue",
   "title": "Pedido Entregue",
   "aliases": ["[EC] Pedido Entregue"],
-  "description": "Webhook Pedido Entregue. Marca entrega e envia confirmação.",
+  "description": "Webhook Pedido Entregue. Envia confirmação, depois marca tag.",
   "steps": [
-    {
-      "type": "addTag",
-      "label": "Marcar Pedido Entregue",
-      "tag": "[EC] Pedido Entregue"
-    },
     {
       "type": "sendText",
       "label": "Confirmar entrega",
       "textKey": "pedidoEntregue"
+    },
+    {
+      "type": "addTag",
+      "label": "Marcar Pedido Entregue",
+      "tag": "[EC] Pedido Entregue"
     }
   ]
 }

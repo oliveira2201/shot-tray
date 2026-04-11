@@ -5,14 +5,14 @@
   "description": "Webhook Pedido Cancelado. Envia msg inicial e dois follow-ups (7d + 1d) cancelando se pagar/receber novo pedido.",
   "steps": [
     {
-      "type": "addTag",
-      "label": "Marcar Cancelado2",
-      "tag": "[EC] Pedido Cancelado2"
-    },
-    {
       "type": "sendButtons",
       "label": "Aviso de cancelamento",
       "templateKey": "pedidoCancelado1"
+    },
+    {
+      "type": "addTag",
+      "label": "Marcar Cancelado2",
+      "tag": "[EC] Pedido Cancelado2"
     },
     {
       "type": "cancelableWait",
@@ -28,14 +28,14 @@
       ]
     },
     {
-      "type": "addTag",
-      "label": "Marcar Cancelado3",
-      "tag": "[EC] Pedido Cancelado3"
-    },
-    {
       "type": "sendButtons",
       "label": "Segunda tentativa",
       "templateKey": "pedidoCancelado2"
+    },
+    {
+      "type": "addTag",
+      "label": "Marcar Cancelado3",
+      "tag": "[EC] Pedido Cancelado3"
     },
     {
       "type": "cancelableWait",

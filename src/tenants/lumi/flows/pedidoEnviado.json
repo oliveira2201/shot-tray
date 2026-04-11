@@ -2,12 +2,22 @@
   "id": "pedidoEnviado",
   "title": "Pedido Enviado",
   "aliases": ["[EC] Pedido Enviado"],
-  "description": "Webhook Pedido Enviado. Marca como Cliente, limpa outras tags e envia botão de rastreio.",
+  "description": "Webhook Pedido Enviado. Envia botão de rastreio, depois marca Cliente e limpa outros estados.",
   "steps": [
+    {
+      "type": "sendButtons",
+      "label": "Enviar botão de rastreio",
+      "templateKey": "pedidoEnviadoTracking"
+    },
     {
       "type": "addTag",
       "label": "Marcar Cliente",
       "tag": "[EC] Cliente"
+    },
+    {
+      "type": "addTag",
+      "label": "Marcar Pedido Enviado",
+      "tag": "[EC] Pedido Enviado"
     },
     {
       "type": "removeTags",
@@ -25,16 +35,6 @@
         "[EC] Pedido Carrinho Abandonado2",
         "[EC] Pedido Carrinho Abandonado3"
       ]
-    },
-    {
-      "type": "addTag",
-      "label": "Marcar Pedido Enviado",
-      "tag": "[EC] Pedido Enviado"
-    },
-    {
-      "type": "sendButtons",
-      "label": "Enviar botão de rastreio",
-      "templateKey": "pedidoEnviadoTracking"
     }
   ]
 }

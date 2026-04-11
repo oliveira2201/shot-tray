@@ -5,6 +5,16 @@
   "description": "Webhook Pedido Recebido. Segue cadeia de follow-ups (3h → 1d → 1d) se não for pago.",
   "steps": [
     {
+      "type": "stopIfHasAnyTag",
+      "label": "Encerrar se já pagou",
+      "tags": ["[EC] Pedido Pago"]
+    },
+    {
+      "type": "sendText",
+      "label": "Confirmar pedido recebido",
+      "textKey": "pedidoRecebido"
+    },
+    {
       "type": "addTag",
       "label": "Marcar Pedido Recebido1",
       "tag": "[EC] Pedido Recebido1"
@@ -23,30 +33,10 @@
       ]
     },
     {
-      "type": "stopIfHasAnyTag",
-      "label": "Encerrar se já pagou",
-      "tags": ["[EC] Pedido Pago"]
-    },
-    {
-      "type": "sendText",
-      "label": "Confirmar pedido recebido",
-      "textKey": "pedidoRecebido"
-    },
-    {
       "type": "cancelableWait",
       "label": "Aguardar 3h antes do 1º follow-up",
       "seconds": 10800,
       "cancelIfTags": ["[EC] Pedido Pago"]
-    },
-    {
-      "type": "removeTag",
-      "label": "Remover Recebido",
-      "tag": "[EC] Pedido Recebido"
-    },
-    {
-      "type": "addTag",
-      "label": "Marcar Recebido2",
-      "tag": "[EC] Pedido Recebido2"
     },
     {
       "type": "sendText",
@@ -54,10 +44,25 @@
       "textKey": "pedidoRecebido1"
     },
     {
+      "type": "removeTag",
+      "label": "Remover Recebido1",
+      "tag": "[EC] Pedido Recebido1"
+    },
+    {
+      "type": "addTag",
+      "label": "Marcar Recebido2",
+      "tag": "[EC] Pedido Recebido2"
+    },
+    {
       "type": "cancelableWait",
       "label": "Aguardar 1 dia antes do 2º follow-up",
       "seconds": 86400,
       "cancelIfTags": ["[EC] Pedido Pago"]
+    },
+    {
+      "type": "sendButtons",
+      "label": "Follow-up 2",
+      "templateKey": "pedidoRecebido2"
     },
     {
       "type": "removeTag",
@@ -68,11 +73,6 @@
       "type": "addTag",
       "label": "Marcar Recebido3",
       "tag": "[EC] Pedido Recebido3"
-    },
-    {
-      "type": "sendButtons",
-      "label": "Follow-up 2",
-      "templateKey": "pedidoRecebido2"
     },
     {
       "type": "cancelableWait",
