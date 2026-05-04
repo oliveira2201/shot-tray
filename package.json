@@ -8,7 +8,8 @@
     "dev": "ts-node src/server.ts",
     "start": "ts-node src/server.ts",
     "build": "tsc",
-    "test": "vitest run"
+    "test": "vitest run",
+    "seed": "tsx scripts/seed-tenants-from-files.ts"
   },
   "dependencies": {
     "@prisma/adapter-pg": "^7.7.0",
@@ -37,6 +38,7 @@
     "@types/supertest": "^6.0.3",
     "supertest": "^7.2.2",
     "ts-node": "^10.9.2",
+    "tsx": "^4.21.0",
     "typescript": "^5.9.3",
     "vitest": "^2.1.4"
   }
