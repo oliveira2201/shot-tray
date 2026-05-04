@@ -34,9 +34,9 @@ model Execution {
 }
 
 model Tenant {
-  id              String       @id
+  id              String       @id // human-readable tenant slug, e.g. "lumi", "oticajoa"
   name            String
-  status          String       @default("active")
+  status          String       @default("active") // active | disabled
   adapterType     String       @map("adapter_type")
   providerType    String       @map("provider_type")
   adapterConfig   Json         @default("{}") @map("adapter_config")
@@ -84,12 +84,12 @@ model Flow {
 model OAuthToken {
   id              String    @id @default(uuid())
   tenantId        String    @map("tenant_id")
-  provider        String
+  provider        String    // "tray" — extend as needed
   accessToken     String    @map("access_token")
   refreshToken    String?   @map("refresh_token")
-  expiresAt       DateTime  @map("expires_at")
+  expiresAt       DateTime  @map("expires_at") @db.Timestamptz(6)
   scope           String?
-  lastRefreshAt   DateTime? @map("last_refresh_at")
+  lastRefreshAt   DateTime? @map("last_refresh_at") @db.Timestamptz(6)
   refreshFailures Int       @default(0) @map("refresh_failures")
   tenant          Tenant    @relation(fields: [tenantId], references: [id], onDelete: Cascade)
 

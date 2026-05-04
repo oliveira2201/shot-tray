@@ -1,4 +1,4 @@
-CREATE TABLE "tenants" (
+CREATE TABLE IF NOT EXISTS "tenants" (
   "id" TEXT PRIMARY KEY,
   "name" TEXT NOT NULL,
   "status" TEXT NOT NULL DEFAULT 'active',
@@ -10,7 +10,7 @@ CREATE TABLE "tenants" (
   "updated_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE "templates" (
+CREATE TABLE IF NOT EXISTS "templates" (
   "id" TEXT PRIMARY KEY DEFAULT gen_random_uuid()::text,
   "tenant_id" TEXT NOT NULL REFERENCES "tenants"("id") ON DELETE CASCADE,
   "kind" TEXT NOT NULL,
@@ -21,7 +21,7 @@ CREATE TABLE "templates" (
   UNIQUE ("tenant_id", "kind", "key")
 );
 
-CREATE TABLE "flows" (
+CREATE TABLE IF NOT EXISTS "flows" (
   "id" TEXT PRIMARY KEY DEFAULT gen_random_uuid()::text,
   "tenant_id" TEXT NOT NULL REFERENCES "tenants"("id") ON DELETE CASCADE,
   "slug" TEXT NOT NULL,
@@ -35,7 +35,7 @@ CREATE TABLE "flows" (
   UNIQUE ("tenant_id", "slug")
 );
 
-CREATE TABLE "oauth_tokens" (
+CREATE TABLE IF NOT EXISTS "oauth_tokens" (
   "id" TEXT PRIMARY KEY DEFAULT gen_random_uuid()::text,
   "tenant_id" TEXT NOT NULL REFERENCES "tenants"("id") ON DELETE CASCADE,
   "provider" TEXT NOT NULL,
@@ -48,4 +48,4 @@ CREATE TABLE "oauth_tokens" (
   UNIQUE ("tenant_id", "provider")
 );
 
-CREATE INDEX "oauth_tokens_expires_at_idx" ON "oauth_tokens"("expires_at");
+CREATE INDEX IF NOT EXISTS "oauth_tokens_expires_at_idx" ON "oauth_tokens"("expires_at");
