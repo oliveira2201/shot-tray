@@ -10,6 +10,7 @@ RUN npm ci --include=dev
 COPY tsconfig.json prisma.config.ts ./
 COPY prisma/ ./prisma/
 COPY src/ ./src/
+COPY scripts/ ./scripts/
 COPY web/ ./web/
 COPY public/ ./public/
 
@@ -35,6 +36,7 @@ COPY --from=builder /app/src/tenants/ ./src/tenants/
 COPY --from=builder /app/src/generated/ ./src/generated/
 COPY --from=builder /app/prisma/ ./prisma/
 COPY --from=builder /app/prisma.config.ts ./
+COPY --from=builder /app/scripts/ ./scripts/
 COPY --from=builder /app/node_modules/ ./node_modules/
 COPY docker-entrypoint.sh ./
 
