@@ -54,39 +54,36 @@ export class TenantRepository {
     try {
       const db = await getPrisma();
       const rows = await db.tenant.findMany({ orderBy: { id: "asc" } });
-      if (rows.length > 0) return rows as TenantRecord[];
+      return rows as TenantRecord[];
     } catch (err: any) {
       logger.warn({ err: err.message }, "Falha ao listar tenants no DB");
+      if (this.opts.fallbackToFiles) return this._loadAllTenantsFromFile();
+      return [];
     }
-
-    if (!this.opts.fallbackToFiles) return [];
-    return this._loadAllTenantsFromFile();
   }
 
   async listTemplates(tenantId: string): Promise<TemplateRecord[]> {
     try {
       const db = await getPrisma();
       const rows = await db.template.findMany({ where: { tenantId } });
-      if (rows.length > 0) return rows as TemplateRecord[];
+      return rows as TemplateRecord[];
     } catch (err: any) {
       logger.warn({ err: err.message, tenantId }, "Falha ao listar templates");
+      if (this.opts.fallbackToFiles) return this._loadTemplatesFromFile(tenantId);
+      return [];
     }
-
-    if (!this.opts.fallbackToFiles) return [];
-    return this._loadTemplatesFromFile(tenantId);
   }
 
   async listFlows(tenantId: string): Promise<FlowRecord[]> {
     try {
       const db = await getPrisma();
       const rows = await db.flow.findMany({ where: { tenantId } });
-      if (rows.length > 0) return rows as FlowRecord[];
+      return rows as FlowRecord[];
     } catch (err: any) {
       logger.warn({ err: err.message, tenantId }, "Falha ao listar flows");
+      if (this.opts.fallbackToFiles) return this._loadFlowsFromFile(tenantId);
+      return [];
     }
-
-    if (!this.opts.fallbackToFiles) return [];
-    return this._loadFlowsFromFile(tenantId);
   }
 
   // --- Fallback de arquivo ---
@@ -136,7 +133,10 @@ export class TenantRepository {
         out.push({ tenantId, kind: "buttons", key, content });
       }
       return out;
-    } catch {
+    } catch (err: any) {
+      if (err?.code !== "ENOENT") {
+        logger.warn({ err: err.message, tenantId }, "Falha ao ler templates do arquivo");
+      }
       return [];
     }
   }
@@ -161,7 +161,10 @@ export class TenantRepository {
         });
       }
       return out;
-    } catch {
+    } catch (err: any) {
+      if (err?.code !== "ENOENT") {
+        logger.warn({ err: err.message, tenantId }, "Falha ao ler flows do arquivo");
+      }
       return [];
     }
   }
