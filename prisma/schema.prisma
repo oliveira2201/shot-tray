@@ -32,3 +32,68 @@ model Execution {
   @@index([phone])
   @@map("executions")
 }
+
+model Tenant {
+  id              String       @id
+  name            String
+  status          String       @default("active")
+  adapterType     String       @map("adapter_type")
+  providerType    String       @map("provider_type")
+  adapterConfig   Json         @default("{}") @map("adapter_config")
+  providerConfig  Json         @default("{}") @map("provider_config")
+  templates       Template[]
+  flows           Flow[]
+  oauthTokens     OAuthToken[]
+  createdAt       DateTime     @default(now()) @map("created_at")
+  updatedAt       DateTime     @updatedAt @map("updated_at")
+
+  @@map("tenants")
+}
+
+model Template {
+  id         String   @id @default(uuid())
+  tenantId   String   @map("tenant_id")
+  kind       String
+  key        String
+  content    Json
+  tenant     Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
+
+  @@unique([tenantId, kind, key])
+  @@map("templates")
+}
+
+model Flow {
+  id          String   @id @default(uuid())
+  tenantId    String   @map("tenant_id")
+  slug        String
+  title       String
+  aliases     String[]
+  description String   @default("")
+  steps       Json
+  enabled     Boolean  @default(true)
+  tenant      Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  @@unique([tenantId, slug])
+  @@map("flows")
+}
+
+model OAuthToken {
+  id              String    @id @default(uuid())
+  tenantId        String    @map("tenant_id")
+  provider        String
+  accessToken     String    @map("access_token")
+  refreshToken    String?   @map("refresh_token")
+  expiresAt       DateTime  @map("expires_at")
+  scope           String?
+  lastRefreshAt   DateTime? @map("last_refresh_at")
+  refreshFailures Int       @default(0) @map("refresh_failures")
+  tenant          Tenant    @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  @@unique([tenantId, provider])
+  @@index([expiresAt])
+  @@map("oauth_tokens")
+}
