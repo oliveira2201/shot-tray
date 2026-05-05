@@ -12,9 +12,6 @@ const envSchema = z.object({
   ZITADEL_AUDIENCE: z.string().optional(),
   DISABLE_AUTH: z.string().optional(),       // "1" desliga auth (dev)
   DISABLE_FILE_FALLBACK: z.string().optional(),
-  SHOTZAP_TOKEN_LUMI: z.string().optional(),
-  SHOTZAP_TOKEN_EBENEZER: z.string().optional(),
-  SHOTZAP_TOKEN_OTICAJOA: z.string().optional(),
   ERP_WEBHOOK_SECRET: z.string().optional(),
   /** Dev: limita qualquer cancelableWait a N segundos (pra testar cadeias rápido) */
   FLOW_WAIT_TURBO: z.coerce.number().optional(),

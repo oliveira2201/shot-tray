@@ -6,7 +6,6 @@
     "outputProvider": "shotzap",
     "config": {
       "baseUrl": "https://api2.shotzap.com.br",
-      "token": "4b6VH31S9cb'",
       "tagsCachePath": "src/tenants/lumi/tags_cache.json",
       "paths": {
         "sendText": "/api/messages/send",
@@ -15,6 +14,24 @@
       },
       "vars": {
         "link_loja": "https://lumivittaoficial.com.br"
+      }
+    }
+  },
+  {
+    "id": "oticajoa",
+    "name": "Ótica Joá",
+    "inputAdapter": "tray",
+    "outputProvider": "shotzap",
+    "config": {
+      "baseUrl": "https://api2.shotzap.com.br",
+      "tagsCachePath": "src/tenants/oticajoa/tags_cache.json",
+      "paths": {
+        "sendText": "/api/messages/send",
+        "addTag": "/api/tags/add",
+        "getTickets": "/api/contacts/alltickets"
+      },
+      "vars": {
+        "link_loja": "https://www.oticajoa.com.br"
       }
     }
   },

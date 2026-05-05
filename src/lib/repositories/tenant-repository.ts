@@ -98,6 +98,19 @@ export class TenantRepository {
       const jsonPath = path.join(process.cwd(), "src", "config", "tenants.json");
       const raw = await fs.readFile(jsonPath, "utf-8");
       const list = JSON.parse(raw);
+
+      // Load secrets (optional file, gitignored)
+      let secrets: Record<string, string> = {};
+      try {
+        const secretsPath = path.join(process.cwd(), "src", "config", "tenants.secrets.json");
+        const secretsRaw = await fs.readFile(secretsPath, "utf-8");
+        secrets = JSON.parse(secretsRaw);
+      } catch (err: any) {
+        if (err?.code !== "ENOENT") {
+          logger.warn({ err: err.message }, "Falha ao ler tenants.secrets.json");
+        }
+      }
+
       return list
         .filter((t: any) => !t.disabled)
         .map((t: any) => ({
@@ -109,7 +122,7 @@ export class TenantRepository {
           adapterConfig: { vars: t.config?.vars || {} },
           providerConfig: {
             baseUrl: t.config?.baseUrl,
-            token: (t.config?.tokenEnv && process.env[t.config.tokenEnv]) || t.config?.token,
+            token: secrets[t.id],
             paths: t.config?.paths || {},
             tagsCachePath: t.config?.tagsCachePath,
           },

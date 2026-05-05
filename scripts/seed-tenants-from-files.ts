@@ -18,6 +18,18 @@ async function main() {
     return;
   }
 
+  // Load secrets (optional file, gitignored)
+  let secrets: Record<string, string> = {};
+  try {
+    const secretsPath = path.join(process.cwd(), "src", "config", "tenants.secrets.json");
+    const secretsRaw = await fs.readFile(secretsPath, "utf-8");
+    secrets = JSON.parse(secretsRaw);
+  } catch (err: any) {
+    if (err?.code !== "ENOENT") {
+      logger.warn({ err: err.message }, "Falha ao ler tenants.secrets.json");
+    }
+  }
+
   for (const t of tenantsRaw) {
     try {
       if (t.disabled) {
@@ -25,9 +37,9 @@ async function main() {
         continue;
       }
 
-      const token = (t.config?.tokenEnv && process.env[t.config.tokenEnv]) || t.config?.token;
+      const token = secrets[t.id];
       if (!token) {
-        logger.warn({ id: t.id, env: t.config?.tokenEnv }, "Token não disponível, seed do tenant pulado");
+        logger.warn({ id: t.id }, "Token não disponível, seed do tenant pulado");
         continue;
       }
 

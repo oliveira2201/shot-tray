@@ -12,6 +12,7 @@ dist/
 # Misc
 .DS_Store
 .env
+src/config/tenants.secrets.json
 .npmrc
 backups/
 /[MD+SZ]*.json
