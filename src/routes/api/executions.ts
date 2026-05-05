@@ -5,7 +5,7 @@ import type { ExecutionStatus } from "../../modules/execution/tracker.js";
 export const executionsApiRouter = Router();
 
 /** Lista execuções de um tenant com filtros */
-executionsApiRouter.get("/api/executions/:tenantId", async (req: Request, res: Response): Promise<any> => {
+executionsApiRouter.get("/api/admin/executions/:tenantId", async (req: Request, res: Response): Promise<any> => {
   const tenantId = req.params.tenantId as string;
   const limit = req.query.limit as string | undefined;
   const offset = req.query.offset as string | undefined;
@@ -33,7 +33,7 @@ executionsApiRouter.get("/api/executions/:tenantId", async (req: Request, res: R
 });
 
 /** Detalhe de uma execução */
-executionsApiRouter.get("/api/executions/:tenantId/:executionId", async (req: Request, res: Response): Promise<any> => {
+executionsApiRouter.get("/api/admin/executions/:tenantId/:executionId", async (req: Request, res: Response): Promise<any> => {
   const executionId = req.params.executionId as string;
 
   try {

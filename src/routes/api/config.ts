@@ -7,8 +7,8 @@ export const configApiRouter = Router();
 
 const configPath = () => path.join(process.cwd(), "src", "config", "tenants.json");
 
-// GET /api/config/:tenantId — retorna config do tenant
-configApiRouter.get("/api/config/:tenantId", async (req, res) => {
+// GET /api/admin/config/:tenantId — retorna config do tenant
+configApiRouter.get("/api/admin/config/:tenantId", async (req, res) => {
   try {
     const content = await fs.readFile(configPath(), "utf-8");
     const tenants = JSON.parse(content);
@@ -21,8 +21,8 @@ configApiRouter.get("/api/config/:tenantId", async (req, res) => {
   }
 });
 
-// PUT /api/config/:tenantId — atualiza config do tenant
-configApiRouter.put("/api/config/:tenantId", async (req, res) => {
+// PUT /api/admin/config/:tenantId — atualiza config do tenant
+configApiRouter.put("/api/admin/config/:tenantId", async (req, res) => {
   try {
     const content = await fs.readFile(configPath(), "utf-8");
     const tenants = JSON.parse(content);

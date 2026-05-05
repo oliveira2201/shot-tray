@@ -20,8 +20,8 @@ interface SimulationLog {
   realResult?: string; // resultado do envio real
 }
 
-// POST /api/simulate/:tenantId/:flowId — simula execução do flow
-simulateApiRouter.post("/api/simulate/:tenantId/:flowId", async (req, res) => {
+// POST /api/admin/simulate/:tenantId/:flowId — simula execução do flow
+simulateApiRouter.post("/api/admin/simulate/:tenantId/:flowId", async (req, res) => {
   const { tenantId, flowId } = req.params;
   const { context = {}, tagsAtTime = {}, sendReal = false } = req.body;
 

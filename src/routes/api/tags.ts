@@ -60,10 +60,10 @@ function extractJwtToken(input: string): string {
 }
 
 /**
- * GET /api/tags/:tenantId/status
+ * GET /api/admin/tags/:tenantId/status
  * Retorna tags dos flows e status na Shotzap
  */
-tagsRouter.get("/tags/:tenantId/status", async (req: Request, res: Response): Promise<any> => {
+tagsRouter.get("/api/admin/tags/:tenantId/status", async (req: Request, res: Response): Promise<any> => {
   const { tenantId } = req.params;
 
   try {
@@ -102,10 +102,10 @@ tagsRouter.get("/tags/:tenantId/status", async (req: Request, res: Response): Pr
 });
 
 /**
- * POST /api/tags/:tenantId/sync
+ * POST /api/admin/tags/:tenantId/sync
  * Cria tags faltantes na Shotzap usando JWT token
  */
-tagsRouter.post("/tags/:tenantId/sync", async (req: Request, res: Response): Promise<any> => {
+tagsRouter.post("/api/admin/tags/:tenantId/sync", async (req: Request, res: Response): Promise<any> => {
   const { tenantId } = req.params;
   const { jwtToken: rawToken } = req.body;
 

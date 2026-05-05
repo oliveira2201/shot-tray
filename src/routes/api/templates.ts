@@ -8,8 +8,8 @@ export const templatesApiRouter = Router();
 const templatesPath = (tenantId: string) =>
   path.join(process.cwd(), "src", "tenants", tenantId, "templates.json");
 
-// GET /api/templates/:tenantId
-templatesApiRouter.get("/api/templates/:tenantId", async (req, res) => {
+// GET /api/admin/templates/:tenantId
+templatesApiRouter.get("/api/admin/templates/:tenantId", async (req, res) => {
   try {
     const content = await fs.readFile(templatesPath(req.params.tenantId), "utf-8");
     res.json(JSON.parse(content));
@@ -18,8 +18,8 @@ templatesApiRouter.get("/api/templates/:tenantId", async (req, res) => {
   }
 });
 
-// PUT /api/templates/:tenantId — salva todos
-templatesApiRouter.put("/api/templates/:tenantId", async (req, res) => {
+// PUT /api/admin/templates/:tenantId — salva todos
+templatesApiRouter.put("/api/admin/templates/:tenantId", async (req, res) => {
   try {
     await fs.writeFile(templatesPath(req.params.tenantId), JSON.stringify(req.body, null, 2), "utf-8");
     logger.info(`Templates salvos: ${req.params.tenantId}`);
@@ -30,8 +30,8 @@ templatesApiRouter.put("/api/templates/:tenantId", async (req, res) => {
   }
 });
 
-// PUT /api/templates/:tenantId/:type/:key — salva um template específico
-templatesApiRouter.put("/api/templates/:tenantId/:type/:key", async (req, res) => {
+// PUT /api/admin/templates/:tenantId/:type/:key — salva um template específico
+templatesApiRouter.put("/api/admin/templates/:tenantId/:type/:key", async (req, res) => {
   const { tenantId, type, key } = req.params;
   try {
     const content = await fs.readFile(templatesPath(tenantId), "utf-8");

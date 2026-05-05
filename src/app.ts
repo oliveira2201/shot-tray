@@ -12,6 +12,7 @@ import { overviewApiRouter } from "./routes/api/overview.js";
 import { tagsRouter } from "./routes/api/tags.js";
 import { schedulerApiRouter } from "./routes/api/scheduler.js";
 import { executionsApiRouter } from "./routes/api/executions.js";
+import { requireAuth } from "./middleware/require-auth.js";
 import { logger } from "./utils/logger.js";
 
 export const app = express();
@@ -19,16 +20,22 @@ export const app = express();
 app.use(cors());
 app.use(express.json({ limit: "2mb" }));
 app.use(express.urlencoded({ extended: true, limit: "2mb" }));
+
+// Públicos (NÃO MUDAR ORDEM — webhooks antes do auth!)
 app.use(healthRouter);
 app.use(webhooksRouter);
-app.use(flowsApiRouter);
-app.use(configApiRouter);
-app.use(simulateApiRouter);
-app.use(templatesApiRouter);
-app.use(overviewApiRouter);
-app.use(tagsRouter);
-app.use(schedulerApiRouter);
-app.use(executionsApiRouter);
+
+// Admin protegido (requireAuth + rotas /api/admin/*)
+app.use(requireAuth, flowsApiRouter);
+app.use(requireAuth, configApiRouter);
+app.use(requireAuth, simulateApiRouter);
+app.use(requireAuth, templatesApiRouter);
+app.use(requireAuth, overviewApiRouter);
+app.use(requireAuth, tagsRouter);
+app.use(requireAuth, schedulerApiRouter);
+app.use(requireAuth, executionsApiRouter);
+
+// SPA estático
 app.use(visualizerRouter);
 
 // Servir frontend React (build estático)

@@ -9,8 +9,8 @@ export const flowsApiRouter = Router();
 
 const tenantsDir = () => path.join(process.cwd(), "src", "tenants");
 
-// GET /api/tenants — lista tenants ativos
-flowsApiRouter.get("/api/tenants", async (_req, res) => {
+// GET /api/admin/tenants — lista tenants ativos
+flowsApiRouter.get("/api/admin/tenants", async (_req, res) => {
   try {
     const tenants = (tenantsData as any[])
       .filter((t) => !t.disabled)
@@ -22,8 +22,8 @@ flowsApiRouter.get("/api/tenants", async (_req, res) => {
   }
 });
 
-// GET /api/flows/:tenantId — lista flows de um tenant
-flowsApiRouter.get("/api/flows/:tenantId", async (req, res) => {
+// GET /api/admin/flows/:tenantId — lista flows de um tenant
+flowsApiRouter.get("/api/admin/flows/:tenantId", async (req, res) => {
   const flowsDir = path.join(tenantsDir(), req.params.tenantId, "flows");
   try {
     const files = await fs.readdir(flowsDir);
@@ -36,8 +36,8 @@ flowsApiRouter.get("/api/flows/:tenantId", async (req, res) => {
   }
 });
 
-// GET /api/flows/:tenantId/:flowId — retorna um flow
-flowsApiRouter.get("/api/flows/:tenantId/:flowId", async (req, res) => {
+// GET /api/admin/flows/:tenantId/:flowId — retorna um flow
+flowsApiRouter.get("/api/admin/flows/:tenantId/:flowId", async (req, res) => {
   const filePath = path.join(
     tenantsDir(),
     req.params.tenantId,
@@ -52,8 +52,8 @@ flowsApiRouter.get("/api/flows/:tenantId/:flowId", async (req, res) => {
   }
 });
 
-// PUT /api/flows/:tenantId/:flowId — salva (atualiza) um flow
-flowsApiRouter.put("/api/flows/:tenantId/:flowId", async (req, res) => {
+// PUT /api/admin/flows/:tenantId/:flowId — salva (atualiza) um flow
+flowsApiRouter.put("/api/admin/flows/:tenantId/:flowId", async (req, res) => {
   const filePath = path.join(
     tenantsDir(),
     req.params.tenantId,
@@ -70,8 +70,8 @@ flowsApiRouter.put("/api/flows/:tenantId/:flowId", async (req, res) => {
   }
 });
 
-// POST /api/flows/:tenantId/:flowId — cria um novo flow
-flowsApiRouter.post("/api/flows/:tenantId/:flowId", async (req, res) => {
+// POST /api/admin/flows/:tenantId/:flowId — cria um novo flow
+flowsApiRouter.post("/api/admin/flows/:tenantId/:flowId", async (req, res) => {
   const flowsDir = path.join(tenantsDir(), req.params.tenantId, "flows");
   const filePath = path.join(flowsDir, `${req.params.flowId}.json`);
   try {
@@ -93,8 +93,8 @@ flowsApiRouter.post("/api/flows/:tenantId/:flowId", async (req, res) => {
   }
 });
 
-// DELETE /api/flows/:tenantId/:flowId — deleta um flow
-flowsApiRouter.delete("/api/flows/:tenantId/:flowId", async (req, res) => {
+// DELETE /api/admin/flows/:tenantId/:flowId — deleta um flow
+flowsApiRouter.delete("/api/admin/flows/:tenantId/:flowId", async (req, res) => {
   const filePath = path.join(
     tenantsDir(),
     req.params.tenantId,

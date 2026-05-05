@@ -1,4 +1,4 @@
-const BASE = '/api'
+const BASE = '/api/admin'
 
 export async function fetchTenants(): Promise<string[]> {
   const res = await fetch(`${BASE}/tenants`)

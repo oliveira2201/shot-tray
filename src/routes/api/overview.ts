@@ -81,8 +81,8 @@ function getAdapterRouting(adapterName: string, flows: any[]) {
   };
 }
 
-// GET /api/overview/:tenantId
-overviewApiRouter.get("/api/overview/:tenantId", async (req, res) => {
+// GET /api/admin/overview/:tenantId
+overviewApiRouter.get("/api/admin/overview/:tenantId", async (req, res) => {
   const { tenantId } = req.params;
 
   try {
