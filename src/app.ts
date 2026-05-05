@@ -38,6 +38,9 @@ app.get("/builder", (_req, res) => {
 app.get("/builder/*", (_req, res) => {
   res.sendFile(path.join(publicDir, "index.html"));
 });
+app.get("/auth/callback", (_req, res) => {
+  res.sendFile(path.join(publicDir, "index.html"));
+});
 
 // Admin protegido — auth aplicado APENAS em /api/admin/*
 app.use("/api/admin", requireAuth);
