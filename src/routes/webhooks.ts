@@ -26,14 +26,22 @@ const WEBHOOK_DEDUPE_TTL = 60;
 
 async function isDuplicateWebhook(tenantId: string, body: any): Promise<string | null> {
   try {
-    // Campos que identificam o evento. Usa o tracknumb (URL única do pedido)
-    // quando disponível pra não confundir pedidos diferentes do mesmo cliente.
+    // Campos que identificam o evento. Suporta ambos os formatos:
+    //   - Nuvemshop/Mautic: taginternals + phone + tracknumb + subscriber_uid
+    //   - Tray:             scope_name + scope_id + act + seller_id
+    // Sem isso, o webhook minimal da Tray (com phone/tracknumb vazios)
+    // gera o mesmo fingerprint pra TODOS os webhooks → todos viram duplicata.
     const fingerprint = [
       tenantId,
       (body.taginternals || "").toString(),
       (body.phone || body.PHONE || "").toString(),
       (body.tracknumb || body.TRACKNUMB || body.abandoned_checkout_url || "").toString(),
       (body.subscriber_uid || "").toString(),
+      // Tray-specific
+      (body.scope_name || "").toString(),
+      (body.scope_id || "").toString(),
+      (body.act || "").toString(),
+      (body.seller_id || "").toString(),
     ].join("|");
 
     const hash = crypto.createHash("sha1").update(fingerprint).digest("hex").slice(0, 16);

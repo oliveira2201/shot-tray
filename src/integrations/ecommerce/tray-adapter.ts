@@ -20,9 +20,36 @@ export class TrayAdapter extends EcommerceAdapter {
     const scopeId = rawEvent?.scope_id?.toString();
     const act = (rawEvent?.act || "").toString().toLowerCase();
 
-    if (scope !== "order" || !scopeId) {
-      logger.info({ scope, scopeId, act, tenantId }, "TrayAdapter: webhook ignorado (escopo não-order ou sem id)");
+    // Aceita apenas escopos que processamos: order, abandoned_cart (sintético do nosso cron)
+    if ((scope !== "order" && scope !== "abandoned_cart") || !scopeId) {
+      logger.info({ scope, scopeId, act, tenantId }, "TrayAdapter: webhook ignorado (escopo não suportado ou sem id)");
       return null;
+    }
+
+    // Carrinho abandonado vem do nosso cron já com payload pronto — não precisa lookup
+    if (scope === "abandoned_cart") {
+      const phone = (rawEvent.cellphone || rawEvent.phone || "").toString();
+      const name = (rawEvent.customer_name || rawEvent.name || "").toString();
+      return {
+        flowAlias: `${this.tenantPrefix} Pedido Carrinho Abandonado1`,
+        customer: { name, phone, tags: [] },
+        data: {
+          email: rawEvent.email,
+          extra1: rawEvent.cart_url || "",
+          extra2: rawEvent.cart_url || "",
+          extra3: rawEvent.products || "",
+        },
+      };
+    }
+
+    // act=delete → pedido cancelado/excluído, sem lookup possível (já não existe)
+    if (act === "delete") {
+      logger.info({ tenantId, scopeId }, "TrayAdapter: order_delete → mapeando para Pedido Cancelado");
+      return {
+        flowAlias: `${this.tenantPrefix} Pedido Cancelado1`,
+        customer: { name: "", phone: "", tags: [] },
+        data: { extra1: "", extra2: "", extra3: "" },
+      };
     }
 
     let client: TrayClient;

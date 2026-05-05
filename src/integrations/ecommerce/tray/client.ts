@@ -39,6 +39,36 @@ export class TrayClient {
     }
   }
 
+  /**
+   * Lista carrinhos da loja (pra detecção de carrinho abandonado).
+   * Doc: API de Listagem de Carrinhos — GET /carts
+   *
+   * @param opts.dateStart YYYY-MM-DD
+   * @param opts.dateEnd   YYYY-MM-DD
+   * @param opts.hasCustomer "1" pra retornar só carrinhos com comprador identificado
+   */
+  async listCarts(opts: { dateStart?: string; dateEnd?: string; hasCustomer?: string } = {}): Promise<any[]> {
+    try {
+      const params: Record<string, string> = {};
+      if (opts.hasCustomer) params.has_customer = opts.hasCustomer;
+      // `date_time` aceita range no formato `[start],[end]` segundo a doc
+      if (opts.dateStart && opts.dateEnd) {
+        params.date_time = `${opts.dateStart},${opts.dateEnd}`;
+      } else if (opts.dateStart) {
+        params.date_time = opts.dateStart;
+      }
+      const res = await this.http.get(`/carts`, { params });
+      const data: any = res.data;
+      if (Array.isArray(data)) return data;
+      if (Array.isArray(data?.Carts)) return data.Carts;
+      if (Array.isArray(data?.carts)) return data.carts;
+      return [];
+    } catch (err: any) {
+      logger.warn({ err: err.message, tenantId: this.tenantId }, "TrayClient.listCarts falhou");
+      return [];
+    }
+  }
+
   static async refresh(tenantId: string): Promise<boolean> {
     const tenant = await repo.findById(tenantId);
     const token = await repo.findOAuthToken(tenantId, "tray");
