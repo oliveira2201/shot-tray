@@ -16,22 +16,25 @@ async function authedFetch(input: RequestInfo, init: RequestInit = {}) {
 
 export async function fetchTenants(): Promise<string[]> {
   const res = await authedFetch(`${BASE}/tenants`)
-  return res.json()
+  const data = await res.json()
+  // Compat: backend agora retorna TenantRecord[]; extrai IDs
+  return Array.isArray(data) ? data.map((t: any) => typeof t === "string" ? t : t.id) : []
 }
 
 export async function fetchFlows(tenantId: string): Promise<string[]> {
-  const res = await authedFetch(`${BASE}/flows/${tenantId}`)
-  return res.json()
+  const res = await authedFetch(`${BASE}/tenants/${tenantId}/flows`)
+  const data = await res.json()
+  return Array.isArray(data) ? data.map((f: any) => typeof f === "string" ? f : f.slug) : []
 }
 
 export async function fetchFlow(tenantId: string, flowId: string) {
-  const res = await authedFetch(`${BASE}/flows/${tenantId}/${flowId}`)
+  const res = await authedFetch(`${BASE}/tenants/${tenantId}/flows/${flowId}`)
   return res.json()
 }
 
-export async function saveFlow(tenantId: string, flowId: string, flow: unknown) {
-  const res = await authedFetch(`${BASE}/flows/${tenantId}/${flowId}`, {
-    method: 'PUT',
+export async function saveFlow(tenantId: string, _flowId: string, flow: unknown) {
+  const res = await authedFetch(`${BASE}/tenants/${tenantId}/flows`, {
+    method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(flow),
   })
