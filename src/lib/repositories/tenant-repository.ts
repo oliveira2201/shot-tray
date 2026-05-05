@@ -86,6 +86,66 @@ export class TenantRepository {
     }
   }
 
+  // --- Mutations ---
+
+  async upsertTenant(input: TenantRecord): Promise<TenantRecord> {
+    const db = await getPrisma();
+    const row = await db.tenant.upsert({
+      where: { id: input.id },
+      create: input,
+      update: {
+        name: input.name,
+        status: input.status,
+        adapterType: input.adapterType,
+        providerType: input.providerType,
+        adapterConfig: input.adapterConfig,
+        providerConfig: input.providerConfig,
+      },
+    });
+    return row as TenantRecord;
+  }
+
+  async setTenantStatus(id: string, status: "active" | "disabled"): Promise<void> {
+    const db = await getPrisma();
+    await db.tenant.update({ where: { id }, data: { status } });
+  }
+
+  async upsertTemplate(input: TemplateRecord): Promise<TemplateRecord> {
+    const db = await getPrisma();
+    const row = await db.template.upsert({
+      where: { tenantId_kind_key: { tenantId: input.tenantId, kind: input.kind, key: input.key } },
+      create: input,
+      update: { content: input.content },
+    });
+    return row as TemplateRecord;
+  }
+
+  async deleteTemplate(tenantId: string, kind: string, key: string): Promise<void> {
+    const db = await getPrisma();
+    await db.template.delete({ where: { tenantId_kind_key: { tenantId, kind, key } } });
+  }
+
+  async upsertFlow(input: FlowRecord): Promise<FlowRecord> {
+    const db = await getPrisma();
+    const row = await db.flow.upsert({
+      where: { tenantId_slug: { tenantId: input.tenantId, slug: input.slug } },
+      create: input,
+      update: {
+        title: input.title,
+        aliases: input.aliases,
+        description: input.description,
+        steps: input.steps,
+        enabled: input.enabled,
+      },
+    });
+    return row as FlowRecord;
+  }
+
+  async deleteFlow(tenantId: string, slug: string): Promise<void> {
+    const db = await getPrisma();
+    await db.flow.delete({ where: { tenantId_slug: { tenantId, slug } } });
+  }
+
   // --- Fallback de arquivo ---
 
   private async _loadTenantFromFile(id: string): Promise<TenantRecord | null> {

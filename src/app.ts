@@ -4,14 +4,16 @@ import path from "path";
 import { healthRouter } from "./routes/health.js";
 import { visualizerRouter } from "./routes/visualizer.js";
 import { webhooksRouter } from "./routes/webhooks.js";
-import { flowsApiRouter } from "./routes/api/flows.js";
 import { configApiRouter } from "./routes/api/config.js";
 import { simulateApiRouter } from "./routes/api/simulate.js";
-import { templatesApiRouter } from "./routes/api/templates.js";
 import { overviewApiRouter } from "./routes/api/overview.js";
 import { tagsRouter } from "./routes/api/tags.js";
 import { schedulerApiRouter } from "./routes/api/scheduler.js";
 import { executionsApiRouter } from "./routes/api/executions.js";
+import { adminTenantsRouter } from "./routes/api/admin/tenants.js";
+import { adminTemplatesRouter } from "./routes/api/admin/templates.js";
+import { adminFlowsRouter } from "./routes/api/admin/flows.js";
+import { adminAdaptersRouter } from "./routes/api/admin/adapters.js";
 import { requireAuth } from "./middleware/require-auth.js";
 import { logger } from "./utils/logger.js";
 
@@ -26,10 +28,12 @@ app.use(healthRouter);
 app.use(webhooksRouter);
 
 // Admin protegido (requireAuth + rotas /api/admin/*)
-app.use(requireAuth, flowsApiRouter);
+app.use(requireAuth, adminTenantsRouter);
+app.use(requireAuth, adminTemplatesRouter);
+app.use(requireAuth, adminFlowsRouter);
+app.use(requireAuth, adminAdaptersRouter);
 app.use(requireAuth, configApiRouter);
 app.use(requireAuth, simulateApiRouter);
-app.use(requireAuth, templatesApiRouter);
 app.use(requireAuth, overviewApiRouter);
 app.use(requireAuth, tagsRouter);
 app.use(requireAuth, schedulerApiRouter);
