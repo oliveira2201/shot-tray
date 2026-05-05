@@ -1,67 +1,46 @@
-import fs from "fs/promises";
-import path from "path";
-import { UseCase } from "../../../types/automation.js";
-import { logger } from "../../../utils/logger.js";
+import { UseCase, Step } from "../../../types/automation.js";
+import { TenantRepository } from "../../../lib/repositories/tenant-repository.js";
 
-// Cache flows per tenant to avoid reading disk on every webhook
-const flowCache: Record<string, UseCase[]> = {};
+const repo = new TenantRepository({ fallbackToFiles: process.env.DISABLE_FILE_FALLBACK !== "1" });
 
-const loadFlows = async (tenantId: string): Promise<UseCase[]> => {
-  if (flowCache[tenantId]) {
-    return flowCache[tenantId];
-  }
+const CACHE_TTL_MS = 30_000;
+const cache = new Map<string, { flows: UseCase[]; expiresAt: number }>();
 
-  const flowsDir = path.join(process.cwd(), "src", "tenants", tenantId, "flows");
-  
-  try {
-    // Check if directory exists
-    await fs.access(flowsDir);
-  } catch (e) {
-    logger.warn({ tenantId, path: flowsDir }, "Flows directory not found for tenant");
-    return [];
-  }
+export async function listFlows(tenantId: string): Promise<UseCase[]> {
+  const cached = cache.get(tenantId);
+  if (cached && cached.expiresAt > Date.now()) return cached.flows;
 
-  try {
-    const files = await fs.readdir(flowsDir);
-    const jsonFiles = files.filter((f) => f.endsWith(".json"));
-    
-    const flows: UseCase[] = [];
-    
-    for (const file of jsonFiles) {
-      const filePath = path.join(flowsDir, file);
-      try {
-        const content = await fs.readFile(filePath, "utf-8");
-        const flow = JSON.parse(content) as UseCase;
-        
-        // Basic validation could happen here
-        if (flow.id && flow.steps) {
-            flows.push(flow);
-        } else {
-             logger.warn({ file }, "Skipping invalid flow file (missing id or steps)");
-        }
-      } catch (err) {
-        logger.error({ err, file }, "Failed to parse flow file");
-      }
-    }
+  const rows = await repo.listFlows(tenantId);
+  const flows: UseCase[] = rows
+    .filter((r) => r.enabled)
+    .map((r) => ({
+      id: r.slug,
+      title: r.title,
+      aliases: r.aliases,
+      description: r.description,
+      steps: r.steps as Step[],
+    }));
 
-    flowCache[tenantId] = flows;
-    return flows;
-  } catch (err) {
-    logger.error({ err, tenantId }, "Failed to load flows");
-    return [];
-  }
-};
+  cache.set(tenantId, { flows, expiresAt: Date.now() + CACHE_TTL_MS });
+  return flows;
+}
 
-export const findFlowByAlias = async (tenantId: string, alias: string): Promise<UseCase | undefined> => {
-  const flows = await loadFlows(tenantId);
+export async function findFlowByAlias(tenantId: string, alias: string): Promise<UseCase | undefined> {
+  const flows = await listFlows(tenantId);
   const normalized = alias.toLowerCase();
-  
-  return flows.find((flow) =>
-    flow.aliases.some((a) => a.toLowerCase().includes(normalized))
-  );
-};
+  return flows.find((f) => f.aliases.some((a) => a.toLowerCase().includes(normalized)));
+}
 
-// Method to force reload (useful for "visualizer" or updates)
-export const reloadFlows = (tenantId: string) => {
-    delete flowCache[tenantId];
-};
+export function invalidate(tenantId: string) {
+  cache.delete(tenantId);
+}
+
+export function invalidateAll() {
+  cache.clear();
+}
+
+// Backwards compat — same behavior as invalidate, kept for case-runner / scheduler
+export async function reloadFlows(tenantId: string): Promise<UseCase[]> {
+  invalidate(tenantId);
+  return listFlows(tenantId);
+}
