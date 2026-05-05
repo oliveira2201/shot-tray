@@ -16,11 +16,12 @@ export function TenantDetail({
   const [tab, setTab] = useState<TabId>('config')
   const [adapterType, setAdapterType] = useState<string | null>(null)
 
+  // OAuth tab sempre visível — só faz sentido pra Tray, mas deixa explícito ao invés de esconder
   const tabs: [TabId, string][] = [
     ['config', 'Config'],
     ['templates', 'Templates'],
     ['flows', 'Flows'],
-    ...((adapterType === 'tray' ? [['oauth', 'OAuth Tray']] : []) as [TabId, string][]),
+    ['oauth', 'OAuth (Tray)'],
   ]
 
   return (
@@ -54,8 +55,15 @@ export function TenantDetail({
       )}
       {tab === 'templates' && <TemplatesTab tenantId={tenantId} />}
       {tab === 'flows' && <FlowsTab tenantId={tenantId} />}
-      {tab === 'oauth' && adapterType === 'tray' && (
-        <OAuthTrayTab tenantId={tenantId} />
+      {tab === 'oauth' && (
+        adapterType === 'tray' ? (
+          <OAuthTrayTab tenantId={tenantId} />
+        ) : (
+          <div className="text-sm text-gray-500 p-3 bg-yellow-50 border border-yellow-200 rounded">
+            Este tenant usa adapter <strong>{adapterType || '?'}</strong> — OAuth Tray não se aplica.
+            Pra usar Tray, troque o adapter na aba <strong>Config</strong> primeiro.
+          </div>
+        )
       )}
     </div>
   )
