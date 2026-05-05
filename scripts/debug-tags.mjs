@@ -18,7 +18,7 @@ async function main() {
   // Load secrets
   const secretsPath = path.join(process.cwd(), "src", "config", "tenants.secrets.json");
   const secrets = JSON.parse(await fs.readFile(secretsPath, "utf-8"));
-  const token = secrets.lumi?.token;
+  const token = typeof secrets.lumi === "string" ? secrets.lumi : secrets.lumi?.token;
   if (!token) {
     console.error("❌ Sem token de lumi em tenants.secrets.json");
     process.exit(1);

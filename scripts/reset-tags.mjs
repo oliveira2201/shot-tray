@@ -29,7 +29,7 @@ async function main() {
 
   const secretsPath = path.join(process.cwd(), "src", "config", "tenants.secrets.json");
   const secrets = JSON.parse(await fs.readFile(secretsPath, "utf-8"));
-  const token = secrets.lumi?.token;
+  const token = typeof secrets.lumi === "string" ? secrets.lumi : secrets.lumi?.token;
 
   const provider = new ShotzapProvider({
     baseUrl: "https://api.shotzap.com.br",
