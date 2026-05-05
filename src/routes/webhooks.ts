@@ -111,8 +111,13 @@ webhooksRouter.post(["/webhooks/:tenantId", "/webhook/:tenantId"], async (req: R
        return res.status(401).json({ error: "Invalid signature" });
     }
 
-    // 3. Normalize Event
-    const normalizedEvent = inputAdapter.normalizeEvent(req.body);
+    // 3. Normalize Event (async-aware: TrayAdapter precisa lookup remoto)
+    let normalizedEvent;
+    if ("normalizeEventAsync" in inputAdapter && typeof (inputAdapter as any).normalizeEventAsync === "function") {
+      normalizedEvent = await (inputAdapter as any).normalizeEventAsync(req.body, tenantId);
+    } else {
+      normalizedEvent = inputAdapter.normalizeEvent(req.body);
+    }
 
     if (!normalizedEvent) {
       logger.info({ tenantId, body: JSON.stringify(req.body).substring(0, 200) }, "⏭️ Evento não mapeado, ignorado");

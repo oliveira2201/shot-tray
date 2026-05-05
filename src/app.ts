@@ -14,6 +14,7 @@ import { adminTenantsRouter } from "./routes/api/admin/tenants.js";
 import { adminTemplatesRouter } from "./routes/api/admin/templates.js";
 import { adminFlowsRouter } from "./routes/api/admin/flows.js";
 import { adminAdaptersRouter } from "./routes/api/admin/adapters.js";
+import { adminOAuthRouter } from "./routes/api/admin/oauth.js";
 import { requireAuth } from "./middleware/require-auth.js";
 import { logger } from "./utils/logger.js";
 
@@ -32,6 +33,7 @@ app.use(requireAuth, adminTenantsRouter);
 app.use(requireAuth, adminTemplatesRouter);
 app.use(requireAuth, adminFlowsRouter);
 app.use(requireAuth, adminAdaptersRouter);
+app.use(requireAuth, adminOAuthRouter);
 app.use(requireAuth, configApiRouter);
 app.use(requireAuth, simulateApiRouter);
 app.use(requireAuth, overviewApiRouter);

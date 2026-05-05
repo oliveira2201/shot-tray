@@ -146,6 +146,57 @@ export class TenantRepository {
     await db.flow.delete({ where: { tenantId_slug: { tenantId, slug } } });
   }
 
+  // --- OAuth tokens ---
+
+  async findOAuthToken(tenantId: string, provider: string) {
+    const db = await getPrisma();
+    return db.oAuthToken.findUnique({
+      where: { tenantId_provider: { tenantId, provider } },
+    });
+  }
+
+  async upsertOAuthToken(input: {
+    tenantId: string;
+    provider: string;
+    accessToken: string;
+    refreshToken?: string | null;
+    expiresAt: Date;
+    scope?: string | null;
+  }) {
+    const db = await getPrisma();
+    return db.oAuthToken.upsert({
+      where: { tenantId_provider: { tenantId: input.tenantId, provider: input.provider } },
+      create: { ...input, refreshFailures: 0, lastRefreshAt: new Date() },
+      update: {
+        accessToken: input.accessToken,
+        refreshToken: input.refreshToken,
+        expiresAt: input.expiresAt,
+        scope: input.scope,
+        lastRefreshAt: new Date(),
+        refreshFailures: 0,
+      },
+    });
+  }
+
+  async incrementRefreshFailure(tenantId: string, provider: string) {
+    const db = await getPrisma();
+    return db.oAuthToken.update({
+      where: { tenantId_provider: { tenantId, provider } },
+      data: { refreshFailures: { increment: 1 } },
+    });
+  }
+
+  async listExpiringTokens(provider: string, withinMs: number) {
+    const db = await getPrisma();
+    return db.oAuthToken.findMany({
+      where: {
+        provider,
+        expiresAt: { lt: new Date(Date.now() + withinMs) },
+        refreshFailures: { lt: 3 },
+      },
+    });
+  }
+
   // --- Fallback de arquivo ---
 
   private async _loadTenantFromFile(id: string): Promise<TenantRecord | null> {

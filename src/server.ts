@@ -3,6 +3,7 @@ import { env } from "./config/env.js";
 import { connectRedis } from "./lib/redis.js";
 import { SchedulerService } from "./modules/scheduler/service.js";
 import { restoreChoicesFromRedis } from "./modules/automation/engine/choice-listener.js";
+import { startOAuthRefreshWorker } from "./modules/scheduler/oauth-refresh.js";
 import { logger } from "./utils/logger.js";
 
 const start = async () => {
@@ -14,6 +15,9 @@ const start = async () => {
 
     // Restaurar choice listeners do Redis (sobrevive a restarts)
     await restoreChoicesFromRedis();
+
+    // Worker de refresh de tokens OAuth (Tray)
+    startOAuthRefreshWorker();
 
     app.listen(env.PORT, () => {
         logger.info(`Servidor escutando na porta ${env.PORT}`);
