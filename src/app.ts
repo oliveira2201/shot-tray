@@ -28,23 +28,8 @@ app.use(express.urlencoded({ extended: true, limit: "2mb" }));
 app.use(healthRouter);
 app.use(webhooksRouter);
 
-// Admin protegido (requireAuth + rotas /api/admin/*)
-app.use(requireAuth, adminTenantsRouter);
-app.use(requireAuth, adminTemplatesRouter);
-app.use(requireAuth, adminFlowsRouter);
-app.use(requireAuth, adminAdaptersRouter);
-app.use(requireAuth, adminOAuthRouter);
-app.use(requireAuth, configApiRouter);
-app.use(requireAuth, simulateApiRouter);
-app.use(requireAuth, overviewApiRouter);
-app.use(requireAuth, tagsRouter);
-app.use(requireAuth, schedulerApiRouter);
-app.use(requireAuth, executionsApiRouter);
-
-// SPA estático
+// SPA estático (sem auth no servidor — o JS do front exige login Zitadel)
 app.use(visualizerRouter);
-
-// Servir frontend React (build estático)
 const publicDir = path.join(process.cwd(), "public");
 app.use(express.static(publicDir));
 app.get("/builder", (_req, res) => {
@@ -53,6 +38,20 @@ app.get("/builder", (_req, res) => {
 app.get("/builder/*", (_req, res) => {
   res.sendFile(path.join(publicDir, "index.html"));
 });
+
+// Admin protegido — auth aplicado APENAS em /api/admin/*
+app.use("/api/admin", requireAuth);
+app.use(adminTenantsRouter);
+app.use(adminTemplatesRouter);
+app.use(adminFlowsRouter);
+app.use(adminAdaptersRouter);
+app.use(adminOAuthRouter);
+app.use(configApiRouter);
+app.use(simulateApiRouter);
+app.use(overviewApiRouter);
+app.use(tagsRouter);
+app.use(schedulerApiRouter);
+app.use(executionsApiRouter);
 
 app.use((err: any, _req: express.Request, res: express.Response, _next: express.NextFunction) => {
   logger.error({ err }, "Erro não tratado");
