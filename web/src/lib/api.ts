@@ -1,22 +1,36 @@
+import { getAccessToken } from '../auth/oidc'
+
 const BASE = '/api/admin'
 
+async function authedFetch(input: RequestInfo, init: RequestInit = {}) {
+  const token = await getAccessToken()
+  return fetch(input, {
+    ...init,
+    headers: {
+      ...(init.headers || {}),
+      'Content-Type': 'application/json',
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+    },
+  })
+}
+
 export async function fetchTenants(): Promise<string[]> {
-  const res = await fetch(`${BASE}/tenants`)
+  const res = await authedFetch(`${BASE}/tenants`)
   return res.json()
 }
 
 export async function fetchFlows(tenantId: string): Promise<string[]> {
-  const res = await fetch(`${BASE}/flows/${tenantId}`)
+  const res = await authedFetch(`${BASE}/flows/${tenantId}`)
   return res.json()
 }
 
 export async function fetchFlow(tenantId: string, flowId: string) {
-  const res = await fetch(`${BASE}/flows/${tenantId}/${flowId}`)
+  const res = await authedFetch(`${BASE}/flows/${tenantId}/${flowId}`)
   return res.json()
 }
 
 export async function saveFlow(tenantId: string, flowId: string, flow: unknown) {
-  const res = await fetch(`${BASE}/flows/${tenantId}/${flowId}`, {
+  const res = await authedFetch(`${BASE}/flows/${tenantId}/${flowId}`, {
     method: 'PUT',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(flow),
@@ -25,7 +39,7 @@ export async function saveFlow(tenantId: string, flowId: string, flow: unknown) 
 }
 
 export async function createFlow(tenantId: string, flowId: string, flow: unknown) {
-  const res = await fetch(`${BASE}/flows/${tenantId}/${flowId}`, {
+  const res = await authedFetch(`${BASE}/flows/${tenantId}/${flowId}`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(flow),
@@ -34,17 +48,17 @@ export async function createFlow(tenantId: string, flowId: string, flow: unknown
 }
 
 export async function deleteFlow(tenantId: string, flowId: string) {
-  const res = await fetch(`${BASE}/flows/${tenantId}/${flowId}`, { method: 'DELETE' })
+  const res = await authedFetch(`${BASE}/flows/${tenantId}/${flowId}`, { method: 'DELETE' })
   return res.json()
 }
 
 export async function fetchConfig(tenantId: string) {
-  const res = await fetch(`${BASE}/config/${tenantId}`)
+  const res = await authedFetch(`${BASE}/config/${tenantId}`)
   return res.json()
 }
 
 export async function saveConfig(tenantId: string, config: unknown) {
-  const res = await fetch(`${BASE}/config/${tenantId}`, {
+  const res = await authedFetch(`${BASE}/config/${tenantId}`, {
     method: 'PUT',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(config),
@@ -53,18 +67,18 @@ export async function saveConfig(tenantId: string, config: unknown) {
 }
 
 export async function fetchOverview(tenantId: string) {
-  const res = await fetch(`${BASE}/overview/${tenantId}`)
+  const res = await authedFetch(`${BASE}/overview/${tenantId}`)
   const text = await res.text()
   try { return JSON.parse(text) } catch { return { error: `Resposta inválida (status ${res.status}). Reinicie o servidor.` } }
 }
 
 export async function fetchTemplates(tenantId: string) {
-  const res = await fetch(`${BASE}/templates/${tenantId}`)
+  const res = await authedFetch(`${BASE}/templates/${tenantId}`)
   return res.json()
 }
 
 export async function saveTemplate(tenantId: string, type: string, key: string, value: unknown) {
-  const res = await fetch(`${BASE}/templates/${tenantId}/${type}/${key}`, {
+  const res = await authedFetch(`${BASE}/templates/${tenantId}/${type}/${key}`, {
     method: 'PUT',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ value }),
@@ -73,7 +87,7 @@ export async function saveTemplate(tenantId: string, type: string, key: string, 
 }
 
 export async function simulateFlow(tenantId: string, flowId: string, body: unknown) {
-  const res = await fetch(`${BASE}/simulate/${tenantId}/${flowId}`, {
+  const res = await authedFetch(`${BASE}/simulate/${tenantId}/${flowId}`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(body),
@@ -82,7 +96,7 @@ export async function simulateFlow(tenantId: string, flowId: string, body: unkno
 }
 
 export async function syncTags(tenantId: string, jwtToken: string) {
-  const res = await fetch(`${BASE}/tags/${tenantId}/sync`, {
+  const res = await authedFetch(`${BASE}/tags/${tenantId}/sync`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ jwtToken }),
@@ -91,28 +105,28 @@ export async function syncTags(tenantId: string, jwtToken: string) {
 }
 
 export async function fetchTagsStatus(tenantId: string) {
-  const res = await fetch(`${BASE}/tags/${tenantId}/status`)
+  const res = await authedFetch(`${BASE}/tags/${tenantId}/status`)
   return res.json()
 }
 
 // Scheduler / Monitor
 export async function fetchSchedulerJobs() {
-  const res = await fetch(`${BASE}/scheduler/jobs`)
+  const res = await authedFetch(`${BASE}/scheduler/jobs`)
   return res.json()
 }
 
 export async function fetchSchedulerLogs(limit = 100) {
-  const res = await fetch(`${BASE}/scheduler/logs?limit=${limit}`)
+  const res = await authedFetch(`${BASE}/scheduler/logs?limit=${limit}`)
   return res.json()
 }
 
 export async function fetchSchedulerStats() {
-  const res = await fetch(`${BASE}/scheduler/stats`)
+  const res = await authedFetch(`${BASE}/scheduler/stats`)
   return res.json()
 }
 
 export async function cancelSchedulerJob(jobId: string) {
-  const res = await fetch(`${BASE}/scheduler/jobs/${jobId}`, { method: 'DELETE' })
+  const res = await authedFetch(`${BASE}/scheduler/jobs/${jobId}`, { method: 'DELETE' })
   return res.json()
 }
 
@@ -128,11 +142,11 @@ export async function fetchExecutions(
   if (opts.limit) params.set('limit', String(opts.limit))
   if (opts.offset) params.set('offset', String(opts.offset))
   const qs = params.toString()
-  const res = await fetch(`${BASE}/executions/${tenantId}${qs ? '?' + qs : ''}`)
+  const res = await authedFetch(`${BASE}/executions/${tenantId}${qs ? '?' + qs : ''}`)
   return res.json()
 }
 
 export async function fetchExecution(tenantId: string, executionId: string) {
-  const res = await fetch(`${BASE}/executions/${tenantId}/${executionId}`)
+  const res = await authedFetch(`${BASE}/executions/${tenantId}/${executionId}`)
   return res.json()
 }

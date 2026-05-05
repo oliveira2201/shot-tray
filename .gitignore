@@ -12,6 +12,8 @@ dist/
 # Misc
 .DS_Store
 .env
+.env.local
+.env.*.local
 src/config/tenants.secrets.json
 .npmrc
 backups/
