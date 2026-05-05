@@ -5,10 +5,13 @@ import { SettingsPanel } from './components/SettingsPanel'
 import { Dashboard } from './components/Dashboard'
 import { Monitor } from './components/Monitor'
 import { History } from './components/History'
+import { TenantList } from './components/TenantList'
+import { TenantDetail } from './components/TenantDetail'
 import { fetchTenants, fetchFlows, fetchFlow } from './lib/api'
 import type { FlowDefinition } from './lib/types'
 
 type Tab = 'editor' | 'simulate' | 'settings' | 'monitor' | 'history'
+type Mode = 'app' | 'tenants'
 
 export default function App() {
   const [tenants, setTenants] = useState<string[]>([])
@@ -17,6 +20,8 @@ export default function App() {
   const [selectedFlow, setSelectedFlow] = useState<FlowDefinition | null>(null)
   const [activeFlowId, setActiveFlowId] = useState('')
   const [tab, setTab] = useState<Tab>('editor')
+  const [mode, setMode] = useState<Mode>('app')
+  const [selectedAdminTenant, setSelectedAdminTenant] = useState<string | null>(null)
 
   useEffect(() => {
     fetchTenants().then((list) => {
@@ -61,9 +66,9 @@ export default function App() {
         {/* Dashboard link */}
         <div className="px-3 pt-2">
           <button
-            onClick={() => { setSelectedFlow(null); setActiveFlowId(''); setTab('editor') }}
+            onClick={() => { setMode('app'); setSelectedFlow(null); setActiveFlowId(''); setTab('editor') }}
             className={`w-full text-left px-2.5 py-2 rounded text-sm flex items-center gap-2 transition-colors ${
-              !activeFlowId && tab !== 'settings'
+              mode === 'app' && !activeFlowId && tab !== 'settings'
                 ? 'bg-blue-100 text-blue-700 font-medium'
                 : 'text-gray-600 hover:bg-gray-100'
             }`}
@@ -97,25 +102,33 @@ export default function App() {
         {/* Bottom links */}
         <div className="border-t border-gray-200 p-2 space-y-0.5">
           <button
-            onClick={() => { setSelectedFlow(null); setActiveFlowId(''); setTab('monitor') }}
+            onClick={() => { setMode('tenants'); setSelectedAdminTenant(null) }}
             className={`w-full text-left px-2.5 py-2 rounded text-sm flex items-center gap-2 transition-colors ${
-              tab === 'monitor' ? 'bg-green-100 text-green-700 font-medium' : 'text-gray-500 hover:bg-gray-100'
+              mode === 'tenants' ? 'bg-indigo-100 text-indigo-700 font-medium' : 'text-gray-500 hover:bg-gray-100'
+            }`}
+          >
+            <span>&#128100;</span> Tenants Admin
+          </button>
+          <button
+            onClick={() => { setMode('app'); setSelectedFlow(null); setActiveFlowId(''); setTab('monitor') }}
+            className={`w-full text-left px-2.5 py-2 rounded text-sm flex items-center gap-2 transition-colors ${
+              mode === 'app' && tab === 'monitor' ? 'bg-green-100 text-green-700 font-medium' : 'text-gray-500 hover:bg-gray-100'
             }`}
           >
             <span>&#9889;</span> Monitor
           </button>
           <button
-            onClick={() => { setSelectedFlow(null); setActiveFlowId(''); setTab('history') }}
+            onClick={() => { setMode('app'); setSelectedFlow(null); setActiveFlowId(''); setTab('history') }}
             className={`w-full text-left px-2.5 py-2 rounded text-sm flex items-center gap-2 transition-colors ${
-              tab === 'history' ? 'bg-purple-100 text-purple-700 font-medium' : 'text-gray-500 hover:bg-gray-100'
+              mode === 'app' && tab === 'history' ? 'bg-purple-100 text-purple-700 font-medium' : 'text-gray-500 hover:bg-gray-100'
             }`}
           >
             <span>&#128338;</span> Histórico
           </button>
           <button
-            onClick={() => setTab('settings')}
+            onClick={() => { setMode('app'); setTab('settings') }}
             className={`w-full text-left px-2.5 py-2 rounded text-sm flex items-center gap-2 transition-colors ${
-              tab === 'settings' ? 'bg-gray-200 text-gray-800 font-medium' : 'text-gray-500 hover:bg-gray-100'
+              mode === 'app' && tab === 'settings' ? 'bg-gray-200 text-gray-800 font-medium' : 'text-gray-500 hover:bg-gray-100'
             }`}
           >
             <span>&#9881;</span> Configurações
@@ -125,8 +138,8 @@ export default function App() {
 
       {/* Main content */}
       <div className="flex-1 flex flex-col overflow-hidden">
-        {/* Tab bar */}
-        {activeFlowId && tab !== 'settings' && (
+        {/* Tab bar (somente no modo app, com flow ativo) */}
+        {mode === 'app' && activeFlowId && tab !== 'settings' && (
           <div className="h-9 bg-gray-50 border-b border-gray-200 flex items-center px-4 gap-1">
             <TabBtn active={tab === 'editor'} onClick={() => setTab('editor')}>Editor</TabBtn>
             <TabBtn active={tab === 'simulate'} onClick={() => setTab('simulate')}>Simular</TabBtn>
@@ -135,26 +148,48 @@ export default function App() {
 
         {/* Content */}
         <div className="flex-1 overflow-hidden">
-          {tab === 'monitor' && <Monitor />}
+          {mode === 'tenants' && !selectedAdminTenant && (
+            <div className="h-full overflow-y-auto">
+              <TenantList
+                onSelect={(id) => setSelectedAdminTenant(id)}
+                onNew={() => {
+                  const id = prompt('ID do novo tenant (a-z0-9_-):')
+                  if (id && /^[a-z0-9_-]+$/.test(id)) setSelectedAdminTenant(id)
+                  else if (id) alert('ID inválido. Use a-z, 0-9, _ ou -')
+                }}
+              />
+            </div>
+          )}
 
-          {tab === 'history' && selectedTenant && <History tenantId={selectedTenant} />}
+          {mode === 'tenants' && selectedAdminTenant && (
+            <TenantDetail
+              tenantId={selectedAdminTenant}
+              onBack={() => setSelectedAdminTenant(null)}
+            />
+          )}
 
-          {tab === 'settings' && selectedTenant && (
+          {mode === 'app' && tab === 'monitor' && <Monitor />}
+
+          {mode === 'app' && tab === 'history' && selectedTenant && (
+            <History tenantId={selectedTenant} />
+          )}
+
+          {mode === 'app' && tab === 'settings' && selectedTenant && (
             <div className="h-full overflow-y-auto">
               <SettingsPanel tenantId={selectedTenant} />
             </div>
           )}
 
-          {tab === 'editor' && selectedFlow && (
+          {mode === 'app' && tab === 'editor' && selectedFlow && (
             <FlowEditor key={activeFlowId} tenantId={selectedTenant} flow={selectedFlow} onSaved={() => {}} />
           )}
 
-          {tab === 'simulate' && activeFlowId && (
+          {mode === 'app' && tab === 'simulate' && activeFlowId && (
             <FlowSimulator tenantId={selectedTenant} flowId={activeFlowId} />
           )}
 
           {/* Dashboard quando nenhum flow selecionado e sem outra tab ativa */}
-          {!selectedFlow && tab !== 'settings' && tab !== 'monitor' && tab !== 'history' && selectedTenant && (
+          {mode === 'app' && !selectedFlow && tab !== 'settings' && tab !== 'monitor' && tab !== 'history' && selectedTenant && (
             <Dashboard tenantId={selectedTenant} onOpenFlow={selectFlow} onOpenSettings={() => setTab('settings')} />
           )}
         </div>
