@@ -64,20 +64,21 @@ export class NuvemshopAdapter extends EcommerceAdapter {
     const tag = (rawEvent?.taginternals || "").toString().trim().toLowerCase();
     if (!tag) return null;
 
+    // Tokeniza por vírgula pra evitar substring traiçoeira (ex.: "unshipped"
+    // contém "shipped" — sem tokenizar, "open,paid,unshipped" cairia em
+    // "[EC] Pedido Enviado" e dispararia mensagem de envio em pedido ainda
+    // não despachado).
+    const tokens: string[] = tag.split(",").map((s: string) => s.trim()).filter(Boolean);
+
     let flowAlias: string | null = null;
 
-    // Primeiro tenta match exato, depois contains
     for (const rule of tagToFlow) {
-      if (rule.exact) {
-        if (tag === rule.match) {
-          flowAlias = rule.flowAlias;
-          break;
-        }
-      } else {
-        if (tag.includes(rule.match)) {
-          flowAlias = rule.flowAlias;
-          break;
-        }
+      const hit = rule.exact
+        ? tokens.some((t: string) => t === rule.match)
+        : tokens.some((t: string) => t === rule.match || t.startsWith(rule.match));
+      if (hit) {
+        flowAlias = rule.flowAlias;
+        break;
       }
     }
 
