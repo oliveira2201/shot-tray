@@ -37,7 +37,10 @@ async function main() {
         continue;
       }
 
-      const token = secrets[t.id];
+      const token =
+        secrets[t.id] ||
+        process.env[`TENANT_${t.id.toUpperCase()}_TOKEN`] ||
+        process.env[`SHOTZAP_TOKEN_${t.id.toUpperCase()}`];
       if (!token) {
         logger.warn({ id: t.id }, "Token não disponível, seed do tenant pulado");
         continue;
