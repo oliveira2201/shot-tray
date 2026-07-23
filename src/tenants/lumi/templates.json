@@ -1,6 +1,6 @@
 {
   "text": {
-    "pedidoRecebido": "Olá, {nome}! ✨ Acabei de receber seu pedido.\nEstou muito feliz por você ter escolhido a LumiVittá para o seu novo ritual diário de amor-próprio.\nAssim que seu pagamento for confirmado, te avisarei por aqui e iniciaremos o preparo com todo o cuidado que você merece. 🤍\nE aproveita salva meu contato na sua agenda para garantir que irá receber as minhas mensagens\nAté logo.",
+    "pedidoRecebido": "Olá, {nome}! ✨\nRecebemos o seu pedido e já estamos acompanhando tudo por aqui. 💛\nAssim que o pagamento for confirmado, iniciaremos a preparação com todo o cuidado e avisaremos você.\nAté já!",
 
     "pedidoRecebido1": "Olá, {nome}! Tudo bem? ✨\nPassando por aqui para avisar que o seu pedido está reservado, apenas aguardando a confirmação do pagamento.\n\nSabemos que a rotina pode ser corrida, mas não queremos que você atrase o início do seu novo ritual diário de amor-próprio. Como um dos nossos valores é o cuidado humano, guardamos os seus produtos com toda a segurança.\n\nVocê teve alguma dificuldade na hora de finalizar? Se precisar que eu reenvie o link ou a chave PIX, é só me falar! 🤍",
 
@@ -9,7 +9,7 @@
   "buttons": {
     "pedidoPago": {
       "title": "Olá, {nome}! ✨",
-      "body": "Ótimas notícias: o pagamento do seu pedido foi aprovado com sucesso!\nEstamos muito felizes em fazer parte da sua rotina. A partir de agora, falta muito pouco para você iniciar o seu ritual diário de amor-próprio e cuidar da sua beleza de dentro para fora\nNossa equipe já está preparando o seu pacote com todo o cuidado e a qualidade que você merece\nAssim que ele for enviado, te chamo aqui com o código de rastreio. 🤍\nSe não salvou meu contato na sua agenda, aproveita e salva agora para garantir que você vai receber as minhas mensagens sobre seu pedido e promoções",
+      "body": "Seu pagamento foi aprovado com sucesso! 💛\nAgora vamos preparar o seu pedido com todo carinho. Assim que ele for enviado, você receberá o código de rastreio por aqui.",
       "footer": "LumiVittá",
       "buttons": [
         { "type": "url", "text": "Acompanhar Pedido", "url": "{extra1}" }
@@ -57,7 +57,7 @@
     },
     "pedidoEnviadoTracking": {
       "title": "Olá, {nome}! ✨",
-      "body": "O seu novo ritual diário de amor-próprio acaba de começar a viagem até você! O seu pedido já foi enviado.\nFalta muito pouco para você começar a cuidar da sua beleza e saúde de dentro para fora, com a qualidade e o cuidado humano que você merece.\nAcompanhe a sua entrega clicando aqui abaixo.",
+      "body": "Seu pedido já foi enviado e está a caminho! 📦💛\nAgora é só acompanhar a entrega pelo link abaixo. Em breve ele estará com você!",
       "footer": "LumiVittá",
       "buttons": [
         { "type": "url", "text": "📦 Rastrear Entrega", "url": "{extra1}" }
