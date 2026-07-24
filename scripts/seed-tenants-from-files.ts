@@ -37,10 +37,13 @@ async function main() {
         continue;
       }
 
-      const token =
+      // Coolify escapa aspas simples ao gerar o .env do container (' vira \'),
+      // então tokens vindos de env chegam mutilados — desfaz o escape.
+      const rawToken =
         secrets[t.id] ||
         process.env[`TENANT_${t.id.toUpperCase()}_TOKEN`] ||
         process.env[`SHOTZAP_TOKEN_${t.id.toUpperCase()}`];
+      const token = rawToken?.replace(/\\'/g, "'");
       if (!token) {
         logger.warn({ id: t.id }, "Token não disponível, seed do tenant pulado");
         continue;
